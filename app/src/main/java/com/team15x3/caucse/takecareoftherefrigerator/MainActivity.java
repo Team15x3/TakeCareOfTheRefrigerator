@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new IntentIntegrator(MainActivity.this).initiateScan();
             }
-            
+
         });
 
 

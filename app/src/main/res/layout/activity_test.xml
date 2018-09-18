@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="com.team15x3.caucse.takecareoftherefrigerator.TestActivity">
 
-    <Button
-        android:id="@+id/btnOpenBarcode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Barcode Test"
-        />
+    <ImageView
+        android:id="@+id/ivBarcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
