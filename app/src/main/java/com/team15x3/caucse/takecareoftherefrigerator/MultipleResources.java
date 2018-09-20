@@ -10,6 +10,7 @@ public class MultipleResources {
     public List<Pageum> page = null;
 
     public class Pageum{
+
         @SerializedName("offset")
         public Number offset;
 
@@ -18,6 +19,9 @@ public class MultipleResources {
 
         @SerializedName("resultCount")
         public Number resultCount;
+
+        @SerializedName("totalCount")
+        public Number totalCount;
     }
 
     @SerializedName("items")
@@ -27,20 +31,11 @@ public class MultipleResources {
         @SerializedName("foodId")
         public String foodId;
 
-        @SerializedName("foodName")
-        public String foodName;
-
-        @SerializedName("volume")
-        public Number volume;
+        @SerializedName("mainNutrientServingMeasureAmount")
+        public Number mainNutrientServingMeasureAmount;
 
         @SerializedName("volumeUnit")
         public String volumeUnit;
-
-        @SerializedName("foodType")
-        public String foodType;
-
-        @SerializedName("bacode")
-        public String bacode;
 
         @SerializedName("thumbnailUrl")
         public String thumbnailUrl;
@@ -50,6 +45,15 @@ public class MultipleResources {
 
         @SerializedName("specificNutrientIncludeYn")
         public String specificNutrientIncludeYn;
+
+        @SerializedName("volume")
+        public Number volume;
+
+        @SerializedName("foodType")
+        public String foodType;
+
+        @SerializedName("bacode")
+        public String bacode;
 
         @SerializedName("mainNutrients")
         public List<mainNu> mainNutrients = null;
@@ -75,11 +79,12 @@ public class MultipleResources {
         @SerializedName("vendors")
         public String vendors;
 
-        @SerializedName("mainNutrientServingMeasureAmount")
-        public Number mainNutrientServingMeasureAmount;
+        @SerializedName("foodName")
+        public String foodName;
 
-        @SerializedName("mainNutrientServingMeasureUnit")
-        public String mainNutrientServingMeasureUnit;
+
+//        @SerializedName("mainNutrientServingMeasureUnit")
+//        public String mainNutrientServingMeasureUnit;
 
 
     }

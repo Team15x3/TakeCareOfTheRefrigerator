@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -52,15 +55,13 @@ public class MainActivity extends AppCompatActivity {
         myBarcode = result.getContents(); //get barcode number
         Toast.makeText(this,""+myBarcode,Toast.LENGTH_SHORT).show();
 
-
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+/*
         text =(TextView)findViewById(R.id.text);
         btnOpenBarcode = (Button)findViewById(R.id.btnOpenBarcode);
         btnOpenBarcode.setOnClickListener(new View.OnClickListener() {
@@ -72,21 +73,23 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
+*/
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
-        Call<MultipleResources> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
+        Call<FoodLists> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
                 ,null,null,null,0,2);
-        call.enqueue(new Callback<MultipleResources>() {
+        call.enqueue(new Callback<FoodLists>() {
             @Override
-            public void onResponse(Call<MultipleResources> call, Response<MultipleResources> response) {
-                MultipleResources food = response.body();
+            public void onResponse(Call<FoodLists> call, Response<FoodLists> response) {
 
+                Log.d("TAG",""+response.body().getSize());
 
             }
 
             @Override
-            public void onFailure(Call<MultipleResources> call, Throwable t) {
+            public void onFailure(Call<FoodLists> call, Throwable t) {
+
+                Log.d("TAG",t.getLocalizedMessage());
                 call.cancel();
             }
         });
