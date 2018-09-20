@@ -7,10 +7,7 @@ import java.util.List;
 
 public class FoodList {
     //have to fix
-    @SerializedName("mainNutrients")
-    public List<mainNu> mainNutrients = new ArrayList();
 
-    public class mainNu{
         @SerializedName("servingAmount")
         public Number servingAmount;
 
@@ -26,5 +23,4 @@ public class FoodList {
         @SerializedName("nutrientId")
         public String nutrientId;
 
-    }
 }

@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,15 +27,23 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.util.Log.e;
 
 public class MainActivity extends AppCompatActivity {
     String myBarcode;
     Button btnOpenBarcode;
+    TextView text;
+
+    APIInterface apiInterface;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -40,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
         myBarcode = result.getContents(); //get barcode number
         Toast.makeText(this,""+myBarcode,Toast.LENGTH_SHORT).show();
+
+
+
     }
 
     @Override
@@ -47,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        text =(TextView)findViewById(R.id.text);
         btnOpenBarcode = (Button)findViewById(R.id.btnOpenBarcode);
         btnOpenBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +73,41 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        apiInterface = APIClient.getClient().create(APIInterface.class);
+
+        Call<MultipleResources> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
+                ,null,null,null,0,2);
+        call.enqueue(new Callback<MultipleResources>() {
+            @Override
+            public void onResponse(Call<MultipleResources> call, Response<MultipleResources> response) {
+                MultipleResources food = response.body();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<MultipleResources> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
+        /*
+        Call<MultipleResources> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
+                ,null,null,null,0,2);
+        call.enqueue(new Callback<MultipleResources>() {
+            @Override
+            public void onResponse(Call<MultipleResources> call, Response<MultipleResources> response) {
+
+                MultipleResources resource = response.body();
+                List<MultipleResources.itemsum> itemdata= resource.items;
+
+            }
+            @Override
+            public void onFailure(Call<MultipleResources> call, Throwable t) {
+
+            }
+        });
+*/
     }
 
 
