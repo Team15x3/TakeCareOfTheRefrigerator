@@ -35,6 +35,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,44 +77,29 @@ public class MainActivity extends AppCompatActivity {
 */
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
-        Call<FoodLists> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
+        Call<ResponseBody> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
                 ,null,null,null,0,2);
-        call.enqueue(new Callback<FoodLists>() {
-            @Override
-            public void onResponse(Call<FoodLists> call, Response<FoodLists> response) {
+        call.enqueue(new Callback<ResponseBody>() {
+           @Override
+           public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+               try {
+                   Log.d("TAG", "" + response.body().string());
+               }catch(Exception e){
 
-                Log.d("TAG",""+response.body().getSize());
+               }
+           }
 
-            }
+           @Override
+           public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<FoodLists> call, Throwable t) {
+           }
+       });
 
-                Log.d("TAG",t.getLocalizedMessage());
-                call.cancel();
-            }
-        });
+    }
 
-        /*
-        Call<MultipleResources> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
-                ,null,null,null,0,2);
-        call.enqueue(new Callback<MultipleResources>() {
-            @Override
-            public void onResponse(Call<MultipleResources> call, Response<MultipleResources> response) {
-
-                MultipleResources resource = response.body();
-                List<MultipleResources.itemsum> itemdata= resource.items;
-
-            }
-            @Override
-            public void onFailure(Call<MultipleResources> call, Throwable t) {
-
-            }
-        });
-*/
     }
 
 
-}
+
 
 

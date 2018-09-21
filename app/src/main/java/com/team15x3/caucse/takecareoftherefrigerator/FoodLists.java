@@ -7,14 +7,18 @@ import java.util.List;
 
 public class FoodLists {
     @SerializedName("data")
-    private List<FoodList> foodLists = new ArrayList<>();
+    private List<FoodList> foodLists;
 
-    public FoodList getFood(int i){
-        return foodLists.get(i);
+    public List<FoodList> getFoodList(){
+        return this.foodLists;
     }
 
     public int getSize(){
         return foodLists.size();
     }
 
+    public void setFoodList(FoodLists f){
+        this.foodLists = f.foodLists;
+
+    }
 }
