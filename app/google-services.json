@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "389541411101",
+    "firebase_url": "https://data-e4ff7.firebaseio.com",
+    "project_id": "data-e4ff7",
+    "storage_bucket": "data-e4ff7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389541411101:android:61ff2b9cb1bb1c04",
+        "android_client_info": {
+          "package_name": "com.team15x3.caucse.takecareoftherefrigerator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389541411101-5knckbdakuvr2dobo7sfj1n8hm4qobs0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team15x3.caucse.takecareoftherefrigerator",
+            "certificate_hash": "912cfeb6100b224aa37f72a741d4665e1ad7d41b"
+          }
+        },
+        {
+          "client_id": "389541411101-bac3hatofnb0a2sdsgshu04elh47dgev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpcrVLBNIYY_r2mUmSNU20-Rqx7K0SCl0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389541411101-bac3hatofnb0a2sdsgshu04elh47dgev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
