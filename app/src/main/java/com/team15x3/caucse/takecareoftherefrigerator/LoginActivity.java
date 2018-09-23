@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Button btnRegister;
+        Button btnRegister, btnSignIn;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         if(Build.VERSION.SDK_INT >=21) {
@@ -29,10 +30,18 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         btnRegister = (Button)findViewById(R.id.btnRegister);
+        btnSignIn = (Button)findViewById(R.id.btnSignIn);
 
-
-
-
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkLoginInfo()){
+                    Intent mainActivityIntent = new Intent(getApplicationContext(),HomeActivity.class);
+                    startActivity(mainActivityIntent);
+                    finish();
+                }
+            }
+        });
 
         //register page
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -42,9 +51,17 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(registerIntent,0);
             }
         });
+    }
 
-        ;
+    private boolean checkLoginInfo(){
+        EditText edtID = (EditText)findViewById(R.id.edtUserName);
+        EditText edtPassWord = (EditText)findViewById(R.id.edtPassword);
 
+        String ID = edtID.getText().toString();
+        String Password = edtPassWord.getText().toString();
 
+        //To do
+        return true;
     }
 }
+

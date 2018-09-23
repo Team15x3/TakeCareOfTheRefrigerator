@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorText">#B8EDFC</color>
-    <color name="colorBackground">#2776C4</color>
+    <color name="colorText">#AAF385</color>
+    <color name="colorBackground">#FF530D</color>
+    <color name="homeTabColor">#F2F4F1</color>
 </resources>
