@@ -131,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(dataAdapter);
 
+
+        
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -161,20 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-/*        text =(TextView)findViewById(R.id.text);
-        btnOpenBarcode = (Button)findViewById(R.id.btnOpenBarcode);
-        btnOpenBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new IntentIntegrator(MainActivity.this).initiateScan();
-            }
-
-
-
-        });*/
-
 
 
     }
