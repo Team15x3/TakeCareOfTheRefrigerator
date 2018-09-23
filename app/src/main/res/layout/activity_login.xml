@@ -38,6 +38,7 @@
                 android:src="@drawable/usericon"></ImageView>
 
             <EditText
+                android:id="@+id/edtUserName"
                 android:layout_margin="5dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -63,6 +64,7 @@
                 android:src="@drawable/padlock"></ImageView>
 
             <EditText
+                android:id="@+id/edtPassword"
                 android:layout_margin="5dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -83,60 +85,59 @@
 
 
             <Button
+                android:id="@+id/btnSignIn"
                 android:layout_margin="7dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/round_button"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign in"
-                android:layout_gravity="center"
+                android:background="@drawable/round_button"
+                android:textSize="20dp"
                 android:textColor="@color/colorText"
-                android:textSize="20dp"/>
+                android:text="Sign in"/>
+
         </FrameLayout>
 
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"></LinearLayout>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
             <TextView
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Forgot password?"
-                android:layout_gravity="center|bottom"
+                android:layout_gravity="center|top"
                 android:textColor="@color/colorText"
                 android:textSize="15dp"/>
             <Button
+                android:id="@+id/btnSearchID"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="7dp"
                 android:background="#00ff0000"/>
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Register now"
-                android:layout_gravity="center"
-                android:textColor="@color/colorText"
-                android:textSize="20dp"/>
+
             <Button
+                android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="7dp"
-                android:background="@drawable/round_button"/>
+                android:background="@drawable/round_button"
+                android:text="Register now"
+                android:textColor="@color/colorText"
+                android:textSize="20dp"/>
         </FrameLayout>
     </LinearLayout>
 
