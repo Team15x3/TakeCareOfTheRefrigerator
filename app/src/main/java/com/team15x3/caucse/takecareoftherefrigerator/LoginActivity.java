@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText edtUserName;
     EditText edtPassword;
     Button buttonSignin;
-    TextView textviewSignin;
+    //TextView textviewSignin;
     TextView textviewMessage;
     Button btnSearchID;
     ProgressDialog progressDialog;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
-        textviewSignin= (TextView) findViewById(R.id.textViewSignin);
+        /*textviewSignin= (TextView) findViewById(R.id.textViewSignin);*/
         /*textviewMessage = (TextView) findViewById(R.id.textviewMessage)*/;
         btnSearchID= (Button) findViewById(R.id.btnSearchID);
         buttonSignin = (Button) findViewById(R.id.btnSignIn);
