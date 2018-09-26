@@ -2,54 +2,50 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.content.DialogInterface;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-public class HomeActivity extends AppCompatActivity {
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabReselectListener;
+import com.roughike.bottombar.OnTabSelectListener;
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
+public class HomeActivity extends FragmentActivity {
+
+    BottomBar bottomBar;
+    private TabHomeFragment tabHomeFragment;
+    private TabRecipeFragment tabRecipeFragment;
+    private TabSettingFragment tabSettingFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        tabHomeFragment = new TabHomeFragment();
+        tabRecipeFragment = new TabRecipeFragment();
+        tabSettingFragment = new TabSettingFragment();
 
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab One"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Two"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab Three"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-
-        viewPager = (ViewPager)findViewById(R.id.pager);
-
-        TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        // Set TabSelectedListener
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
+        bottomBar = (BottomBar)findViewById(R.id.bottomBar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+            public void onTabSelected(int tabId) {
+                FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+                switch(tabId){
+                    case R.id.tab_home : transaction.replace(R.id.contentContainer, tabHomeFragment).commit();
+                        break;
+                    case R.id.tab_recipe: transaction.replace(R.id.contentContainer, tabRecipeFragment).commit();
+                        break;
+                    case R.id.tab_setting: transaction.replace(R.id.contentContainer, tabSettingFragment).commit();
+                        break;
+                    default: break;
+                }
             }
         });
 
@@ -57,7 +53,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
 
         //super.onBackPressed();
         new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
@@ -72,4 +67,14 @@ public class HomeActivity extends AppCompatActivity {
                 .setNegativeButton("No",null)
                 .show();
     }
+
+    public void initFragment(){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.contentContainer, tabHomeFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+
+
 }
