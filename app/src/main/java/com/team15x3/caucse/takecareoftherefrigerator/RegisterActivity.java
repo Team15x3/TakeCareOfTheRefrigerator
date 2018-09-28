@@ -18,9 +18,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -42,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     public static String checkuid;
+    public String jsonparing;
+    private ChildEventListener mChild;
 
     Button btnRegister;
     @Override
@@ -52,9 +61,40 @@ public class RegisterActivity extends AppCompatActivity {
         edtUserName = findViewById(R.id.edtUserName);
         edtPassword = findViewById(R.id.edtPassword);
         edtEmail = findViewById(R.id.edtEmail);
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        //databaseReference = FirebaseDatabase.getInstance().getReference("recipe");
         edtUserName = (EditText)findViewById(R.id.edtUserName);
         edtPassword = (EditText)findViewById(R.id.edtPassword);
+        initDatabase();
+        //output();
+
+          databaseReference = firebaseDatabase.getReference("users");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                   String data1 = dataSnapshot.getValue().toString();
+                    //String data2 = databaseReference.orderByChild("users").toString();
+
+                    // child 내에 있는 데이터만큼 반복합니다.
+                //String data = dataSnapshot.getChildren().toString();
+
+               // Log.d("ooooo",data);
+                    Log.d("ooooo",data1);
+                   // Log.d("ooooo",data2);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
       /*  if(Build.VERSION.SDK_INT >=21) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorBackground));
@@ -185,5 +225,76 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    //레시피 보내기
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+
+            InputStream is = getAssets().open("레시피+재료정보_20180912192458.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+
+        return json;
+
+    }
+
+    public void output(){
+
+        JSONObject obj = new JSONObject();
+        jsonparing =  loadJSONFromAsset().toString();
+        Log.d("www","www");
+        databaseReference.child("recipe3").setValue(jsonparing);
+        Log.d("eee","eee");
+    }
+
+    private void initDatabase() {
+
+        //databaseReference = FirebaseDatabase.getInstance();
+
+        databaseReference = firebaseDatabase.getReference("recipe");
+        databaseReference.child("users").setValue(checkuid);
+
+        mChild = new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addChildEventListener(mChild);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        databaseReference.removeEventListener(mChild);
+    }
 }
 
