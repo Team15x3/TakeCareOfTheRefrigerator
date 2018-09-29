@@ -65,6 +65,7 @@
                         android:fontFamily="sana-serif-light"
                         />
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/edtUserName"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -92,6 +93,7 @@
                         android:fontFamily="sana-serif-light"
                         />
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/edtPassword"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
