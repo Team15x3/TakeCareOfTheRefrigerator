@@ -1,67 +1,124 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
-
-    }
+    //define view objects
+    EditText edtUserName;
+    EditText edtPassword;
+    Button buttonSignin;
+    TextView textviewSignin;
+    TextView textviewMessage;
+    Button btnSearchID;
+    ProgressDialog progressDialog;
+    //define firebase object
+    FirebaseAuth firebaseAuth;
+    Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Button btnRegister, btnSignIn;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if(Build.VERSION.SDK_INT >=21) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorBackground));
+
+        //initializig firebase auth object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        if(firebaseAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        }
+        edtUserName = (EditText) findViewById(R.id.edtUserName);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
+        /*textviewSignin= (TextView) findViewById(R.id.textViewSignin);*/
+        /*textviewMessage = (TextView) findViewById(R.id.textviewMessage)*/;
+        btnSearchID= (Button) findViewById(R.id.btnSearchID);
+        buttonSignin = (Button) findViewById(R.id.btnSignIn);
+        progressDialog = new ProgressDialog(this);
+        btnRegister = (Button)findViewById(R.id.btnRegister);
+        //button click event
+        buttonSignin.setOnClickListener(this);
+        //textviewSignin.setOnClickListener(this);
+        btnSearchID.setOnClickListener(this);
+
+
+        btnRegister.setOnClickListener(this);
+
+    }
+
+    private void userLogin(){
+        String email = edtUserName.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+
+        if(TextUtils.isEmpty(email)){
+            Toast.makeText(this, "email을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this, "password를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        btnRegister = (Button)findViewById(R.id.btnRegister);
-        btnSignIn = (Button)findViewById(R.id.btnSignIn);
+        progressDialog.setMessage("로그인중입니다. 잠시 기다려 주세요...");
+        progressDialog.show();
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkLoginInfo()){
-                    Intent mainActivityIntent = new Intent(getApplicationContext(),HomeActivity.class);
-                    startActivity(mainActivityIntent);
-                    finish();
-                }
-            }
-        });
-
-        //register page
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent registerIntent = new Intent(getApplicationContext(),RegisterActivity.class);
-                startActivityForResult(registerIntent,0);
-            }
-        });
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if(task.isSuccessful()) {
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        } else {
+                            Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
+                            /*textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");*/
+                        }
+                    }
+                });
     }
 
-    private boolean checkLoginInfo(){
-        EditText edtID = (EditText)findViewById(R.id.edtUserName);
-        EditText edtPassWord = (EditText)findViewById(R.id.edtPassword);
 
-        String ID = edtID.getText().toString();
-        String Password = edtPassWord.getText().toString();
 
-        //To do
-        return true;
+    @Override
+    public void onClick(View view) {
+
+
+
+        if(view == buttonSignin) {
+            userLogin();
+        }
+/*        if(view == textviewSignin) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }*/
+        if(view == btnSearchID) {
+            finish();
+            startActivity(new Intent(this, FindActivity.class));
+        }
+
+        if(view== btnRegister)
+        {
+            finish();
+            startActivity(new Intent(this, RegisterActivity.class));
+
+        }
     }
+
 }
-

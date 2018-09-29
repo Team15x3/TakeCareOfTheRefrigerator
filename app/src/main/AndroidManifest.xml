@@ -21,6 +21,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".HomeActivity"></activity>
     </application>
 
