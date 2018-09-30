@@ -6,14 +6,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class Refrigerator {
-    private ArrayList<Food>  mFoodList;
+    private ArrayList<Food>   mFoodList;
+    private ArrayList<Recipe> mRecipeList;
 
     private FoodProcessing   mFoodProcess;
     private RecipeProcessing mRecipePrcess;
 
     public Refrigerator() {
         mFoodList     = new ArrayList<Food>();
-        mFoodProcess  = new FoodProcessing();
+        mFoodProcess  = new FoodProcessing(mFoodList);
         mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);
     }
 
@@ -30,6 +31,11 @@ public class Refrigerator {
     public ArrayList<Food> getFoodList() {
         return mFoodList;
     }
+
+    public ArrayList<Recipe> getRecipeList() { return mRecipeList; };
+
+
+    // 같은 food에 대해서 여러개가 있을 때 어떻게 할지 결정 안 함.
 
     public void deleteFood(Food o1) {
         Iterator<Food> iter = this.mFoodList.iterator();

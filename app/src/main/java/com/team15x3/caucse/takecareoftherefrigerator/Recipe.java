@@ -46,6 +46,10 @@ public class Recipe {
         Collections.sort(mIngredientList);
     }
 
+    public void searchRecipe(String ingredientName) {
+
+    }
+
     public int getRecipeID() {
         return mRecipeID;
     }
@@ -81,6 +85,10 @@ class Ingredient implements Comparable<Ingredient> {
 
         //mTypeID = ;
         //mTypeName = ;
+    }
+
+    public void searchIngredient(String ingredientName) {
+
     }
 
     public String getmRecipeID() {
