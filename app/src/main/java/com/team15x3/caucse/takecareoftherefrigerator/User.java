@@ -18,7 +18,7 @@ public class User {
 
     public String getID() { return mID; }
 
-    public String getPssword() { return mPssword; }
+    public String getPssword() { return mPassword; }
 
     public ArrayList<Refrigerator> getRefrigeratorList() { return mRefrigeratorList; }
 }
