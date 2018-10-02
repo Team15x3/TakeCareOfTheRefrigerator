@@ -10,4 +10,7 @@
     <color name="transparent">#00000000</color>
     <color name="gradientStart">#EF629F</color>
     <color name="gradientEnd">#EECDA3</color>
+    <color name="samplecolor">#EEE0A3</color>
+    <color name="black">#000000</color>
+    <color name="lightgray">#D3D1D1</color>
 </resources>

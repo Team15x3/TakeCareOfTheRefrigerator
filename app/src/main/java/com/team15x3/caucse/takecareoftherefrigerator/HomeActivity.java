@@ -29,9 +29,9 @@ public class HomeActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Window window = getWindow();
+      /*  Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(HomeActivity.this, R.color.transparent));
-
+*/
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();
         tabSettingFragment = new TabSettingFragment();
@@ -54,23 +54,6 @@ public class HomeActivity extends FragmentActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        //super.onBackPressed();
-        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Closing Activity")
-                .setMessage("Are you sure you want to close this activity?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                })
-                .setNegativeButton("No",null)
-                .show();
     }
 
     public void initFragment(){

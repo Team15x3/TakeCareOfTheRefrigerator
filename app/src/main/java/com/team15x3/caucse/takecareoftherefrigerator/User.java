@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class User {
 
-    private int defaultRefrigertor;
+    private int defaultRefrigerator;
     private String mID;
     private String mPassword;
     private ArrayList<Refrigerator> mRefrigeratorList;
@@ -15,12 +15,10 @@ public class User {
     private User(){
 
         mRefrigeratorList = new ArrayList<Refrigerator>();
-        // mID = ;
-        //mPassword = ;
-
-        // mRefrigeratorList = new ArrayList<Refrigerator>();
-    }
-
+        defaultRefrigerator = 0;
+        mID = null;
+        mPassword = null;
+        }
 
 
     public String getID() { return mID; }
@@ -41,4 +39,7 @@ public class User {
         this.mRefrigeratorList = mRefrigeratorList;
     }
 
+    public int getDefaultRefrigerator() {
+        return defaultRefrigerator;
+    }
 }
