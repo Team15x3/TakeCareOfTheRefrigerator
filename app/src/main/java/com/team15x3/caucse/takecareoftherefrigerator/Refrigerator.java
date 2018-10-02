@@ -13,6 +13,7 @@ public class Refrigerator {
     private RecipeProcessing mRecipePrcess;
 
     public Refrigerator() {
+        mRecipeList = new ArrayList<Recipe>();
         mFoodList     = new ArrayList<Food>();
         mFoodProcess  = new FoodProcessing(mFoodList);
         mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);

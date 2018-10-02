@@ -58,7 +58,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Username"
+                        android:text="E-mail"
+                        android:inputType="textEmailAddress"
                         android:textAllCaps="true"
                         android:textSize="15sp"
                         android:textColor="@color/white"
@@ -87,6 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Password"
+                        android:inputType="textPassword"
                         android:textAllCaps="true"
                         android:textSize="15sp"
                         android:textColor="@color/white"

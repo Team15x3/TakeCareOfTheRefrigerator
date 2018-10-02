@@ -4,21 +4,41 @@ import java.util.ArrayList;
 
 public class User {
 
+    private int defaultRefrigertor;
     private String mID;
     private String mPassword;
-
     private ArrayList<Refrigerator> mRefrigeratorList;
 
-    public User() {
-       // mID = ;
+
+    //To make only one instance, I define private constructor
+    public static final User INSTANCE = new User();
+    private User(){
+
+        mRefrigeratorList = new ArrayList<Refrigerator>();
+        // mID = ;
         //mPassword = ;
 
-       // mRefrigeratorList = new ArrayList<Refrigerator>();
+        // mRefrigeratorList = new ArrayList<Refrigerator>();
     }
+
+
 
     public String getID() { return mID; }
 
     public String getPssword() { return mPassword; }
 
     public ArrayList<Refrigerator> getRefrigeratorList() { return mRefrigeratorList; }
+
+    public void setmID(String mID) {
+        this.mID = mID;
+    }
+
+    public void setmPassword(String mPassword) {
+        this.mPassword = mPassword;
+    }
+
+    public void setmRefrigeratorList(ArrayList<Refrigerator> mRefrigeratorList) {
+        this.mRefrigeratorList = mRefrigeratorList;
+    }
+
 }

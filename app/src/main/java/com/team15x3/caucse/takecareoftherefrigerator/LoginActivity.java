@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //define view objects
     EditText edtUserName;
     EditText edtPassword;
-    Button buttonSignin;
+    Button btnSignin;
     TextView textviewSignin;
     TextView textviewMessage;
     Button btnSearchID;
@@ -33,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //define firebase object
     FirebaseAuth firebaseAuth;
     Button btnRegister;
+    final int REGISTER_REQUEST = 10;
 
 
     //animation splash
@@ -50,34 +51,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        rellay1 =(RelativeLayout)findViewById(R.id.rellay1);
-        rellay2 =(RelativeLayout)findViewById(R.id.rellay2);
-        handler.postDelayed(runnable,2000);
+        initViews();
 
-          //initializig firebase auth object
-        firebaseAuth = FirebaseAuth.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REGISTER_REQUEST && resultCode == RESULT_OK){
+            Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
         }
-
-        edtUserName = (EditText) findViewById(R.id.edtUserName);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        /*textviewSignin= (TextView) findViewById(R.id.textViewSignin);*/
-        /*textviewMessage = (TextView) findViewById(R.id.textviewMessage)*/;
-        btnSearchID= (Button) findViewById(R.id.btnSearchID);
-        buttonSignin = (Button) findViewById(R.id.btnSignIn);
-        progressDialog = new ProgressDialog(this);
-        btnRegister = (Button)findViewById(R.id.btnRegister);
-        //button click event
-        buttonSignin.setOnClickListener(this);
-        //textviewSignin.setOnClickListener(this);
-        btnSearchID.setOnClickListener(this);
-
-
-        btnRegister.setOnClickListener(this);
-
     }
 
     private void userLogin(){
@@ -117,26 +101,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-
-
-        if(view == buttonSignin) {
+        if(view == btnSignin) {
             userLogin();
         }
-/*        if(view == textviewSignin) {
-            finish();
-            startActivity(new Intent(this, MainActivity.class));
-        }*/
         if(view == btnSearchID) {
-            finish();
             startActivity(new Intent(this, FindActivity.class));
         }
-
         if(view== btnRegister)
         {
-            finish();
-            startActivity(new Intent(this, RegisterActivity.class));
-
+            startActivityForResult(new Intent(getApplicationContext(),RegisterActivity.class),REGISTER_REQUEST);
         }
     }
 
+
+
+    private void initViews(){
+
+        rellay1 =(RelativeLayout)findViewById(R.id.rellay1);
+        rellay2 =(RelativeLayout)findViewById(R.id.rellay2);
+        handler.postDelayed(runnable,2000);
+
+        //initializig firebase auth object
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        if(firebaseAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        }
+
+
+        edtUserName = (EditText) findViewById(R.id.edtUserName);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
+        /*textviewSignin= (TextView) findViewById(R.id.textViewSignin);*/
+        /*textviewMessage = (TextView) findViewById(R.id.textviewMessage)*/;
+        btnSearchID= (Button) findViewById(R.id.btnSearchID);
+        btnSignin = (Button) findViewById(R.id.btnSignIn);
+        progressDialog = new ProgressDialog(this);
+        btnRegister = (Button)findViewById(R.id.btnRegister);
+        //button click event
+        btnSignin.setOnClickListener(this);
+        //textviewSignin.setOnClickListener(this);
+        btnSearchID.setOnClickListener(this);
+        btnRegister.setOnClickListener(this);
+    }
 }
