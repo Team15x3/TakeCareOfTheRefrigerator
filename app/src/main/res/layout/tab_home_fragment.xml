@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/grad_bg"
-            android:layout_marginBottom="20dp" />
+             />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,25 +80,40 @@
 
                 />
 
-            <Button
-                android:id="@+id/btnInsert"
-                android:text ="Insert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/btnEdit"
-                />
-
-            <Button
-                android:id="@+id/btnSearch"
-                android:text = "search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/btnInsert"
-                />
         </RelativeLayout>
     </FrameLayout>
 
 
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_search_bg"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtSearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:layout_marginStart="20dp"
+            android:textSize="20dp"
+            android:layout_marginTop="3dp"
+            android:backgroundTint="@color/transparent"
+            />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_margin="8dp"
+            android:background="@drawable/ic_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"></LinearLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -118,6 +133,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <Button
+            android:id="@+id/btnInsert"
+            android:background="@drawable/ic_add"
+            android:layout_margin="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
     </FrameLayout>
 
 </LinearLayout>

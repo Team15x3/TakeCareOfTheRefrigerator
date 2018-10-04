@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,6 +33,8 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private static ListAdapter adapter;
     private Button btnInsert;
     private String myBarcode;
+    private EditText edtSearch;
+    private Button btnSearch;
 
     @Nullable
     @Override
@@ -41,6 +45,12 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
         friger = User.INSTANCE.getRefrigeratorList();
         btnInsert = (Button)view.findViewById(R.id.btnInsert);
+        edtSearch= (EditText)view.findViewById(R.id.edtSearch);
+        edtSearch.setInputType(0);
+        btnSearch = (Button)view.findViewById(R.id.btnSearch);
+
+        edtSearch.setOnClickListener(this);
+        btnSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
 
         if (friger.isEmpty()) {
@@ -93,6 +103,13 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 dialog.callFunction();
                 break;
             }
+            case R.id.edtSearch:{
+                edtSearch.setInputType(1);
+                InputMethodManager mgr = (InputMethodManager) view.getContext().getSystemService(view.getContext().INPUT_METHOD_SERVICE);
+                mgr.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+                break;
+            }
+            case R.id.btnSearch:
 
         }
     }
