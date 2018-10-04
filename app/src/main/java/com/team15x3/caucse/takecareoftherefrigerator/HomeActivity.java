@@ -1,6 +1,7 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -11,10 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Window;
+import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -22,6 +28,8 @@ public class HomeActivity extends FragmentActivity {
     private TabHomeFragment tabHomeFragment;
     private TabRecipeFragment tabRecipeFragment;
     private TabSettingFragment tabSettingFragment;
+    private ArrayList<Refrigerator> friger;
+    private long backKeyPressedTime = 0;
 
 
     @Override
@@ -32,6 +40,13 @@ public class HomeActivity extends FragmentActivity {
       /*  Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(HomeActivity.this, R.color.transparent));
 */
+        friger = User.INSTANCE.getRefrigeratorList();
+
+        friger.add(new Refrigerator());
+
+        friger.get(0).addFood(new Food("ex1","",2,2));
+        friger.get(0).addFood(new Food("ex2","",2,2));
+
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();
         tabSettingFragment = new TabSettingFragment();
@@ -62,6 +77,21 @@ public class HomeActivity extends FragmentActivity {
         transaction.addToBackStack(null);
         transaction.commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000){
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(getApplicationContext(),"뒤로 버튼을 한번 더 누르시면 종료됩니다.",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(System.currentTimeMillis() <= backKeyPressedTime+2000){
+            finishAffinity();
+            System.runFinalization();
+            System.exit(0);
+        }
     }
 
 

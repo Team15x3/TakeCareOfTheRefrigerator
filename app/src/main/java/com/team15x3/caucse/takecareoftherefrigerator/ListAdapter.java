@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
-    private final ArrayList<Food> lists;
+    private ArrayList<Food> lists = new ArrayList<Food>();
     private Bitmap FoodPic;
     private int layout;
 
@@ -49,7 +49,8 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Context context = viewGroup.getContext();
+        final int pos = position;
+        final Context context = viewGroup.getContext();
 
         if(view == null){
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -61,7 +62,7 @@ public class ListAdapter extends BaseAdapter {
         TextView tvNumberOfFood = (TextView)view.findViewById(R.id.tvCountFood);
         TextView tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
 
-        Food curFood = (Food)getItem(position);
+        Food curFood = (Food)getItem(pos);
         final String imageUrl = curFood.getPicture();
         tvName.setText(curFood.getFoodName());
         tvNumberOfFood.setText(""+curFood.getExpirationDate());

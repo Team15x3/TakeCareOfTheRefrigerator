@@ -42,8 +42,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            rellay1.setVisibility(View.VISIBLE);
-            rellay2.setVisibility(View.VISIBLE);
+
+            if (firebaseAuth.getCurrentUser() != null) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            } else {
+                rellay1.setVisibility(View.VISIBLE);
+                rellay2.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -124,10 +130,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //initializig firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-        }
 
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
