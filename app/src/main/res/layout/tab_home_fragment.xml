@@ -50,17 +50,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="sample"
                 android:textSize="40dp" />
 
             <TextView
-
+                android:id="@+id/tvGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:layout_below="@+id/tvName"
                 android:layout_marginLeft="10dp"
-                android:text="personal"
                 android:textSize="20dp"
                 />
         </RelativeLayout>

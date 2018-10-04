@@ -42,10 +42,6 @@ public class HomeActivity extends FragmentActivity {
 */
         friger = User.INSTANCE.getRefrigeratorList();
 
-        friger.add(new Refrigerator());
-
-        friger.get(0).addFood(new Food("ex1","",2,2));
-        friger.get(0).addFood(new Food("ex2","",2,2));
 
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();

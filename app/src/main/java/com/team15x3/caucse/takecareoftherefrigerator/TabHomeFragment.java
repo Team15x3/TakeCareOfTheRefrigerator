@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -35,6 +36,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private String myBarcode;
     private EditText edtSearch;
     private Button btnSearch;
+    private TextView tvName;
 
     @Nullable
     @Override
@@ -48,14 +50,21 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         edtSearch= (EditText)view.findViewById(R.id.edtSearch);
         edtSearch.setInputType(0);
         btnSearch = (Button)view.findViewById(R.id.btnSearch);
+        tvName = (TextView)view.findViewById(R.id.tvName);
 
         edtSearch.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
 
         if (friger.isEmpty()) {
-            Toast.makeText(view.getContext(), "냉장고를 만들어보세요!", Toast.LENGTH_SHORT).show();
-            //팝업창
+            friger = User.INSTANCE.getRefrigeratorList();
+
+            friger.add(new Refrigerator("My Friger"));
+
+            friger.get(0).addFood(new Food("ex1","",2,2));
+            friger.get(0).addFood(new Food("ex2","",2,2));
+
+            setFoodList();
         } else {
             setFoodList();
         }
@@ -67,6 +76,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private void setFoodList() {
 
         try {
+             tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
             data = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
             if (data.isEmpty()) {
                 ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
