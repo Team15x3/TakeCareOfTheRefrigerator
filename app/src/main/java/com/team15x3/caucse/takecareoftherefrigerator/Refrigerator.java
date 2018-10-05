@@ -8,15 +8,20 @@ import java.util.Iterator;
 public class Refrigerator {
     private ArrayList<Food>   mFoodList;
     private ArrayList<Recipe> mRecipeList;
-
+    private String Name;
     private FoodProcessing   mFoodProcess;
     private RecipeProcessing mRecipePrcess;
 
-    public Refrigerator() {
+    public Refrigerator(String name) {
+        this.Name = name;
         mRecipeList = new ArrayList<Recipe>();
         mFoodList     = new ArrayList<Food>();
         mFoodProcess  = new FoodProcessing(mFoodList);
         mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);
+    }
+
+    public String getName() {
+        return Name;
     }
 
     public void addFood(Food food) {

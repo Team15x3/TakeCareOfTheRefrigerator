@@ -6,6 +6,8 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,17 +27,19 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 public class TabHomeFragment extends Fragment implements View.OnClickListener {
+    private final int INSERT_REQUEST = 11;
     private ListView FoodList;
     private ImageView ivEmptyFoodList;
     private View view;
     private ArrayList<Refrigerator> friger;
-    private  ArrayList<Food> data;
+    private  ArrayList<Food> data ,list;
     private ImageView ivHomeImage;
     private static ListAdapter adapter;
     private Button btnInsert;
     private String myBarcode;
     private EditText edtSearch;
     private Button btnSearch;
+    private TextView tvName;
 
     @Nullable
     @Override
@@ -48,14 +53,21 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         edtSearch= (EditText)view.findViewById(R.id.edtSearch);
         edtSearch.setInputType(0);
         btnSearch = (Button)view.findViewById(R.id.btnSearch);
+        tvName = (TextView)view.findViewById(R.id.tvName);
 
         edtSearch.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
 
         if (friger.isEmpty()) {
-            Toast.makeText(view.getContext(), "냉장고를 만들어보세요!", Toast.LENGTH_SHORT).show();
-            //팝업창
+            friger = User.INSTANCE.getRefrigeratorList();
+
+            friger.add(new Refrigerator("My Friger"));
+
+            friger.get(0).addFood(new Food("ex1","",2,2));
+            friger.get(0).addFood(new Food("ex2","",2,2));
+
+            setFoodList();
         } else {
             setFoodList();
         }
@@ -67,13 +79,19 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private void setFoodList() {
 
         try {
-            data = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+             tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
+
+
+            //data =실제 데이터, list=복사본
+            data  = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+            list = new ArrayList<Food>();
+            list.addAll(list);
             if (data.isEmpty()) {
                 ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
                 ivEmptyFoodList.setImageDrawable(getResources().getDrawable(R.drawable.empty));
             } else {
                 Log.d("success","get food list");
-                adapter = new ListAdapter(view.getContext(), R.layout.food_list, data);
+                adapter = new ListAdapter(view.getContext(), R.layout.food_list, list);
                 FoodList.setAdapter(adapter);
 
                 FoodList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,6 +99,19 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         FoodInfoDialog dialog = new FoodInfoDialog(getContext());
                         dialog.callFunction(data.get(i));
+                    }
+                });
+
+                edtSearch.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        String text = edtSearch.getText().toString();
+                        search(text);
                     }
                 });
             }
@@ -99,8 +130,8 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             //두가지 선택지를 보여주는 다이얼로그(바코드, 수동입력)
             case R.id.btnInsert: {
-                FoodInsertDialog dialog = new FoodInsertDialog(getContext());
-                dialog.callFunction();
+                Intent intent = new Intent(view.getContext(),InsertFoodActivity.class);
+                startActivityForResult(intent,INSERT_REQUEST);
                 break;
             }
             case R.id.edtSearch:{
@@ -109,18 +140,25 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 mgr.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
                 break;
             }
-            case R.id.btnSearch:
 
         }
     }
 
+    private void search(String text){
+        list.clear();
+        if(text.length() == 0){
+            list.addAll(data);
+        }else{
+            for(int i = 0; i<data.size();i++){
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
-        myBarcode = result.getContents(); //get barcode number
-        Toast.makeText(getContext(),myBarcode,Toast.LENGTH_SHORT).show();
-        //api parsing , get information
+                if(data.get(i).getFoodName().toLowerCase().contains(text)){
+                    list.add(data.get(i));
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
+
+
 }
