@@ -25,6 +25,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 public class TabHomeFragment extends Fragment implements View.OnClickListener {
+    private final int INSERT_REQUEST = 11;
     private ListView FoodList;
     private ImageView ivEmptyFoodList;
     private View view;
@@ -109,8 +110,8 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             //두가지 선택지를 보여주는 다이얼로그(바코드, 수동입력)
             case R.id.btnInsert: {
-                FoodInsertDialog dialog = new FoodInsertDialog(getContext());
-                dialog.callFunction();
+                Intent intent = new Intent(view.getContext(),InsertFoodActivity.class);
+                startActivityForResult(intent,INSERT_REQUEST);
                 break;
             }
             case R.id.edtSearch:{
@@ -125,12 +126,5 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
-        myBarcode = result.getContents(); //get barcode number
-        Toast.makeText(getContext(),myBarcode,Toast.LENGTH_SHORT).show();
-        //api parsing , get information
-    }
+
 }

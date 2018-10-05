@@ -28,7 +28,7 @@ class FoodInfoDialog {
         dialog.show();
 
         final Button okButton = (Button)dialog.findViewById(R.id.okButton);
-        final Button cancelButton = (Button)dialog.findViewById(R.id.cancelButton);
+        final Button deleteButton = (Button)dialog.findViewById(R.id.deleteButton);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,47 +37,21 @@ class FoodInfoDialog {
             }
         });
 
+        deleteButton.setOnClickListener(new View.OnClickListener(){
 
-    }
 
-}
-
-class FoodInsertDialog{
-
-    private Context context;
-
-    public FoodInsertDialog(Context context){
-        this.context = context;
-    }
-
-    public void callFunction(){
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.food_insert_dialog);
-        dialog.show();
-
-        final Button barcodeButton = (Button)dialog.findViewById(R.id.btnBarcode);
-        final Button manualButton = (Button)dialog.findViewById(R.id.btnManual);
-
-        //barcode recognition
-        barcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                new IntentIntegrator((Activity) context).initiateScan();
+
             }
         });
 
-        //manually input data
-        manualButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //popup new dialog
-            }
-        });
 
     }
 
 }
+
+
 
 
