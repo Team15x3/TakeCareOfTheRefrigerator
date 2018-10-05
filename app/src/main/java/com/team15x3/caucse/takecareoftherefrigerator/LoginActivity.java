@@ -42,8 +42,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            rellay1.setVisibility(View.VISIBLE);
-            rellay2.setVisibility(View.VISIBLE);
+
+            if (firebaseAuth.getCurrentUser() != null) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            } else {
+                rellay1.setVisibility(View.VISIBLE);
+                rellay2.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -85,9 +91,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
+
                         if(task.isSuccessful()) {
                             finish();
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
                             /*textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");*/
@@ -114,7 +121,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     private void initViews(){
 
         rellay1 =(RelativeLayout)findViewById(R.id.rellay1);
@@ -123,11 +129,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         //initializig firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
-
-        if(firebaseAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-        }
 
 
         edtUserName = (EditText) findViewById(R.id.edtUserName);
@@ -140,7 +141,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnRegister = (Button)findViewById(R.id.btnRegister);
         //button click event
         btnSignin.setOnClickListener(this);
-        //textviewSignin.setOnClickListener(this);
         btnSearchID.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
     }
