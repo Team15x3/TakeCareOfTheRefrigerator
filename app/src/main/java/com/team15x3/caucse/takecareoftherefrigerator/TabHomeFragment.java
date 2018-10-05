@@ -6,6 +6,8 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private ImageView ivEmptyFoodList;
     private View view;
     private ArrayList<Refrigerator> friger;
-    private  ArrayList<Food> data;
+    private  ArrayList<Food> data ,list;
     private ImageView ivHomeImage;
     private static ListAdapter adapter;
     private Button btnInsert;
@@ -78,13 +80,18 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
         try {
              tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
-            data = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+
+
+            //data =실제 데이터, list=복사본
+            data  = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+            list = new ArrayList<Food>();
+            list.addAll(list);
             if (data.isEmpty()) {
                 ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
                 ivEmptyFoodList.setImageDrawable(getResources().getDrawable(R.drawable.empty));
             } else {
                 Log.d("success","get food list");
-                adapter = new ListAdapter(view.getContext(), R.layout.food_list, data);
+                adapter = new ListAdapter(view.getContext(), R.layout.food_list, list);
                 FoodList.setAdapter(adapter);
 
                 FoodList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,6 +99,19 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         FoodInfoDialog dialog = new FoodInfoDialog(getContext());
                         dialog.callFunction(data.get(i));
+                    }
+                });
+
+                edtSearch.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        String text = edtSearch.getText().toString();
+                        search(text);
                     }
                 });
             }
@@ -120,11 +140,25 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 mgr.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
                 break;
             }
-            case R.id.btnSearch:
 
         }
     }
 
+    private void search(String text){
+        list.clear();
+        if(text.length() == 0){
+            list.addAll(data);
+        }else{
+            for(int i = 0; i<data.size();i++){
+
+                if(data.get(i).getFoodName().toLowerCase().contains(text)){
+                    list.add(data.get(i));
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
 
 
 }
