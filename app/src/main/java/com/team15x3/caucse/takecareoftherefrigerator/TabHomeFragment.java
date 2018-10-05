@@ -49,13 +49,13 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.tab_home_fragment, container, false);
-        FoodList = (ListView) view.findViewById(R.id.lvFoodList);
+        FoodList =  view.findViewById(R.id.lvFoodList);
 
         friger = User.INSTANCE.getRefrigeratorList();
-        btnInsert = (Button)view.findViewById(R.id.btnInsert);
-        edtSearch= (EditText)view.findViewById(R.id.edtSearch);
+        btnInsert = view.findViewById(R.id.btnInsert);
+        edtSearch= view.findViewById(R.id.edtSearch);
         edtSearch.setInputType(0);
-        tvName = (TextView)view.findViewById(R.id.tvName);
+        tvName = view.findViewById(R.id.tvName);
 
         edtSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
@@ -104,7 +104,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 FoodList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        ShowFoodInformation(list.get(i));
+                        ShowFoodInformation(list.get(i),i);
                     }
                 });
 
@@ -166,10 +166,18 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         adapter.notifyDataSetChanged();
     }
 
-    private void ShowFoodInformation(Food food){
+    private void ShowFoodInformation(Food food, int listnumber){
         Intent intent = new Intent(view.getContext(),FoodInfoActivity.class);
-        intent.putExtra("food",food);
+        intent.putExtra("list_number",listnumber);
+        intent.putExtra("food", food);
         startActivityForResult(intent, SHOW_INFORMATION_REQUEST);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==SHOW_INFORMATION_REQUEST && resultCode == FoodInfoActivity.LIST_CHANGED){
+            setFoodList();
+        }
+    }
 }
