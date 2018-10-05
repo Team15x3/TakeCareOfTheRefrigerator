@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FoodInfoActivity"
+    android:orientation="vertical"
+    android:background="@color/beige">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/wine">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_marginTop="10dp"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Information"
+            android:textColor="@color/beige"
+            android:layout_toRightOf="@id/btnBack"
+            android:layout_marginTop="10dp"
+            android:textSize="30dp"/>
+
+        <Button
+            android:id="@+id/btnRevise"
+            android:layout_width="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="45dp"
+            android:layout_toLeftOf="@id/btnDelete"
+            android:background="@drawable/btn_revise"
+            />
+        <Button
+            android:id="@+id/btnDelete"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_delete"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_marginTop="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp">
+                <ImageView
+                    android:id="@+id/ivFoodImage"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+
+                <LinearLayout
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:id="@+id/tvName"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="NameOfFood"
+                        android:textSize="30dp"
+                        android:fontFamily="sans-serif-medium"/>
+
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:id="@+id/tvCountFood"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="count : 3"
+                        android:textSize="20dp"/>
+
+                    <TextView
+                        android:gravity="center_vertical"
+                        android:id="@+id/tvExpirationDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:text="Expriation date : 4 days"
+                        android:textSize="20dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkgray"/>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Ingredients_"
+                android:textSize="20dp"/>
+
+            <TextView
+
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25dp"
+                android:text="정제수,탄산가스,카라멜색소,인산,합성감미료 ( 아스파탐 , 아세설팜칼륨 ),천연착향료,구연산삼나트륨,천연카페인 ( 향미증진제 )"
+                android:id="@+id/tvIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkgray"/>
+
+            <TextView
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Allergy ingredient_"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:textSize="25dp"
+                android:text="우유 대두"
+                android:id="@+id/tvAllergyIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkgray"/>
+
+            <TextView
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Nutrient_"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tvNutrientServing"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="총 제공량 (250ml)"
+                android:textSize="25dp"/>
+
+
+            <TableLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+            </TableLayout>
+
+            <ImageView
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/darkgray"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

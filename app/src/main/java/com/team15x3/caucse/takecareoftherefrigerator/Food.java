@@ -1,15 +1,19 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
-public class Food {
+import java.io.Serializable;
+import java.util.List;
+
+public class Food implements Serializable{
 
     private String mFoodID;
     private String mFoodName;
-
     private String mBacode;
-
+    private int volume; //중량
+    private String volumeUnit;
+    private String foodType;
     private String picture;
+    private List<AllergyIngredient> allergy;
     private int mExpirationDate;
-
     private int mCount;
 
     public Food() {
@@ -42,6 +46,9 @@ public class Food {
         return false;
     }
 
+    public int getmCount() {
+        return mCount;
+    }
 
     public String getFoodID() {
         return mFoodID;
@@ -53,5 +60,27 @@ public class Food {
 
     public int getExpirationDate() {
         return mExpirationDate;
+    }
+}
+
+
+class AllergyIngredient{
+    private int materialId;
+    private String materialName;
+
+    public int getMaterialId() {
+        return materialId;
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 }

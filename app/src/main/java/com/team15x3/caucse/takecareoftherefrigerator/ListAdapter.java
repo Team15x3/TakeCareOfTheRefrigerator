@@ -65,10 +65,13 @@ public class ListAdapter extends BaseAdapter {
         Food curFood = (Food)getItem(pos);
         final String imageUrl = curFood.getPicture();
         tvName.setText(curFood.getFoodName());
-        tvNumberOfFood.setText(""+curFood.getExpirationDate());
-        tvExpirationDate.setText(""+curFood.getExpirationDate());
+        tvNumberOfFood.setText("count : "+curFood.getmCount());
 
-
+        if(curFood.getExpirationDate() == 1){
+            tvExpirationDate.setText(""+curFood.getExpirationDate()+" Day");
+        }else if(curFood.getExpirationDate()>1) {
+            tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");
+        }
         if(imageUrl.equals("")){
             ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
         }else {
