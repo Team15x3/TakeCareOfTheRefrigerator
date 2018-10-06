@@ -64,15 +64,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
             friger = User.INSTANCE.getRefrigeratorList();
 
             friger.add(new Refrigerator("My Friger"));
-
-            friger.get(0).addFood(new Food("ex1","",2,2));
-            friger.get(0).addFood(new Food("ex2","",2,2));
-            friger.get(0).addFood(new Food("ex3","",2,2));
-            friger.get(0).addFood(new Food("ex4","",2,2));
-            friger.get(0).addFood(new Food("ex5","",2,2));
-            friger.get(0).addFood(new Food("ex6","",2,2));
-            friger.get(0).addFood(new Food("ex7","",2,2));
-            friger.get(0).addFood(new Food("ex8","",2,2));
+            SampleInit();
         }
 
         setFoodList();
@@ -179,5 +171,20 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         if(requestCode==SHOW_INFORMATION_REQUEST && resultCode == FoodInfoActivity.LIST_CHANGED){
             setFoodList();
         }
+    }
+
+    private void SampleInit(){
+
+
+        friger.get(0).addFood(new Food("롤앤롤케이크","",2,2));
+        friger.get(0).addFood(new Food("ex2","",2,2));
+        friger.get(0).addFood(new Food("ex3","",2,2));
+        friger.get(0).addFood(new Food("ex4","",2,2));
+        friger.get(0).addFood(new Food("ex5","",2,2));
+        friger.get(0).addFood(new Food("ex6","",2,2));
+        friger.get(0).addFood(new Food("ex7","",2,2));
+        friger.get(0).addFood(new Food("ex8","",2,2));
+
+
     }
 }

@@ -23,6 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -93,8 +97,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
 
+                if (response.isSuccessful()) {
+                    Log.d("GGGG", "this is righjt?");
+
+                    try {
+
+                        String jsonInfo = response.body().string();
+
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonObject = jsonParser.parse(jsonInfo).getAsJsonObject();
+
+                        JsonArray jsonArray = jsonObject.getAsJsonArray("items");
+                        JsonElement jsonElement = jsonArray.get(0);
+
+                        JsonObject jsonObject1 = jsonElement.getAsJsonObject();
+
+                        String foodID = jsonObject1.get("foodId").getAsString();
+                        String foodName = jsonObject1.get("foodName").getAsString();
+                        String barcode = jsonObject1.get("barcode").getAsString();
+
+                        String foodType = jsonObject1.get("foodType").getAsString();
+                        String thumbnailURL = jsonObject1.get("thumbnailUrl").getAsString();
+
+
+                        Log.d("check",foodID);
+/*
                     // Gson 인스턴스 생성
                     gson = new GsonBuilder().create();
                     // JSON 으로 변환
@@ -107,9 +135,10 @@ public class MainActivity extends AppCompatActivity {
                     datap =  response.body().string().toString();
                     Log.d("QQQ", datapasing);
                     Log.d("QQQ", datap);
-                    Log.d("QQQ", strContact);
-                }catch(Exception e){
+                    Log.d("QQQ", strContact);*/
+                    } catch (Exception e) {
 
+                    }
                 }
             }
 

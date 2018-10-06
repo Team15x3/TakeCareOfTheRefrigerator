@@ -80,8 +80,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="NameOfFood"
-                        android:textSize="30dp"
+                        android:text="동원 황다랑어 포도씨유 참치"
+                        android:singleLine="true"
+                        android:textSize="25dp"
                         android:fontFamily="sans-serif-medium"/>
 
                     <TextView
@@ -127,7 +128,6 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:textSize="25dp"
-                android:text="정제수,탄산가스,카라멜색소,인산,합성감미료 ( 아스파탐 , 아세설팜칼륨 ),천연착향료,구연산삼나트륨,천연카페인 ( 향미증진제 )"
                 android:id="@+id/tvIngredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -154,7 +154,6 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:textSize="25dp"
-                android:text="우유 대두"
                 android:id="@+id/tvAllergyIngredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -187,6 +186,7 @@
 
 
             <TableLayout
+                android:id="@+id/table"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_width="match_parent"
