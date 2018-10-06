@@ -26,12 +26,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
@@ -77,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
     APIInterface apiInterface;
 
-    EatSightProcessing mEatSightProcess = new EatSightProcessing();
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -92,9 +88,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEatSightProcess.addFoodInformationFromEatSightAPI("11");
-
-        /*
         apiInterface = APIClient.getClient().create(APIInterface.class);
 
         Call<ResponseBody> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
@@ -106,62 +99,47 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 if (response.isSuccessful()) {
-                    try {
+                    Log.d("GGGG", "this is righjt?");
 
-                        Gson gson = new Gson();
-                        //String jsonInfo = gson.toJson(response.body().string());
+                    try {
 
                         String jsonInfo = response.body().string();
 
-
-
                         JsonParser jsonParser = new JsonParser();
-                        JsonElement element = jsonParser.parse(jsonInfo);
+                        JsonObject jsonObject = jsonParser.parse(jsonInfo).getAsJsonObject();
 
-                        //String str = element.getAsString();
+                        JsonArray jsonArray = jsonObject.getAsJsonArray("items");
+                        JsonElement jsonElement = jsonArray.get(0);
 
-                        JsonArray jsonArray = element.getAsJsonArray();
+                        JsonObject jsonObject1 = jsonElement.getAsJsonObject();
 
-                        for (int i = 0; i < jsonArray.size(); i++) {
-                            JsonObject temp = (JsonObject) jsonArray.get(i);
+                        String foodID = jsonObject1.get("foodId").getAsString();
+                        String foodName = jsonObject1.get("foodName").getAsString();
+                        String barcode = jsonObject1.get("barcode").getAsString();
 
-                            //String temp = temp.get("")
-                        }
-
-                       // JsonObject dataObject = jsonObject.getAsJsonObject("items");
-
-                       // Log.d("GOOD", dataObject.get("foodId").toString());
-                        // Log.d("GOOD",jsonObject.get("rate").toString());
-
-                       // Log.d("GOOD", dataObject.get("servingAmount").toString());
-
-                        Log.d("SSS", jsonInfo);
-
-                    }
-                    catch(JsonParseException e){
-                        Log.d("DDD",e.getMessage());
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                        String foodType = jsonObject1.get("foodType").getAsString();
+                        String thumbnailURL = jsonObject1.get("thumbnailUrl").getAsString();
 
 
-                try {
-
+                        Log.d("check",foodID);
+/*
+                    // Gson 인스턴스 생성
                     gson = new GsonBuilder().create();
-                    String jsonInfo = gson.toJson(response.body().string()); // to Json
-
-                    Log.d("QQQ", jsonInfo);
-
+                    // JSON 으로 변환
+                    strContact = gson.toJson(response.body().string());
 
 
+                    Log.d("QQQ", "" + response.body().string());
+                    datapasing =  response.body().toString();
 
-                }  catch (IOException e) {
-                    e.printStackTrace();
+                    datap =  response.body().string().toString();
+                    Log.d("QQQ", datapasing);
+                    Log.d("QQQ", datap);
+                    Log.d("QQQ", strContact);*/
+                    } catch (Exception e) {
+
+                    }
                 }
-
-
             }
 
             @Override
@@ -170,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-*/
 
         inputBtn = (Button) findViewById(R.id.inputBtn);
         listView = (ListView) findViewById(R.id.listView);
