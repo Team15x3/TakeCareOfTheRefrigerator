@@ -8,7 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.6"
+        android:layout_weight="0.5"
         >
 
         <ImageView
@@ -16,25 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/grad_bg"
+            android:background="@color/wine"
              />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="8"
-                android:layout_height="match_parent"></LinearLayout>
+                android:layout_height="match_parent">
+                <TextView
+                    android:text="sample"
+                    android:id="@+id/tvName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="30dp"
+                    android:textColor="@color/beige"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"/>
+            </LinearLayout>
             <Button
-                android:layout_marginRight="3dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/menu"
-
+                android:layout_marginBottom="10dp"
                 android:layout_alignParentRight="true"
                 />
         </LinearLayout>
@@ -45,79 +55,44 @@
             android:layout_gravity="center_vertical|bottom"
             >
 
-            <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="40dp" />
-
-            <TextView
-                android:id="@+id/tvGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:layout_below="@+id/tvName"
-                android:layout_marginLeft="10dp"
-                android:textSize="20dp"
-                />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:background="@drawable/btn_bg">
 
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_search"/>
 
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text = "Edit"
+            <EditText
+                android:id="@+id/edtSearch"
+                android:textColor="@color/beige"
+                android:backgroundTint="@color/transparent"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
-                />
-
-        </RelativeLayout>
     </FrameLayout>
 
 
-    <LinearLayout
-        android:layout_margin="10dp"
-        android:background="@drawable/btn_search_bg"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/edtSearch"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:layout_marginStart="20dp"
-            android:textSize="20dp"
-            android:layout_marginTop="3dp"
-            android:backgroundTint="@color/transparent"
-            />
-
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_margin="8dp"
-            android:background="@drawable/ic_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.4"></LinearLayout>
-    </LinearLayout>
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="2">
         <ListView
+            android:choiceMode="multipleChoice"
             android:id="@+id/lvFoodList"
             android:layout_margin="20dp"
             android:layout_width="fill_parent"
