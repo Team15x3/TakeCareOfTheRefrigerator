@@ -60,9 +60,17 @@ public class Food {
     @Expose
     private ArrayList<Nutrient> mMainNutrients = new ArrayList<Nutrient>();
 
+    private int mD_Day; /* d-day variable for expiration date */
+
+    private int mExpirationDate;
+
+    private int mCount;
+
     public Food(String foodID, String foodName) {
         mFoodID = foodID;
         mFoodName = foodName;
+
+        mD_Day = 7; /* default value */
     }
 
     public void setFoodID(String foodId) { mFoodID = foodId; }
@@ -112,6 +120,18 @@ public class Food {
     public String getFoodName() { return mFoodName; }
 
     public void setFoodName(String foodName) { mFoodName = foodName; }
+
+    public int getCount() { return mCount; }
+
+    public void setCount(int count) { mCount = count; }
+
+    public int getExpirationDate() { return mExpirationDate; }
+
+    public void setExpirationDate(int expirationDate) { mExpirationDate = expirationDate; }
+
+    public int getD_Day() { return mD_Day; }
+
+    public void setD_Day(int d_day) { mD_Day = d_day; }
 }
 
 class Nutrient {
@@ -164,9 +184,7 @@ class Nutrient {
         return nutrientID;
     }
 
-    public void setServingAmountUnit(String servingAmountUnit) {
-        this.servingAmountUnit = servingAmountUnit;
-    }
+    public void setServingAmountUnit(String servingAmountUnit) { this.servingAmountUnit = servingAmountUnit; }
 
     public String getNutrientName() {
         return nutrientName;
