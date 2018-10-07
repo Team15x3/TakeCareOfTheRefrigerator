@@ -67,13 +67,11 @@ public class MainActivity extends AppCompatActivity {
     public String datap;
     public String strContact;
 
-    private Gson gson;
+    public APIProcessing mApiProcessing = new APIProcessing();
 
     String myBarcode;
     Button btnOpenBarcode;
     TextView text;
-
-    APIInterface apiInterface;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -88,70 +86,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        apiInterface = APIClient.getClient().create(APIInterface.class);
-
-        Call<ResponseBody> call = apiInterface.doGetListResources("ALL","barcode","18801073181905",null
-                ,null,null,null,0,2);
-
-        call.enqueue(new Callback<ResponseBody>() {
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                if (response.isSuccessful()) {
-                    Log.d("GGGG", "this is righjt?");
-
-                    try {
-
-                        String jsonInfo = response.body().string();
-
-                        JsonParser jsonParser = new JsonParser();
-                        JsonObject jsonObject = jsonParser.parse(jsonInfo).getAsJsonObject();
-
-                        JsonArray jsonArray = jsonObject.getAsJsonArray("items");
-                        JsonElement jsonElement = jsonArray.get(0);
-
-                        JsonObject jsonObject1 = jsonElement.getAsJsonObject();
-
-                        String foodID = jsonObject1.get("foodId").getAsString();
-                        String foodName = jsonObject1.get("foodName").getAsString();
-                        String barcode = jsonObject1.get("barcode").getAsString();
-
-                        String foodType = jsonObject1.get("foodType").getAsString();
-                        String thumbnailURL = jsonObject1.get("thumbnailUrl").getAsString();
-
-
-                        Log.d("check",foodID);
-/*
-                    // Gson 인스턴스 생성
-                    gson = new GsonBuilder().create();
-                    // JSON 으로 변환
-                    strContact = gson.toJson(response.body().string());
-
-
-                    Log.d("QQQ", "" + response.body().string());
-                    datapasing =  response.body().toString();
-
-                    datap =  response.body().string().toString();
-                    Log.d("QQQ", datapasing);
-                    Log.d("QQQ", datap);
-                    Log.d("QQQ", strContact);*/
-                    } catch (Exception e) {
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-
+        // mApiProcessing.parseJsonFromBarcode("8801094252601");
 
         inputBtn = (Button) findViewById(R.id.inputBtn);
         listView = (ListView) findViewById(R.id.listView);
-
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
@@ -159,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
 
         listView.setAdapter(dataAdapter);
-
-
         
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

@@ -14,9 +14,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+/* If you want to receive data, */
+/* use APIProcessing class */
+
 public class APIProcessing {
 
     protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);;
+
+    /* get food information from barcode */
 
     public void parseJsonFromBarcode(String barcode) {
         Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
