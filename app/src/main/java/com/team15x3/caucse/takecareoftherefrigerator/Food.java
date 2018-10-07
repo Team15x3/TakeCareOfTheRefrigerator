@@ -1,221 +1,186 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Food implements Serializable{
+public class Food {
 
+    @SerializedName("foodId")
+    @Expose
     private String mFoodID;
+
+    @SerializedName("foodName")
+    @Expose
     private String mFoodName;
-    private String mBacode;
-    private int volume; //중량
-    private String volumeUnit;
-    private String foodType;
-    private String picture;
-    private ArrayList<foodMaterials> materials; //원재료
-    private List<AllergyIngredient> allergy;
-    private int mExpirationDate;
-    private int mCount;
-    private int servingAmount;//총 제공량
-    private String servingAmountUnit; //제공량 단위
-    private ArrayList<Nutrients> nutrients;
 
-    public Food() {
-        //mFoodID = ;
-        //mFoodName = ;
+    @SerializedName("volume")
+    @Expose
+    private Number mVolume;
 
-        //mBacode = ;
+    @SerializedName("volumeUnit")
+    @Expose
+    private String mVolumeUnit;
 
-        // mCount = ;
+    @SerializedName("foodType")
+    @Expose
+    private String mFoodType;
 
-        //mExpirationDate = ;
+    @SerializedName("barcode")
+    @Expose
+    private String mBarcode;
+
+    @SerializedName("thumbnailUrl")
+    @Expose
+    private String mThumbnailUrl;
+
+    @SerializedName("registerDate")
+    @Expose
+    private String mRegisterDate;
+
+    @SerializedName("specificNutrientIncludeYn")
+    @Expose
+    private String mSpecificNutrientIncludeYN;
+
+    @SerializedName("vendors")
+    @Expose
+    private String mVendors;
+
+    @SerializedName("mainNutrientServingMeasureAmount")
+    @Expose
+    private Number mainNutrientServingMeasureAmount;
+
+    @SerializedName("mainNutrientServingMeasureUnit")
+    @Expose
+    private String mainNutrientServingMeasureUnit;
+
+    @SerializedName("mainNutrients")
+    @Expose
+    private ArrayList<Nutrient> mMainNutrients = new ArrayList<Nutrient>();
+
+    public Food(String foodID, String foodName) {
+        mFoodID = foodID;
+        mFoodName = foodName;
     }
 
-    public Food(String mFoodName, String picture, int mCount, int mExpirationDate){
-        materials = new ArrayList<foodMaterials>();
-        allergy = new ArrayList<AllergyIngredient>();
-        nutrients = new ArrayList<Nutrients>();
-        this.mFoodName = mFoodName;
-        this.picture  = picture;
-        this.mCount = mCount;
-        this.mExpirationDate = mExpirationDate;
-    }
+    public void setFoodID(String foodId) { mFoodID = foodId; }
 
-    public void setNutrients(ArrayList<Nutrients> nutrients) {
-        this.nutrients = nutrients;
-    }
+    public String getFoodID() { return mFoodID; }
 
-    public void setAllergy(List<AllergyIngredient> allergy) {
-        this.allergy = allergy;
-    }
+    public void setVolumeUnit(String volumeUnit) { mVolumeUnit = volumeUnit; }
 
-    public void setServingAmount(int servingAmount) {
-        this.servingAmount = servingAmount;
-    }
+    public String getVolumeUnit() { return mVolumeUnit; }
 
-    public void setServingAmountUnit(String servingAmountUnit) {
-        this.servingAmountUnit = servingAmountUnit;
-    }
+    public void setRegisterDate(String registerDate) { mRegisterDate = registerDate; }
 
-    public void setVolumeUnit(String volumeUnit) {
-        this.volumeUnit = volumeUnit;
-    }
+    public String getRegisterDate() { return mRegisterDate; }
 
-    public void setVolume(int volume) {
-        this.volume = volume;
-    }
+    public Object getThumbnailUrl() { return mThumbnailUrl; }
 
-    public void setFoodType(String foodType) {
-        this.foodType = foodType;
-    }
+    public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl = thumbnailUrl; }
 
-    public void setMaterials(ArrayList<foodMaterials> materials) {
-        this.materials = materials;
-    }
+    public void setMainNutrientServingMeasureAmount(Number mainNutrientServingMeasureAmount) { this.mainNutrientServingMeasureAmount = mainNutrientServingMeasureAmount; }
 
-    public void setmBacode(String mBacode) {
-        this.mBacode = mBacode;
-    }
+    public Object getMainNutrientServingMeasureAmount() { return mainNutrientServingMeasureAmount; }
 
-    public void setmCount(int mCount) {
-        this.mCount = mCount;
-    }
+    public Object getMainNutrientServingMeasureUnit() { return mainNutrientServingMeasureUnit; }
 
-    public void setmExpirationDate(int mExpirationDate) {
-        this.mExpirationDate = mExpirationDate;
-    }
+    public void setMainNutrientServingMeasureUnit(String mainNutrientServingMeasureUnit) { this.mainNutrientServingMeasureUnit = mainNutrientServingMeasureUnit; }
 
-    public String getPicture() {
-        return picture;
-    }
+    public Number getVolume() { return mVolume; }
 
-    public boolean updateFoodName(String foodID, String foodName) {
-        if (mFoodID == foodID) {
-            mFoodName = foodName;
-            return true;
-        }
-        return false;
-    }
+    public void setVolume(Number volume) { mVolume = volume; }
 
-    public int getmCount() {
-        return mCount;
-    }
+    public String getFoodType() { return mFoodType; }
 
-    public String getFoodID() {
-        return mFoodID;
-    }
+    public void setFoodType(String foodType) { mFoodType = foodType; }
+
+    public String getBarcode() { return mBarcode; }
+
+    public void setBarcode(String barcode) { mBarcode = barcode; }
+
+    public Object getMainNutrients() { return mMainNutrients; }
+
+    public void setMainNutrients(ArrayList<Nutrient> mainNutrients) { mMainNutrients = mainNutrients; }
+
+    public String getVendors() { return mVendors; }
+
+    public void setVendors(String vendors) { mVendors = vendors; }
 
     public String getFoodName() { return mFoodName; }
 
-    public String getBacode() { return mBacode; }
-
-    public String getServingAmountUnit() {
-        return servingAmountUnit;
-    }
-
-    public ArrayList<Nutrients> getNutrients() {
-        return nutrients;
-    }
-
-    public int getServingAmount() {
-        return servingAmount;
-    }
-
-    public int getExpirationDate() {
-        return mExpirationDate;
-    }
-
-    public ArrayList<foodMaterials> getMaterials() {
-        return materials;
-    }
-    public List<AllergyIngredient> getAllergy() {
-        return allergy;
-    }
+    public void setFoodName(String foodName) { mFoodName = foodName; }
 }
 
+class Nutrient {
 
+    @SerializedName("nutrientId")
+    @Expose
+    private String nutrientID;
 
-class foodMaterials{
-
-    private String materialsStructure; //원재료 구조식
-    private String materialName;    //원재료 이름
-
-    public String getMaterialName() {
-        return materialName;
-    }
-
-    public String getMaterialsStructure() {
-        return materialsStructure;
-    }
-}
-class AllergyIngredient{
-    private int materialId;
-    private String materialName;
-
-    public int getMaterialId() {
-        return materialId;
-    }
-
-    public String getMaterialName() {
-        return materialName;
-    }
-
-    public void setMaterialId(int materialId) {
-        this.materialId = materialId;
-    }
-
-    public void setMaterialName(String materialName) {
-        this.materialName = materialName;
-    }
-}
-
-class Nutrients{
-    private int servingAmount;
-    private String servingAmountUnit;
-    private int rate;
+    @SerializedName("nutrientName")
+    @Expose
     private String nutrientName;
-    private String nutrientId;
 
-    public int getServingAmount() {
-        return servingAmount;
-    }
+    @SerializedName("rate")
+    @Expose
+    private Number rate;
 
-    public String getServingAmountUnit() {
-        return servingAmountUnit;
-    }
+    @SerializedName("servingAmountUnit")
+    @Expose
+    private String servingAmountUnit;
 
-    public String getNutrientName() {
-        return nutrientName;
-    }
+    @SerializedName("servingAmount")
+    @Expose
+    private Number servingAmount;
 
-    public String getNutrientId() {
-        return nutrientId;
-    }
-
-    public int getRate() {
-        return rate;
-    }
-
-    public void setServingAmountUnit(String servingAmountUnit) {
+    public Nutrient(String nutrientID, String nutrientName, Number rate, String servingAmountUnit, Number servingAmount) {
+        this.nutrientID = nutrientID;
+        this.nutrientName = nutrientName;
+        this.rate = rate;
         this.servingAmountUnit = servingAmountUnit;
-    }
-
-    public void setServingAmount(int servingAmount) {
         this.servingAmount = servingAmount;
     }
 
-    public void setRate(int rate) {
-        this.rate = rate;
+    public void setNutrientID(String nutrientID) {
+        this.nutrientID = nutrientID;
     }
 
     public void setNutrientName(String nutrientName) {
         this.nutrientName = nutrientName;
     }
 
-    public void setNutrientId(String nutrientId) {
-        this.nutrientId = nutrientId;
+    public void setRate(Number rate) {
+        this.rate = rate;
     }
 
+    public void setServingAmount(Number servingAmount) {
+        this.servingAmount = servingAmount;
+    }
+
+    public String getNutrientID() {
+        return nutrientID;
+    }
+
+    public void setServingAmountUnit(String servingAmountUnit) {
+        this.servingAmountUnit = servingAmountUnit;
+    }
+
+    public String getNutrientName() {
+        return nutrientName;
+    }
+
+    public Number getRate() {
+        return rate;
+    }
+
+    public String getServingAmountUnit() {
+        return servingAmountUnit;
+    }
+
+    public Number getServingAmount() {
+        return servingAmount;
+    }
 }
