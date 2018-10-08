@@ -56,7 +56,6 @@ public class Data2Activity extends AppCompatActivity {
             public void onClick(View view) {
                 dataAdapter.clear();
                 foodname = editText.getText().toString();
-                Log.d("FOOD",foodname);
                 num2=0;
                 num3=0;
                 if(foodname!="")
@@ -83,7 +82,6 @@ public class Data2Activity extends AppCompatActivity {
 
                         if(data1.equals(foodname))
                         {
-                            Log.d("음식기록",dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
                             foodcode=Integer.parseInt(dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
 
                             FindRecipe2(num2);
@@ -127,8 +125,6 @@ public class Data2Activity extends AppCompatActivity {
 
                         if(foodcode== data4)
                         {
-                            Log.d("dlehd",String.valueOf(num2));
-      
                             recipeid = Integer.parseInt(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
                             dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_NM_KO").getValue().toString());
                             dataAdapter.notifyDataSetChanged();
