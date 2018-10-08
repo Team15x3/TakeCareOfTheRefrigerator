@@ -76,24 +76,18 @@ public class Data2Activity extends AppCompatActivity {
 
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Log.d("레시피3", "ㅇㄴㄹㅇㄴㄹㅇㄴㄹㅇㄴㄹㄴ");
+       
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String enddata= dataSnapshot.child(String.valueOf(num1)).child("RN").getValue().toString();
                        data1=dataSnapshot.child(String.valueOf(num1)).child("IRDNT_NM").getValue().toString();
-                       Log.d("레시피3333",String.valueOf(num1));
-                    Log.d("레시피3", "짜짜짜짜짜짜짜짜");
-                    Log.d("레시피3", String.valueOf(num1));
-                    Log.d("레시피3", dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
-                    Log.d("레시피3",foodname);
-                    Log.d("레시피3333",data1);
-                    Log.d("레시피3",recipe3end);
+
                         if(data1.equals(foodname))
                         {
                             Log.d("음식기록",dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
                             foodcode=Integer.parseInt(dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
 
                             FindRecipe2(num2);
-                            Log.d("이동했나","ㅇㅇㅇㅇ");
+                          
                             recipe3end="end";
                         }
                     if(recipe3end.equals("end")||Integer.parseInt(enddata)==6104)
@@ -112,10 +106,7 @@ public class Data2Activity extends AppCompatActivity {
         });
 
     }
-    public void pp()
-    {
-        Log.d("ppppp","pppppp");
-    }
+
     public void FindRecipe2(int bb)
     {
         databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe2"+"/"+"data");
@@ -128,17 +119,16 @@ public class Data2Activity extends AppCompatActivity {
                // dataAdapter.clear();
 
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    Log.d("레시피2","sdfsdfsfsdfdsf");
+ 
                     recipe3end="abcd";
-                        Log.d("레시피2",String.valueOf(foodcode));
+           
                         data4=Integer.parseInt(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
 
-                        Log.d("레시피77",String.valueOf(data4));
-                        Log.d("레시피33333",recipe2end);
+
                         if(foodcode== data4)
                         {
                             Log.d("dlehd",String.valueOf(num2));
-                            Log.d("이동했니","ㅇㅇ");
+      
                             recipeid = Integer.parseInt(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
                             dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_NM_KO").getValue().toString());
                             dataAdapter.notifyDataSetChanged();
@@ -168,7 +158,7 @@ public class Data2Activity extends AppCompatActivity {
                             FindRecipe1(num3);
                             recipe2end="end";
                         }
-                        Log.d("아이",String.valueOf(num2));
+      
 
                     if(recipe2end.equals("end")||data4==195453)
                         break;
@@ -192,8 +182,6 @@ public class Data2Activity extends AppCompatActivity {
 
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Log.d("data3",data1);
-                Log.d("data1",String.valueOf(recipeid));
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     recipe2end="abcd";
                     recipe1end="abcd";
@@ -210,7 +198,7 @@ public class Data2Activity extends AppCompatActivity {
                     }
 
                     if (recipe1end.equals("end")||Integer.parseInt(data6)==195453) {
-                        Log.d("레시피333",recipe3end);
+
                         Recipe3(num1 + 1);
                         num3++;
                         break;
