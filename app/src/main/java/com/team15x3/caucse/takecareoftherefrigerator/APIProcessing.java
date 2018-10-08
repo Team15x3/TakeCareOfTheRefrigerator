@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -20,11 +21,11 @@ import retrofit2.Response;
 
 public class APIProcessing {
 
+    protected Food mFood;
     protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);;
 
     /* get food information from barcode */
-
-    public void parseJsonFromBarcode(String barcode) {
+    public Food parseJsonFromBarcode(String barcode) {
         Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
                 barcode, null, null, null,
                 null, 0, 2);
@@ -34,9 +35,9 @@ public class APIProcessing {
             public void onResponse(Call<EatSightAPI> call, Response<EatSightAPI> response) {
                 if (response.isSuccessful()) {
                     EatSightAPI eatSightAPI = response.body();
-                    ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
+                    List<Food> foodArrayList = eatSightAPI.getFoodList();
 
-                    Food food = foodArrayList.get(0);
+                    mFood = foodArrayList.get(0);
                 }
             }
 
@@ -45,6 +46,8 @@ public class APIProcessing {
                 t.printStackTrace();
             }
         });
+
+        return mFood;
     }
 
     public void parseJsonFromFoodID(String foodID) {

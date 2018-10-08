@@ -10,13 +10,13 @@ public class EatSightAPI {
 
     @SerializedName("items")
     @Expose
-    private ArrayList<Food> mFoodList = new ArrayList<Food>();
+    private List<Food> mFoodList = new ArrayList<Food>();
 
     @SerializedName("page")
     @Expose
     private Page mPage;
 
-    public ArrayList<Food> getFoodList() {
+    public List<Food> getFoodList() {
         return mFoodList;
     }
 
