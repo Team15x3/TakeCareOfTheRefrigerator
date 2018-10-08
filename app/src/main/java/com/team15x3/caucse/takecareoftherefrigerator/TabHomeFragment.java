@@ -161,7 +161,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private void ShowFoodInformation(Food food, int listnumber){
         Intent intent = new Intent(view.getContext(),FoodInfoActivity.class);
         intent.putExtra("list_number",listnumber);
-        intent.putExtra("food", food);
+        //intent.putExtra("food", food);
         startActivityForResult(intent, SHOW_INFORMATION_REQUEST);
     }
 
@@ -175,7 +175,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
     private void SampleInit(){
 
-
+/*
         friger.get(0).addFood(new Food("롤앤롤케이크","",2,2));
         friger.get(0).addFood(new Food("ex2","",2,2));
         friger.get(0).addFood(new Food("ex3","",2,2));
@@ -183,7 +183,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         friger.get(0).addFood(new Food("ex5","",2,2));
         friger.get(0).addFood(new Food("ex6","",2,2));
         friger.get(0).addFood(new Food("ex7","",2,2));
-        friger.get(0).addFood(new Food("ex8","",2,2));
+        friger.get(0).addFood(new Food("ex8","",2,2));*/
 
 
     }

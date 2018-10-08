@@ -61,5 +61,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         myBarcode = result.getContents(); //get barcode number
         Toast.makeText(getApplicationContext(),myBarcode,Toast.LENGTH_SHORT).show();
         //api parsing , get information
+
+        APIProcessing api = new APIProcessing();
+        Food f = api.parseJsonFromBarcode(myBarcode);
     }
 }

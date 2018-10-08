@@ -56,7 +56,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvNutrientServing = findViewById(R.id.tvNutrientServing);
 
         tvFoodName.setText(food.getFoodName());
-        tvCountFood.setText("Quantity : "+food.getmCount());
+        /*tvCountFood.setText("Quantity : "+food.getmCount());
         tvExpirationDate.setText("Expiration date : "+food.getExpirationDate()) ;
 
         if(food.getMaterials().size() != 0){
@@ -102,6 +102,8 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
             table.addView(tablerow);
 
         }
+
+        */
     }
 
     @Override
