@@ -1,7 +1,9 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,22 +110,47 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        if(view == btnBack){
-            finish();
-        }
-        if(view == btnDelete){
-            ArrayList<Food> foodlist= User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
-            Intent intent = getIntent();
-            int num = intent.getIntExtra("list_number",-1);
-            Log.d("index number",num+"");
-            foodlist.remove(num);
-            setResult(LIST_CHANGED,intent);
-            finish();
-        }
-
+        if(view == btnBack){ finish(); }
+        if(view == btnDelete){ deletion(); }
         if(view == btnRevise){
 
             //ToDo
         }
     }
+
+
+
+    private void deletion(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm deletion")
+                .setMessage("Are you sure you want to delete this food?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ArrayList<Food> foodlist= User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+                        Intent intent = getIntent();
+                        int num = intent.getIntExtra("list_number",-1);
+                        Log.d("index number",num+"");
+                        foodlist.remove(num);
+                        setResult(LIST_CHANGED,intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+
+
 }

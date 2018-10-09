@@ -3,10 +3,11 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Food {
+public class Food implements Serializable{
 
     @SerializedName("foodId")
     @Expose
@@ -58,19 +59,15 @@ public class Food {
 
     @SerializedName("mainNutrients")
     @Expose
-    private ArrayList<Nutrient> mMainNutrients = new ArrayList<Nutrient>();
+    private List<Nutrient> mMainNutrients = new ArrayList<Nutrient>();
 
-    private int mD_Day; /* d-day variable for expiration date */
 
-    private int mExpirationDate;
-
-    private int mCount;
 
     public Food(String foodID, String foodName) {
         mFoodID = foodID;
         mFoodName = foodName;
 
-        mD_Day = 7; /* default value */
+        //mD_Day = 7; /* default value */
     }
 
     public void setFoodID(String foodId) { mFoodID = foodId; }
@@ -121,7 +118,7 @@ public class Food {
 
     public void setFoodName(String foodName) { mFoodName = foodName; }
 
-    public int getCount() { return mCount; }
+ /*   public int getCount() { return mCount; }
 
     public void setCount(int count) { mCount = count; }
 
@@ -131,7 +128,7 @@ public class Food {
 
     public int getD_Day() { return mD_Day; }
 
-    public void setD_Day(int d_day) { mD_Day = d_day; }
+    public void setD_Day(int d_day) { mD_Day = d_day; }*/
 }
 
 class Nutrient {
