@@ -85,53 +85,53 @@ public class Food {
 
     public String getRegisterDate() { return mRegisterDate; }
 
-    public Object getThumbnailUrl() { return mThumbnailUrl; }
-
     public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl = thumbnailUrl; }
+
+    public String getThumbnailUrl() { return mThumbnailUrl; }
 
     public void setMainNutrientServingMeasureAmount(Number mainNutrientServingMeasureAmount) { this.mainNutrientServingMeasureAmount = mainNutrientServingMeasureAmount; }
 
-    public Object getMainNutrientServingMeasureAmount() { return mainNutrientServingMeasureAmount; }
-
-    public Object getMainNutrientServingMeasureUnit() { return mainNutrientServingMeasureUnit; }
+    public int getMainNutrientServingMeasureAmount() { return mainNutrientServingMeasureAmount.intValue(); }
 
     public void setMainNutrientServingMeasureUnit(String mainNutrientServingMeasureUnit) { this.mainNutrientServingMeasureUnit = mainNutrientServingMeasureUnit; }
 
-    public Number getVolume() { return mVolume; }
+    public String getMainNutrientServingMeasureUnit() { return mainNutrientServingMeasureUnit; }
 
     public void setVolume(Number volume) { mVolume = volume; }
 
-    public String getFoodType() { return mFoodType; }
+    public int getVolume() { return mVolume.intValue(); }
 
     public void setFoodType(String foodType) { mFoodType = foodType; }
 
-    public String getBarcode() { return mBarcode; }
+    public String getFoodType() { return mFoodType; }
 
     public void setBarcode(String barcode) { mBarcode = barcode; }
 
-    public Object getMainNutrients() { return mMainNutrients; }
+    public String getBarcode() { return mBarcode; }
 
     public void setMainNutrients(ArrayList<Nutrient> mainNutrients) { mMainNutrients = mainNutrients; }
 
-    public String getVendors() { return mVendors; }
+    public ArrayList<Nutrient> getMainNutrients() { return mMainNutrients; }
 
     public void setVendors(String vendors) { mVendors = vendors; }
 
-    public String getFoodName() { return mFoodName; }
+    public String getVendors() { return mVendors; }
 
     public void setFoodName(String foodName) { mFoodName = foodName; }
 
-    public int getCount() { return mCount; }
+    public String getFoodName() { return mFoodName; }
 
     public void setCount(int count) { mCount = count; }
 
-    public int getExpirationDate() { return mExpirationDate; }
+    public int getCount() { return mCount; }
 
     public void setExpirationDate(int expirationDate) { mExpirationDate = expirationDate; }
 
-    public int getD_Day() { return mD_Day; }
+    public int getExpirationDate() { return mExpirationDate; }
 
     public void setD_Day(int d_day) { mD_Day = d_day; }
+
+    public int getD_Day() { return mD_Day; }
 }
 
 class Nutrient {
@@ -168,37 +168,37 @@ class Nutrient {
         this.nutrientID = nutrientID;
     }
 
+    public String getNutrientID() {
+        return nutrientID;
+    }
+
     public void setNutrientName(String nutrientName) {
         this.nutrientName = nutrientName;
+    }
+
+    public String getNutrientName() {
+        return nutrientName;
     }
 
     public void setRate(Number rate) {
         this.rate = rate;
     }
 
+    public int getRate() {
+        return rate.intValue();
+    }
+
     public void setServingAmount(Number servingAmount) {
         this.servingAmount = servingAmount;
-    }
-
-    public String getNutrientID() {
-        return nutrientID;
-    }
-
-    public void setServingAmountUnit(String servingAmountUnit) { this.servingAmountUnit = servingAmountUnit; }
-
-    public String getNutrientName() {
-        return nutrientName;
-    }
-
-    public Number getRate() {
-        return rate;
     }
 
     public String getServingAmountUnit() {
         return servingAmountUnit;
     }
 
-    public Number getServingAmount() {
-        return servingAmount;
+    public void setServingAmountUnit(String servingAmountUnit) { this.servingAmountUnit = servingAmountUnit; }
+
+    public int getServingAmount() {
+        return servingAmount.intValue();
     }
 }

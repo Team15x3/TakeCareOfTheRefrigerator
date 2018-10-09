@@ -62,7 +62,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Toast.makeText(getApplicationContext(),myBarcode,Toast.LENGTH_SHORT).show();
         //api parsing , get information
 
-        APIProcessing api = new APIProcessing();
-        Food f = api.parseJsonFromBarcode(myBarcode);
+        /*APIProcessing api = new APIProcessing();
+        Food f = api.parseJsonFromBarcode(myBarcode);*/
     }
 }
