@@ -6,22 +6,24 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class Refrigerator {
+    private String mName;
+
     private ArrayList<Food>   mFoodList;
     private ArrayList<Recipe> mRecipeList;
-    private String Name;
     private FoodProcessing   mFoodProcess;
     private RecipeProcessing mRecipePrcess;
 
     public Refrigerator(String name) {
-        this.Name = name;
-        mRecipeList = new ArrayList<Recipe>();
+        mName = name;
+
         mFoodList     = new ArrayList<Food>();
+        mRecipeList = new ArrayList<Recipe>();
         mFoodProcess  = new FoodProcessing(mFoodList);
         mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);
     }
 
     public String getName() {
-        return Name;
+        return mName;
     }
 
     public void addFood(Food food) {
@@ -59,11 +61,9 @@ class AscendingExpirationDate implements Comparator<Food> {
 
     @Override
     public int compare(Food o1, Food o2) {
-
-        return 1;
-       /* if (o1.getExpirationDate() > o2.getExpirationDate()) { return 1; }
+        if (o1.getExpirationDate() > o2.getExpirationDate()) { return 1; }
         else if (o1.getExpirationDate() < o2.getExpirationDate()) { return -1; }
-        else { return 0; }*/
+        else { return 0; }
     }
 }
 

@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-         mApiProcessing.parseJsonFromBarcode("8801094252601");
+        mApiProcessing.parseJsonFromBarcode("8801094252601");
 
         inputBtn = (Button) findViewById(R.id.inputBtn);
         listView = (ListView) findViewById(R.id.listView);

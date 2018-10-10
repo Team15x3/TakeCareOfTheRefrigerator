@@ -10,13 +10,13 @@ public class EatSightAPI {
 
     @SerializedName("items")
     @Expose
-    private List<Food> mFoodList = new ArrayList<Food>();
+    private ArrayList<Food> mFoodList = new ArrayList<Food>();
 
     @SerializedName("page")
     @Expose
     private Page mPage;
 
-    public List<Food> getFoodList() {
+    public ArrayList<Food> getFoodList() {
         return mFoodList;
     }
 
@@ -36,4 +36,10 @@ class Page {
     @SerializedName("totalCount")
     @Expose
     private Number totalCount;
+
+    public int getOffset() { return offset.intValue(); }
+
+    public int getResultCount() { return resultCount.intValue(); }
+
+    public int getTotalCount() { return totalCount.intValue(); }
 }
