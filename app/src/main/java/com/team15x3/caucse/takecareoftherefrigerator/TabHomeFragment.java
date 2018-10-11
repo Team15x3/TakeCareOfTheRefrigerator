@@ -82,6 +82,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
         try {
              tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
+
             //data =실제 데이터, list=복사본
             data  = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
             list = new ArrayList<Food>();

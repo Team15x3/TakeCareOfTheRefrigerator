@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -63,7 +65,7 @@ public class ListAdapter extends BaseAdapter {
         TextView tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
 
         Food curFood = (Food)getItem(pos);
-        final String imageUrl="ho";// = curFood.getPicture();
+        final String imageUrl=curFood.getThumbnailUrl();
         tvName.setText(curFood.getFoodName());
         //tvNumberOfFood.setText("count : "+curFood.getmCount());
 
@@ -72,34 +74,19 @@ public class ListAdapter extends BaseAdapter {
         }else if(curFood.getExpirationDate()>1) {
             tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");*/
         //
-        if(imageUrl.equals("")){
+        Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
+        if(curFood.getThumbnailUrl().equals("")){
             ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
         }else {
-            //set image using url
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(imageUrl);
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        connection.setDoInput(true);
-                        connection.connect();
-
-                        InputStream input = connection.getInputStream();
-                        FoodPic = BitmapFactory.decodeStream(input);
-                    } catch (IOException ex) {
-
-                    }
-                }
-            };
-            thread.start();
-            try {
-                thread.join();
-                ivPicture.setImageBitmap(FoodPic);
-            } catch (InterruptedException e) {
-
+            File imgFile = new File(curFood.getThumbnailUrl());
+            if (imgFile.exists()) {
+                Log.d("PICTURE_ADDRESS","called!");
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ivPicture.setImageBitmap(myBitmap);
             }
+
         }
+
         return view;
     }
 

@@ -11,6 +11,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -164,6 +166,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Image Upload");
             builder.setPositiveButton("Take picture",cameraListener);
+            builder.setNeutralButton("Album",albumListener);
             builder.setNegativeButton("cancel",cancelListener);
             builder.show();
         }
@@ -198,10 +201,12 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 if(resultCode !=RESULT_OK) return;
 
                 final Bundle extras = data.getExtras();
-                String filePath  = Environment.getExternalStorageDirectory().getAbsolutePath()+"/FoodPicture/"+System.currentTimeMillis()+"jpg";
+                String filePath  = Environment.getExternalStorageDirectory().getAbsolutePath()+"/TakeCareOfTheRefrigerator/"+System.currentTimeMillis()+"jpg";
                 if(extras != null){
                     Bitmap photo = extras.getParcelable("data");
                     ivFoodImage.setImageBitmap(photo);
+                    ivFoodImage.setVisibility(View.VISIBLE);
+                    btnFoodImage.setVisibility(View.INVISIBLE);
                     storeCropImage(photo,filePath);
                     absolutePath = filePath;
                     break;
@@ -211,10 +216,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
             }
         }
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode,data);
-        myBarcode = result.getContents(); //get barcode number
-        Toast.makeText(getApplicationContext(),myBarcode,Toast.LENGTH_SHORT).show();
-        //api parsing , get information
+            //IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            //myBarcode = result.getContents(); //get barcode number
+            //Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
+            //api parsing , get information
 
 
         //Food f = mApiProcessing.parseJsonFromBarcode(myBarcode);
@@ -224,8 +229,16 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     public void doTakePhotoAction(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String url = "tmp_"+String.valueOf(System.currentTimeMillis())+".jpg";
-        ImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
+        String url = "tmp_"+String.valueOf(System.currentTimeMillis());
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        try {
+            File image = File.createTempFile(url,".jpg",storageDir);
+            absolutePath = image.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //ImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
+        ImageCaptureUri = FileProvider.getUriForFile(getApplicationContext(), "com.team15x3.caucse.takecareoftherefrigerator.fileprovider",new File(Environment.getExternalStorageDirectory(),url));
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageCaptureUri);
         startActivityForResult(intent, PICK_FROM_CAMERA);
@@ -273,6 +286,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     private void setFoodInformation(){
         InsertFood = new Food();
+        InsertFood.setThumbnailUrl(absolutePath);
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
     }

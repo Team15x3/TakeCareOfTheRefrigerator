@@ -87,7 +87,7 @@ public class Food implements Serializable{
 
     public String getRegisterDate() { return mRegisterDate; }
 
-    public Object getThumbnailUrl() { return mThumbnailUrl; }
+    public String getThumbnailUrl() { return mThumbnailUrl; }
 
     public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl = thumbnailUrl; }
 
