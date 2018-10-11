@@ -18,11 +18,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".InsertFoodActivity" android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".HomeActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".InsertFoodActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".FoodInfoActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SlidingMenuActivity"></activity>
     </application>
 
 </manifest>

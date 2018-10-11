@@ -3,10 +3,11 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Food {
+public class Food implements Serializable{
 
     @SerializedName("foodId")
     @Expose
@@ -66,6 +67,7 @@ public class Food {
 
     private int mCount;
 
+    public Food(){}
     public Food(String foodID, String foodName) {
         mFoodID = foodID;
         mFoodName = foodName;

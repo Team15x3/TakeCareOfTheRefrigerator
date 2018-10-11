@@ -57,7 +57,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvAllergyIngredient = findViewById(R.id.tvAllergyIngredient);
         tvNutrientServing = findViewById(R.id.tvNutrientServing);
 
-        tvFoodName.setText(food.getFoodName());
+        //tvFoodName.setText(food.getFoodName());
         /*tvCountFood.setText("Quantity : "+food.getmCount());
         tvExpirationDate.setText("Expiration date : "+food.getExpirationDate()) ;
 

@@ -80,24 +80,18 @@
                         android:layout_margin="10dp">
 
                         <Button
+                            android:id="@+id/btnFoodImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/add_picture"/>
                         <ImageView
+                            android:id="@+id/ivFoodImage"
                             android:layout_width="match_parent"
                             android:layout_height= "match_parent"/>
 
                     </FrameLayout>
 
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnExpirationDate"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Set Expiration date"
-                    android:background="@drawable/btn_bg"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -119,6 +113,15 @@
                         android:gravity="center"
                         android:textSize="20dp" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnExpirationDate"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Set Expiration date"
+                    android:background="@drawable/btn_bg"/>
+
                 <LinearLayout
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
@@ -243,11 +246,11 @@
                 android:background="@drawable/btn_bg"/>
 
             <Button
-                android:id="@+id/btnCancle"
+                android:id="@+id/btnCancel"
                 android:layout_margin="4dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="Cancle"
+                android:text="Cancel"
                 android:textColor="@color/wine"
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg"/>
