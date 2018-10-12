@@ -85,7 +85,7 @@ public class ListAdapter extends BaseAdapter {
     }
 
     private void setPictureOnList(View view){
-        if(curFood.getThumbnailUrl().equals("")){
+        if( curFood.getThumbnailUrl() == null || curFood.getThumbnailUrl().isEmpty()){
             Log.d("PICTURE_ADDRESS","NULL");
             ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
         }else if(curFood.getIsFromGallery() == true){

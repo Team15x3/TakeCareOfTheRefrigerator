@@ -27,8 +27,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_weight="8">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -51,24 +51,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Food name"
-                            android:singleLine="true"/>
+                            android:singleLine="true" />
+
                         <LinearLayout
-                            android:layout_marginTop="5dp"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:textSize="20dp"
-                                android:text="Quantity"/>
+                                android:text="Quantity"
+                                android:textSize="20dp" />
+
                             <Spinner
                                 android:id="@+id/spinQuantity"
-                                android:layout_marginStart="10dp"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"></Spinner>
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"></Spinner>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -76,18 +78,19 @@
                     <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:layout_weight="1">
 
                         <Button
                             android:id="@+id/btnFoodImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/add_picture"/>
+                            android:background="@drawable/add_picture" />
+
                         <ImageView
                             android:id="@+id/ivFoodImage"
                             android:layout_width="match_parent"
-                            android:layout_height= "match_parent"/>
+                            android:layout_height="match_parent" />
 
                     </FrameLayout>
 
@@ -99,133 +102,149 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:textSize="20dp"
-                        android:text="Expriation date "/>
+                        android:text="Expriation date "
+                        android:textSize="20dp" />
+
                     <TextView
                         android:id="@+id/tvExpirationDate"
-                        android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
                         android:gravity="center"
                         android:textSize="20dp" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btnExpirationDate"
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Set Expiration date"
-                    android:background="@drawable/btn_bg"/>
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_bg"
+                    android:text="Set Expiration date" />
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:textSize="20dp"
-                        android:text="Alarm date "/>
+                        android:text="Alarm date "
+                        android:textSize="20dp" />
+
                     <Spinner
                         android:id="@+id/spinAlarmDate"
-                        android:layout_marginStart="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"></Spinner>
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"></Spinner>
 
                 </LinearLayout>
 
 
                 <LinearLayout
+                    android:layout_marginTop="10dp"
                     android:id="@+id/linShowInformation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    >
 
-                    <ImageView
-                        android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/wine"/>
+
+
                     <TextView
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:text="Food Information"
-                        android:textSize="25dp"
-                        android:gravity="center"
-                        />
+                        android:textSize="25dp" />
+
                     <ImageView
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/wine"/>
-
+                        android:layout_marginTop="10dp"
+                        android:background="@color/wine" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Ingredients"
-                        android:gravity="center"
-                        android:textSize="15dp"/>
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="20dp"/>
-                    <ImageView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/wine"/>
-
-                    <TextView
                         android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Allergy Ingredients"
                         android:gravity="center"
-                        android:textSize="15dp"/>
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="20dp"/>
-                    <ImageView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/wine"/>
-
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:text="Nutrients"
-                        android:gravity="center"
-                        android:textSize="15dp"/>
+                        android:textSize="15dp" />
+
                     <TextView
-                        android:layout_marginTop="10dp"
+                        android:id="@+id/tvNutrientServing"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20dp"/>
-                    <ImageView
                         android:layout_marginTop="10dp"
+                        android:textSize="20dp" />
+
+                    <TableLayout
+                        android:id="@+id/table"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></TableLayout>
+                    <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/wine"/>
+                        android:layout_marginTop="10dp"
+                        android:background="@color/wine" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:text="Allergy Ingredients"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/tvAllergyIngredient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/wine" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Ingredients"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/tvIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/wine" />
 
                 </LinearLayout>
             </LinearLayout>
+
+
+
+
         </ScrollView>
-
-
 
 
         <LinearLayout
@@ -255,10 +274,5 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg"/>
         </LinearLayout>
-
-        </LinearLayout>
-
-
-
-
+    </LinearLayout>
 </LinearLayout>

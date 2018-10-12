@@ -1,6 +1,7 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -55,14 +56,6 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         btnRevise = (Button)findViewById(R.id.btnRevise);
         table = findViewById(R.id.table);
 
-        SetInformationOfFood();
-
-        btnBack.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
-        btnRevise.setOnClickListener(this);
-    }
-
-    private void SetInformationOfFood() {
         tvFoodName = findViewById(R.id.tvName);
         tvCountFood = findViewById(R.id.tvCountFood);
         tvExpirationDate = findViewById(R.id.tvExpirationDate);
@@ -75,42 +68,47 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvExpirationDate.setText("Exp date : "+food.getExpirationDate()) ;
 
         //setPicture(food);
-        if(food.getMaterialList().size() != 0){
-            for(int i = 0; i<food.getMaterialList().size()-1;i++){
-                tvIngredients.append(food.getMaterialList().get(i).getMaterialName() +", ");
-            }
-            tvIngredients.append(food.getMaterialList().get(food.getMaterialList().size()-1).getMaterialName());
+
+        SetInformationOfFood(food, tvIngredients, tvAllergyIngredient, tvNutrientServing, table,this);
+
+        btnBack.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+        btnRevise.setOnClickListener(this);
+    }
+
+    public static void  SetInformationOfFood(Food food, TextView tvIngredients, TextView tvAllergyIngredient, TextView tvNutrientServing, TableLayout table, Context context) {
+
+        Iterator<Material> materials = food.getMaterialList().iterator();
+        while(materials.hasNext()){
+            tvIngredients.append(materials.next().getMaterialName() +", ");
         }
 
         Iterator<Allergy> iter = food.getAllergyList().iterator();
         while(iter.hasNext()) {
             tvAllergyIngredient.append(iter.next().getMaterialName()+", ");
         }
-
-
- /*       if(food.getAllergyList().size()!=0){
-            for(int i = 0; i<food.getAllergyList().size()-1; i++){
-                tvAllergyIngredient.append(food.getAllergyList().get(i).getMaterialName()+", ");
-            }
-            tvAllergyIngredient.append(food.getAllergyList().get(food.getAllergyList().size()-1).getMaterialName());
-        }*/
         tvNutrientServing.setText("Total Serving Amount ("+food.getMainNutrientServingMeasureAmount()+food.getMainNutrientServingMeasureUnit()+")");
 
-        for(int i = 0 ; i<food.getMainNutrientsList().size();i++){
-            TableRow tablerow = new TableRow(this);
+        Iterator<Nutrient> nutrientIterator = food.getMainNutrientsList().iterator();
+        while(nutrientIterator.hasNext()){
+            Nutrient f = nutrientIterator.next();
+            TableRow tablerow = new TableRow(context);
             tablerow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT));
 
-            TextView name = new TextView(this);
-            name.setText(food.getMainNutrientsList().get(i).getNutrientName());
+            TextView name = new TextView(context);
+            name.setText(f.getNutrientName()+"   ");
+            name.setTextSize(20);
             name.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-            TextView servingAmount = new TextView(this);
-            servingAmount.setText(food.getMainNutrientsList().get(i).getServingAmount() + food.getMainNutrientsList().get(i).getServingAmountUnit());
+            TextView servingAmount = new TextView(context);
+            servingAmount.setText(f.getServingAmount() + f.getServingAmountUnit().toLowerCase()+"   ");
             servingAmount.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            servingAmount.setTextSize(20);
 
-            TextView rate = new TextView(this);
-            rate.setText(food.getMainNutrientsList().get(i).getRate()+"%");
+            TextView rate = new TextView(context);
+            rate.setText(f.getRate()+"%");
             rate.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            rate.setTextSize(20);
 
             tablerow.addView(name);
             tablerow.addView(servingAmount);

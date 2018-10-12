@@ -116,23 +116,31 @@
                 android:background="@color/darkgray"/>
 
             <TextView
+                android:layout_marginEnd="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Ingredients_"
-                android:textSize="15dp"/>
+                android:text="Nutrient_"
+                android:textSize="18dp"/>
 
             <TextView
-
+                android:id="@+id/tvNutrientServing"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:textSize="25dp"
-                android:id="@+id/tvIngredients"
+                android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="20dp"/>
 
 
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </TableLayout>
             <ImageView
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
@@ -148,16 +156,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Allergy ingredient_"
-                android:textSize="15dp"/>
+                android:textSize="18dp"/>
 
             <TextView
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:id="@+id/tvAllergyIngredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+
+
             <ImageView
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
@@ -167,31 +177,22 @@
                 android:background="@color/darkgray"/>
 
             <TextView
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Nutrient_"
-                android:textSize="15dp"/>
+                android:text="Ingredients_"
+                android:textSize="18dp"/>
 
             <TextView
-                android:id="@+id/tvNutrientServing"
+
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
+                android:textSize="20dp"
+                android:id="@+id/tvIngredients"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"/>
+                android:layout_height="wrap_content" />
 
-
-            <TableLayout
-                android:id="@+id/table"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </TableLayout>
 
             <ImageView
                 android:layout_marginTop="20dp"
@@ -200,6 +201,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/darkgray"/>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

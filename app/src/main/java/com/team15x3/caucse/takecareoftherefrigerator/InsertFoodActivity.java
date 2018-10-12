@@ -26,7 +26,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +63,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     private int Month =calendar.get(Calendar.MONTH);
     private int Year = calendar.get(Calendar.YEAR);
     protected Food InsertFood = new Food();
+    protected TextView tvIngredients, tvAllergyIngredient, tvNutrientServing;
+    protected TableLayout table;
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
@@ -68,6 +72,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     EditText edtName;
     TextView tvExpirationDate;
     ImageView ivFoodImage;
+    LinearLayout linShowInformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,11 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         btnFoodImage = (Button)findViewById(R.id.btnFoodImage);
         btnExpirationDate = (Button)findViewById(R.id.btnExpirationDate);
         tvExpirationDate = (TextView)findViewById(R.id.tvExpirationDate);
+        linShowInformation = (LinearLayout)findViewById(R.id.linShowInformation);
+        tvIngredients = (TextView)findViewById(R.id.tvIngredients);
+        tvAllergyIngredient = (TextView)findViewById(R.id.tvAllergyIngredient);
+        tvNutrientServing = (TextView)findViewById(R.id.tvNutrientServing);
+        table = (TableLayout)findViewById(R.id.table);
 
         final ArrayList<Integer> spinQuantityList = new ArrayList<>();
         for(int i = 0; i<100 ;i++){
@@ -261,12 +271,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                                     edtName.setText(InsertFood.getFoodName());
 
                                     parseJsonFromFoodID(InsertFood.getFoodID());
-
-                                    InsertFood.setIsFromGallery(false);
-                                    Picasso.with(getApplicationContext())
-                                            .load(InsertFood.getThumbnailUrl())
-                                            .into(ivFoodImage);
-                                    btnFoodImage.setVisibility(View.INVISIBLE);
                                 }
                             }
 
@@ -290,6 +294,17 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                                     if (response.body().getMaterialList() != null) {
                                         InsertFood.setMaterialList(response.body().getMaterialList());
                                     }
+
+                                    //setting information on the activity
+                                    InsertFood.setIsFromGallery(false);
+                                    Picasso.with(getApplicationContext())
+                                            .load(InsertFood.getThumbnailUrl())
+                                            .into(ivFoodImage);
+                                    btnFoodImage.setVisibility(View.INVISIBLE);
+                                    linShowInformation.setVisibility(View.VISIBLE);
+
+                                    FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
+
                                 }
                             }
 
@@ -309,9 +324,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                 APIProcessing api = new APIProcessing();
                 api.execute(myBarcode);
-
-                //InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
-
             }
 
         }
