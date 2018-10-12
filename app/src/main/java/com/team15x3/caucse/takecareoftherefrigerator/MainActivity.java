@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
     public String datap;
     public String strContact;
 
-    public APIProcessing mApiProcessing = new APIProcessing();
-
     String myBarcode;
     Button btnOpenBarcode;
     TextView text;
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mApiProcessing.parseJsonFromBarcode("8801094252601");
 
         inputBtn = (Button) findViewById(R.id.inputBtn);
         listView = (ListView) findViewById(R.id.listView);

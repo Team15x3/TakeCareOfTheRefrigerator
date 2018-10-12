@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,6 +29,10 @@ public class ListAdapter extends BaseAdapter {
     private ArrayList<Food> lists = new ArrayList<Food>();
     private Bitmap FoodPic;
     private int layout;
+    private Food curFood;
+    private ImageView ivPicture;
+    TextView tvName,tvNumberOfFood, tvExpirationDate;
+
 
     public ListAdapter(Context context, int layout, ArrayList<Food> data){
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,50 +65,42 @@ public class ListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.food_list,viewGroup,false);
         }
 
-        ImageView ivPicture = (ImageView)view.findViewById(R.id.ivPictureOfFood);
-        TextView tvName = (TextView)view.findViewById(R.id.tvNameOfFood);
-        TextView tvNumberOfFood = (TextView)view.findViewById(R.id.tvCountFood);
-        TextView tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
+        ivPicture = (ImageView)view.findViewById(R.id.ivPictureOfFood);
+        tvName = (TextView)view.findViewById(R.id.tvNameOfFood);
+        tvNumberOfFood = (TextView)view.findViewById(R.id.tvCountFood);
+        tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
 
-        Food curFood = (Food)getItem(pos);
-        final String imageUrl="ho";// = curFood.getPicture();
+        curFood = (Food)getItem(pos);
         tvName.setText(curFood.getFoodName());
-        //tvNumberOfFood.setText("count : "+curFood.getmCount());
+        tvNumberOfFood.setText("Quantity : "+curFood.getCount());
 
        /* if(curFood.getExpirationDate() == 1){
             tvExpirationDate.setText(""+curFood.getExpirationDate()+" Day");
         }else if(curFood.getExpirationDate()>1) {
             tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");*/
         //
-        if(imageUrl.equals("")){
-            ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
-        }else {
-            //set image using url
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(imageUrl);
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        connection.setDoInput(true);
-                        connection.connect();
 
-                        InputStream input = connection.getInputStream();
-                        FoodPic = BitmapFactory.decodeStream(input);
-                    } catch (IOException ex) {
-
-                    }
-                }
-            };
-            thread.start();
-            try {
-                thread.join();
-                ivPicture.setImageBitmap(FoodPic);
-            } catch (InterruptedException e) {
-
-            }
-        }
+        setPictureOnList(view);
         return view;
+    }
+
+    private void setPictureOnList(View view){
+        if(curFood.getThumbnailUrl().equals("")){
+            Log.d("PICTURE_ADDRESS","NULL");
+            ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
+        }else if(curFood.getIsFromGallery() == true){
+            Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
+            File imgFile = new File(curFood.getThumbnailUrl());
+            if (imgFile.exists()) {
+                Log.d("PICTURE_ADDRESS","called!");
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ivPicture.setImageBitmap(myBitmap);
+            }
+        }else{
+            Picasso.with(view.getContext())
+                    .load(curFood.getThumbnailUrl())
+                    .into(ivPicture);
+        }
     }
 
 

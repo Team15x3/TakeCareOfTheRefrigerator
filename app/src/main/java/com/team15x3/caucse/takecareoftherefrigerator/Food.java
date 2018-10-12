@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Food implements Serializable{
@@ -61,19 +62,33 @@ public class Food implements Serializable{
     @Expose
     private ArrayList<Nutrient> mMainNutrients = new ArrayList<Nutrient>();
 
+    @SerializedName("allergyIngredient")
+    @Expose
+    private ArrayList<Allergy> mAllergyList = new ArrayList<Allergy>();
+
+    @SerializedName("foodMaterials")
+    @Expose
+    private ArrayList<Material> mMaterialList = new ArrayList<Material>();
+
     private int mD_Day; /* d-day variable for expiration date */
 
     private int mExpirationDate;
 
     private int mCount;
 
-    public Food(){}
+    private boolean IsUriFromGallery;
+
+    public Food() {}
+
     public Food(String foodID, String foodName) {
         mFoodID = foodID;
         mFoodName = foodName;
 
         mD_Day = 7; /* default value */
     }
+
+    public void setIsFromGallery( boolean f){IsUriFromGallery = f;}
+    public boolean getIsFromGallery(){return IsUriFromGallery;}
 
     public void setFoodID(String foodId) { mFoodID = foodId; }
 
@@ -87,19 +102,32 @@ public class Food implements Serializable{
 
     public String getRegisterDate() { return mRegisterDate; }
 
-    public Object getThumbnailUrl() { return mThumbnailUrl; }
+    public String getThumbnailUrl() { return mThumbnailUrl; }
 
     public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl = thumbnailUrl; }
 
     public void setMainNutrientServingMeasureAmount(Number mainNutrientServingMeasureAmount) { this.mainNutrientServingMeasureAmount = mainNutrientServingMeasureAmount; }
 
-    public Object getMainNutrientServingMeasureAmount() { return mainNutrientServingMeasureAmount; }
+    public int getMainNutrientServingMeasureAmount() {
+        try {
+            return mainNutrientServingMeasureAmount.intValue();
+        } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-    public Object getMainNutrientServingMeasureUnit() { return mainNutrientServingMeasureUnit; }
+    public String getMainNutrientServingMeasureUnit() { return mainNutrientServingMeasureUnit; }
 
     public void setMainNutrientServingMeasureUnit(String mainNutrientServingMeasureUnit) { this.mainNutrientServingMeasureUnit = mainNutrientServingMeasureUnit; }
 
-    public Number getVolume() { return mVolume; }
+    public int getVolume() {
+        if (mVolume == null) {
+            return 0;
+        }
+
+        return mVolume.intValue();
+    }
 
     public void setVolume(Number volume) { mVolume = volume; }
 
@@ -111,9 +139,9 @@ public class Food implements Serializable{
 
     public void setBarcode(String barcode) { mBarcode = barcode; }
 
-    public Object getMainNutrients() { return mMainNutrients; }
+    public ArrayList<Nutrient> getMainNutrientsList() { return mMainNutrients; }
 
-    public void setMainNutrients(ArrayList<Nutrient> mainNutrients) { mMainNutrients = mainNutrients; }
+    public void setMainNutrientsList(ArrayList<Nutrient> mainNutrients) { mMainNutrients = mainNutrients; }
 
     public String getVendors() { return mVendors; }
 
@@ -122,6 +150,14 @@ public class Food implements Serializable{
     public String getFoodName() { return mFoodName; }
 
     public void setFoodName(String foodName) { mFoodName = foodName; }
+
+    public ArrayList<Allergy> getAllergyList() { return mAllergyList; }
+
+    public void setAllergyList(ArrayList<Allergy> allergyList) { mAllergyList = allergyList;}
+
+    public ArrayList<Material> getMaterialList() { return mMaterialList; }
+
+    public void setMaterialList(ArrayList<Material> materialList) { mMaterialList = materialList;}
 
     public int getCount() { return mCount; }
 
@@ -156,7 +192,7 @@ class Nutrient {
 
     @SerializedName("servingAmount")
     @Expose
-    private Number servingAmount;
+    private Number servingAmount = 0;
 
     public Nutrient(String nutrientID, String nutrientName, Number rate, String servingAmountUnit, Number servingAmount) {
         this.nutrientID = nutrientID;
@@ -192,15 +228,69 @@ class Nutrient {
         return nutrientName;
     }
 
-    public Number getRate() {
-        return rate;
+    public int getRate() {
+        try {
+            return rate.intValue();
+        } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
-    public String getServingAmountUnit() {
-        return servingAmountUnit;
-    }
+    public String getServingAmountUnit() { return servingAmountUnit; }
 
-    public Number getServingAmount() {
-        return servingAmount;
+    public int getServingAmount() {
+        try {
+            return servingAmount.intValue();
+        } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
+
+class Allergy {
+
+    @SerializedName("materialId")
+    @Expose
+    private Number mMaterialID;
+
+    @SerializedName("materialName")
+    @Expose
+    private String mMaterialName;
+
+    public void setMaterialID(Number materialID) { mMaterialID = materialID; }
+
+    public int getMaterialID() {
+        try {
+            return mMaterialID.intValue();
+        } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public void setMaterialName(String materialName) { mMaterialName = materialName; }
+
+    public String getMaterialName() { return mMaterialName; }
+}
+
+class Material {
+
+    @SerializedName("materialStructure")
+    @Expose
+    private String mMaterialStructure;
+
+    @SerializedName("materialName")
+    @Expose
+    private String mMaterialName;
+
+    public void setMaterialID(String materialStructure) { mMaterialStructure = materialStructure; }
+
+    public String getMaterialID() { return mMaterialStructure; }
+
+    public void setMaterialName(String materialName) { mMaterialName = materialName; }
+
+    public String getMaterialName() { return mMaterialName; }
+}
+
