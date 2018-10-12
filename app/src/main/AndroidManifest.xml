@@ -31,7 +31,7 @@
         
         
         <provider
-            android:authorities="com.team15x3.caucse.takecareoftherefrigerator.fileprovider"
+            android:authorities="com.team15x3.caucse.takecareoftherefrigerator"
             android:name="android.support.v4.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">

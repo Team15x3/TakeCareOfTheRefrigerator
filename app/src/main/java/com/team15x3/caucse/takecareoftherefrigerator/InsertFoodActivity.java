@@ -1,16 +1,22 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +34,7 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -41,12 +48,14 @@ import java.util.Date;
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
 
     private final int NO_DATA = 3;
+    private static final int MY_PERMISSION_CAMERA = 1111;
+    private static final int REQUEST_BARCODE =49374;
     private static final int REQUEST_TAKE_PHOTO = 100;
-    private static final int PICK_FROM_ALBUM = 101;
-    private static final int CROP_FROM_IMAGE = 102;
+    private static final int REQUEST_TAKE_ALBUM = 101;
+    private static final int REQUEST_IMAGE_CROP = 102;
     final Calendar calendar = Calendar.getInstance();
     private String absolutePath;
-    private Uri ImageCaptureUri;
+    private Uri ImageCaptureUri, photoURI, albumURI;
     private int Day = calendar.get(Calendar.DAY_OF_MONTH);
     private int Month =calendar.get(Calendar.MONTH);
     private int Year = calendar.get(Calendar.YEAR);
@@ -106,6 +115,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         btnFoodImage.setOnClickListener(this);
         ivFoodImage.setOnClickListener(this);
 
+        checkPermission();
 
     }
 
@@ -183,8 +193,24 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         if(resultCode !=RESULT_OK) return;
 
         switch (requestCode){
-            case PICK_FROM_ALBUM:{
-                ImageCaptureUri = data.getData();
+            case REQUEST_TAKE_ALBUM:{
+                if(resultCode == RESULT_OK){
+                    //Log.d("REQUEST_TAKE_ALBUM","OK");
+                    if(data.getData()!=null){
+                        //Log.d("REQUEST_TAKE_ALBUM","OK2");
+                        try{
+                            File albumFile = null;
+                            albumFile = createImageFile();
+                            photoURI = data.getData();
+                            albumURI = Uri.fromFile(albumFile);
+                            //Log.d("REQUEST_TAKE_ALBUM","OK3");
+                            cropImage();
+                        }catch (Exception e){
+                            Log.e("TAKE_ALBUM_SINGLE ERROR",e.toString());
+                        }
+                    }
+                }
+                break;
             }
             case REQUEST_TAKE_PHOTO:{
                 if(resultCode == RESULT_OK){
@@ -193,6 +219,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         galleryAddpic();
 
                         ivFoodImage.setImageURI(ImageCaptureUri);
+                        btnFoodImage.setVisibility(View.INVISIBLE);
+                        ivFoodImage.setVisibility(View.VISIBLE);
                     }catch (Exception e){
                         Log.d("REQUEST_TAKE_PHOTO",e.toString());
                     }
@@ -201,26 +229,32 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 }
                 break;
             }
-            case CROP_FROM_IMAGE:{
-                if(resultCode !=RESULT_OK) return;
-
-                final Bundle extras = data.getExtras();
-                String filePath  = Environment.getExternalStorageDirectory().getAbsolutePath()+"/TakeCareOfTheRefrigerator/"+System.currentTimeMillis()+"jpg";
-                if(extras != null){
-                    Bitmap photo = extras.getParcelable("data");
-                    ivFoodImage.setImageBitmap(photo);
-                    ivFoodImage.setVisibility(View.VISIBLE);
+            case REQUEST_IMAGE_CROP:{
+                if(resultCode == RESULT_OK){
+                    galleryAddpic();
+                    ivFoodImage.setImageURI(albumURI);
                     btnFoodImage.setVisibility(View.INVISIBLE);
-                    storeCropImage(photo,filePath);
-                    absolutePath = filePath;
-                    break;
+                    ivFoodImage.setVisibility(View.VISIBLE);
                 }
-                File f = new File(ImageCaptureUri.getPath());
-                if(f.exists()) f.delete();
-
+                break;
             }
+            case REQUEST_BARCODE:{
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                Log.d("BARCODE REQUESTCODE",requestCode+"");
+                myBarcode = result.getContents(); //get barcode number
+                Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
+                //api parsing , get information
+
+                InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
+                edtName.setText(InsertFood.getFoodName());
+                Picasso.with(this)
+                        .load(InsertFood.getThumbnailUrl())
+                        .into(ivFoodImage);
+            }
+
         }
-            //IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            Log.d("BARCODE REQUESTCODE",requestCode+"");
             //myBarcode = result.getContents(); //get barcode number
             //Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
             //api parsing , get information
@@ -244,6 +278,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                     Log.e("captureCamera Error",e.toString());
                 }
                 if(photoFile != null){
+                    Log.d("CHECK AUTHO",getPackageName());
                     Uri providerURI = FileProvider.getUriForFile(this, getPackageName(),photoFile);
                     ImageCaptureUri = providerURI;
 
@@ -258,34 +293,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void doTakeAlbumAction(){
-        Intent intent =new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
-    }
-
-
-
-
-    private void storeCropImage(Bitmap bitmap, String filePath){
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/FoodPicture";
-        File directory_FoodPicture = new File(dirPath);
-
-        if(!directory_FoodPicture.exists()) directory_FoodPicture.mkdir();
-
-        File copyFile = new File(filePath);
-        BufferedOutputStream out = null;
-
-        try{
-
-            copyFile.createNewFile();
-            out = new BufferedOutputStream(new FileOutputStream(copyFile));
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            sendBroadcast(new Intent (Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(copyFile)));
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        startActivityForResult(intent, REQUEST_TAKE_ALBUM);
     }
 
     @Override
@@ -330,4 +341,67 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Toast.makeText(this, "stored in Album completely",Toast.LENGTH_SHORT).show();
 
     }
+
+    private void checkPermission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+
+            if((ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))||
+                    (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA))){
+                new AlertDialog.Builder(this)
+                        .setTitle("알림")
+                        .setMessage("저장소 권한이 거부되었습니다. 사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다. ")
+                        .setNeutralButton("설정", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:"+getPackageName()));
+                                startActivity(intent);
+                            }
+                        })
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                finish();
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
+            }else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},MY_PERMISSION_CAMERA);
+            }
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSION_CAMERA:
+                for(int i = 0; i<grantResults.length; i++){
+                    if(grantResults[i] <0){
+                        Toast.makeText(this, "해당권한을 활성화 해야합니다.",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                break;
+        }
+    }
+
+    public void cropImage(){
+
+        Intent cropIntent = new Intent("com.android.camera,action.CROP");
+        cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        cropIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        cropIntent.setDataAndType(photoURI,"image/*");
+        cropIntent.putExtra("outputX",200);
+        cropIntent.putExtra("outputY",200);
+        cropIntent.putExtra("aspectX",1);
+        cropIntent.putExtra("aspectY",1);
+        cropIntent.putExtra("scale",true);
+        cropIntent.putExtra("output",albumURI);
+        startActivityForResult(cropIntent,REQUEST_IMAGE_CROP);
+
+
+    }
+
 }
