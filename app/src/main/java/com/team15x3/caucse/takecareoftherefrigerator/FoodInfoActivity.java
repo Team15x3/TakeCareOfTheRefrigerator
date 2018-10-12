@@ -95,7 +95,12 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         while(iter.hasNext()) {
             tvAllergyIngredient.append(iter.next().getMaterialName()+", ");
         }
-        tvNutrientServing.setText("Total Serving Amount ("+food.getMainNutrientServingMeasureAmount()+food.getMainNutrientServingMeasureUnit()+")");
+        if(food.getVolume() == 0 || food.getVolumeUnit() == null){
+
+        }else{
+            tvNutrientServing.setText("Total Serving Amount ( "+food.getVolume()+food.getVolumeUnit().toLowerCase()+" )");
+        }
+
 
         Iterator<Nutrient> nutrientIterator = food.getMainNutrientsList().iterator();
         while(nutrientIterator.hasNext()){
