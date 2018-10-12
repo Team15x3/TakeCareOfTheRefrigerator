@@ -8,4 +8,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="누르면반응해달라구요???"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView" />
+
 </LinearLayout>

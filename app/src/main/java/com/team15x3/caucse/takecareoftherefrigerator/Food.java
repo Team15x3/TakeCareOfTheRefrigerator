@@ -114,7 +114,7 @@ public class Food implements Serializable{
         } catch(NumberFormatException e) {
             e.printStackTrace();
             return 0;
-        }catch(NullPointerException e){
+        } catch(NullPointerException e){
             e.printStackTrace();
             return 0;
         }
@@ -125,11 +125,15 @@ public class Food implements Serializable{
     public void setMainNutrientServingMeasureUnit(String mainNutrientServingMeasureUnit) { this.mainNutrientServingMeasureUnit = mainNutrientServingMeasureUnit; }
 
     public int getVolume() {
-        if (mVolume == null) {
+        try {
+            return mVolume.intValue();
+        } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        } catch(NullPointerException e){
+            e.printStackTrace();
             return 0;
         }
-
-        return mVolume.intValue();
     }
 
     public void setVolume(Number volume) { mVolume = volume; }
@@ -234,7 +238,10 @@ class Nutrient {
     public int getRate() {
         try {
             return rate.intValue();
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        } catch(NullPointerException e){
             e.printStackTrace();
             return 0;
         }
@@ -246,6 +253,9 @@ class Nutrient {
         try {
             return servingAmount.intValue();
         } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        } catch(NullPointerException e){
             e.printStackTrace();
             return 0;
         }
@@ -268,6 +278,9 @@ class Allergy {
         try {
             return mMaterialID.intValue();
         } catch(NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        } catch(NullPointerException e){
             e.printStackTrace();
             return 0;
         }
