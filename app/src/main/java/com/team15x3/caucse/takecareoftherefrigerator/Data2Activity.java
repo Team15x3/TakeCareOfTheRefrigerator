@@ -198,10 +198,10 @@ public class Data2Activity extends AppCompatActivity {
                         list5.add( dataSnapshot.child(String.valueOf(j)).child("CALORIE").getValue().toString());
                         list5.add( dataSnapshot.child(String.valueOf(j)).child("QNT").getValue().toString());
                         list5.add( dataSnapshot.child(String.valueOf(j)).child("LEVEL_NM").getValue().toString());
-                                /*if(dataSnapshot.child(String.valueOf(j)).child("IRDNT_CODE").getValue()!=null)
+                                if(dataSnapshot.child(String.valueOf(j)).child("IRDNT_CODE").getValue()!=null)
                                 list5.add( dataSnapshot.child(String.valueOf(j)).child("IRDNT_CODE").getValue().toString());
                                 if(dataSnapshot.child(String.valueOf(j)).child("PC_NM").getValue()!=null)
-                                list5.add( dataSnapshot.child(String.valueOf(j)).child("PC_NM").getValue().toString());*/
+                                list5.add( dataSnapshot.child(String.valueOf(j)).child("PC_NM").getValue().toString());
                         list5.add( dataSnapshot.child(String.valueOf(j)).child("IMG_URL").getValue().toString());
                         list5.add( dataSnapshot.child(String.valueOf(j)).child("DET_URL").getValue().toString());
 
