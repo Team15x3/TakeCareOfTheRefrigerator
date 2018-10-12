@@ -29,6 +29,10 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+import android.support.v4.widget.DrawerLayout;
+
+
 public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private final int INSERT_REQUEST = 11;
     private final int SHOW_INFORMATION_REQUEST = 12;
@@ -43,6 +47,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private String myBarcode;
     private EditText edtSearch;
     private TextView tvName;
+    private ArrayList<Integer> findIndex = new ArrayList<>();
 
     @Nullable
     @Override
@@ -56,6 +61,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         edtSearch= view.findViewById(R.id.edtSearch);
         edtSearch.setInputType(0);
         tvName = view.findViewById(R.id.tvName);
+        ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
 
         edtSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
@@ -64,7 +70,6 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
             friger = User.INSTANCE.getRefrigeratorList();
 
             friger.add(new Refrigerator("My Friger"));
-            SampleInit();
         }
 
         setFoodList();
@@ -77,17 +82,18 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
         try {
              tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
-
-
             //data =실제 데이터, list=복사본
             data  = friger.get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
             list = new ArrayList<Food>();
             list.addAll(data);
 
             if (data.isEmpty()) {
-                ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
+                ivEmptyFoodList.setVisibility(View.VISIBLE);
+                FoodList.setVisibility(View.INVISIBLE);
                 ivEmptyFoodList.setImageDrawable(getResources().getDrawable(R.drawable.empty));
             } else {
+                ivEmptyFoodList.setVisibility(View.INVISIBLE);
+                FoodList.setVisibility(View.VISIBLE);
                 Log.d("success","get food list");
                 adapter = new ListAdapter(view.getContext(), R.layout.food_list, list);
                 FoodList.setAdapter(adapter);
@@ -143,6 +149,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void search(String text){
+        findIndex.clear();
         list.clear();
         if(text.length() == 0){
             list.addAll(data);
@@ -151,6 +158,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
                 if(data.get(i).getFoodName().toLowerCase().contains(text)){
                     list.add(data.get(i));
+                    findIndex.add(i);
                 }
             }
         }
@@ -160,31 +168,29 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
     private void ShowFoodInformation(Food food, int listnumber){
         Intent intent = new Intent(view.getContext(),FoodInfoActivity.class);
-        intent.putExtra("list_number",listnumber);
-        //intent.putExtra("food", food);
+        if(edtSearch.getText().toString().length()== 0){
+            intent.putExtra("list_number",listnumber);
+        }else{
+            intent.putExtra("list_number",findIndex.get(listnumber));
+        }
+        intent.putExtra("food", food);
         startActivityForResult(intent, SHOW_INFORMATION_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("ON_ACTIVITY_CALLED",requestCode + "METHOD CALLED" + resultCode);
+
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==SHOW_INFORMATION_REQUEST && resultCode == FoodInfoActivity.LIST_CHANGED){
+            Log.d("DELETE_CEHCK","CALL!");
+            setFoodList();
+            edtSearch.setText(edtSearch.getText().toString());
+        }
+        if(requestCode == INSERT_REQUEST && resultCode == RESULT_OK){
+            Log.d("ONACTIVIY_RESULT_CALLED","OnActivityResult, insert_request");
             setFoodList();
         }
     }
 
-    private void SampleInit(){
-
-/*
-        friger.get(0).addFood(new Food("롤앤롤케이크","",2,2));
-        friger.get(0).addFood(new Food("ex2","",2,2));
-        friger.get(0).addFood(new Food("ex3","",2,2));
-        friger.get(0).addFood(new Food("ex4","",2,2));
-        friger.get(0).addFood(new Food("ex5","",2,2));
-        friger.get(0).addFood(new Food("ex6","",2,2));
-        friger.get(0).addFood(new Food("ex7","",2,2));
-        friger.get(0).addFood(new Food("ex8","",2,2));*/
-
-
-    }
 }

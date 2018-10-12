@@ -9,11 +9,11 @@
             />
         <tab
             id="@+id/tab_recipe"
-            title="home"
+            title="recipe"
             />
         <tab
             id="@+id/tab_setting"
-            title="home"
+            title="setting"
             />
 
     </tabs>

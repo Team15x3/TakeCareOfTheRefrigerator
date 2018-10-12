@@ -20,12 +20,11 @@ import retrofit2.Response;
 
 public class APIProcessing {
 
-    protected Food mFood;
     protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);;
 
     /* get food information from barcode */
 
-    public Food parseJsonFromBarcode(String barcode) {
+    public void parseJsonFromBarcode(String barcode) {
         Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
                 barcode, null, null, null,
                 null, 0, 2);
@@ -37,8 +36,6 @@ public class APIProcessing {
                     EatSightAPI eatSightAPI = response.body();
                     ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
 
-                    mFood = foodArrayList.get(0);
-
                     Food food = foodArrayList.get(0);
                 }
             }
@@ -48,8 +45,6 @@ public class APIProcessing {
                 t.printStackTrace();
             }
         });
-
-        return mFood;
     }
 
     public void parseJsonFromFoodID(String foodID) {

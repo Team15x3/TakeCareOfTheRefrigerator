@@ -20,138 +20,212 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/btn_bg"
-            android:backgroundTint="@color/gradientStart"
+            android:backgroundTint="@color/wine"
             android:text="Importing information into a barcode"
             android:textColor="@color/white"/>
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_weight="8"
+            android:layout_marginTop="10dp">
 
             <LinearLayout
-                android:layout_margin="10dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/edtFoodName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Food name"
+                            android:singleLine="true"/>
+                        <LinearLayout
+                            android:layout_marginTop="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="20dp"
+                                android:text="Quantity"/>
+                            <Spinner
+                                android:id="@+id/spinQuantity"
+                                android:layout_marginStart="10dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"></Spinner>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_margin="10dp">
+
+                        <Button
+                            android:id="@+id/btnFoodImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/add_picture"/>
+                        <ImageView
+                            android:id="@+id/ivFoodImage"
+                            android:layout_width="match_parent"
+                            android:layout_height= "match_parent"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="20dp"
+                        android:text="Expriation date "/>
+                    <TextView
+                        android:id="@+id/tvExpirationDate"
+                        android:layout_marginStart="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnExpirationDate"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="Food Name"
-                    android:textSize="20dp"
-                    android:gravity="center_vertical"/>
-                <EditText
+                    android:layout_height="wrap_content"
+                    android:text="Set Expiration date"
+                    android:background="@drawable/btn_bg"/>
+
+                <LinearLayout
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="20dp"
+                        android:text="Alarm date "/>
+                    <Spinner
+                        android:id="@+id/spinAlarmDate"
+                        android:layout_marginStart="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></Spinner>
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <FrameLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
 
-                <Button
+                <LinearLayout
+                    android:id="@+id/linShowInformation"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/add_picture" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp" />
-            </FrameLayout>
+                    <ImageView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/wine"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Food Information"
+                        android:textSize="25dp"
+                        android:gravity="center"
+                        />
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/wine"/>
 
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ingredients"
+                        android:gravity="center"
+                        android:textSize="15dp"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"/>
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/wine"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:orientation="vertical">
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Allergy Ingredients"
+                        android:gravity="center"
+                        android:textSize="15dp"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"/>
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/wine"/>
 
-            <LinearLayout
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nutrients"
+                        android:gravity="center"
+                        android:textSize="15dp"/>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"/>
+                    <ImageView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/wine"/>
 
-                <TextView
-                    android:text="count"
-                    android:textSize="20dp"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"/>
+                </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="alarm"
-                    android:textSize="20dp"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <EditText
-                    android:inputType="numberDecimal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"/>
-            </LinearLayout>
+        </ScrollView>
 
 
-            <LinearLayout
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:text="Exp"
-                    android:textSize="20dp"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:inputType="numberDecimal"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"/>
-                <Button
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="set"
-                    android:background="@drawable/btn_bg"
-                    android:backgroundTint="@color/gradientStart"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3">
-        </LinearLayout>
 
 
         <LinearLayout
@@ -168,16 +242,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="add"
-                android:textColor="@color/gradientStart"
+                android:textColor="@color/wine"
                 android:background="@drawable/btn_bg"/>
 
             <Button
-                android:id="@+id/btnCancle"
+                android:id="@+id/btnCancel"
                 android:layout_margin="4dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="Cancle"
-                android:textColor="@color/gradientStart"
+                android:text="Cancel"
+                android:textColor="@color/wine"
                 android:layout_weight="1"
                 android:background="@drawable/btn_bg"/>
         </LinearLayout>
