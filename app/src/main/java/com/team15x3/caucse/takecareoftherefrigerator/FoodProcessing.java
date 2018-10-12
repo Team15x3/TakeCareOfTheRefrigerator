@@ -24,9 +24,9 @@ public class FoodProcessing {
         while (iterator.hasNext()) {
             Food food = iterator.next();
 
-            if (food.getExpirationDate() - current_time < food.getD_Day()) {
+            /*if (food.getExpirationDate() - current_time < food.getD_Day()) {
                 food_list.add(food);
-            }
+            }*/
         }
 
         return food_list;
