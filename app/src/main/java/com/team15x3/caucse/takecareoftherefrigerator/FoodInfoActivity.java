@@ -21,6 +21,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -44,7 +46,8 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_food_info);
         //getWindow().setStatusBarColor(getResources().getColor(R.color.beige));
 
-        food = (Food)getIntent().getSerializableExtra("food");
+        int idx = getIntent().getIntExtra("list_number",-1);
+        food = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(idx);
         SetInformationOfFood(food);
 
         btnBack = (Button)findViewById(R.id.btnBack);
@@ -73,6 +76,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvCountFood.setText("Quantity : "+food.getCount());
         tvExpirationDate.setText("Exp date : "+food.getExpirationDate()) ;
 
+        //setPicture(food);
         /*if(food.getMaterials().size() != 0){
             for(int i = 0; i<food.getMaterials().size()-1;i++){
                 tvIngredients.append(food.getMaterials().get(i).getMaterialName() +", ");
@@ -130,8 +134,6 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
-
     private void deletion(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -164,4 +166,22 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    private void setPicture(Food food){
+        if(food.getThumbnailUrl().equals("")){
+            Log.d("PICTURE_ADDRESS","NULL");
+            ivFoodImage.setImageDrawable(getResources().getDrawable(R.drawable.empty_pic));
+        }else if(food.getIsFromGallery() == true){
+            Log.d("PICTURE_ADDRESS",food.getThumbnailUrl());
+            File imgFile = new File(food.getThumbnailUrl());
+            if (imgFile.exists()) {
+                Log.d("PICTURE_ADDRESS","called!");
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ivFoodImage.setImageBitmap(myBitmap);
+            }
+        }else{
+            Picasso.with(this)
+                    .load(food.getThumbnailUrl())
+                    .into(ivFoodImage);
+        }
+    }
 }

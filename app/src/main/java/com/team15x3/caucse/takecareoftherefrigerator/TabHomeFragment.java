@@ -174,7 +174,6 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         }else{
             intent.putExtra("list_number",findIndex.get(listnumber));
         }
-        intent.putExtra("food", food);
         startActivityForResult(intent, SHOW_INFORMATION_REQUEST);
     }
 

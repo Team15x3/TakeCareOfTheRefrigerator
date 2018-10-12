@@ -1,18 +1,16 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -23,7 +21,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -37,14 +34,17 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
 
@@ -60,7 +60,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     private int Day = calendar.get(Calendar.DAY_OF_MONTH);
     private int Month =calendar.get(Calendar.MONTH);
     private int Year = calendar.get(Calendar.YEAR);
-    private Food InsertFood = new Food();
+    protected Food InsertFood = new Food();
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
@@ -249,13 +249,76 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
                 //api parsing , get information
 
-                InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
-                edtName.setText(InsertFood.getFoodName());
+                class APIProcessing extends AsyncTask<String, String, Void> {
+                    protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);
 
-                InsertFood.setIsFromGallery(false);
-                Picasso.with(this)
-                        .load(InsertFood.getThumbnailUrl())
-                        .into(ivFoodImage);
+                    /* get food information from barcode */
+                    public void parseJsonFromBarcode(String barcode) {
+                        Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
+                                barcode, null, null, null,
+                                null, 0, 2);
+
+                        call.enqueue(new Callback<EatSightAPI>() {
+                            @Override
+                            public void onResponse(Call<EatSightAPI> call, Response<EatSightAPI> response) {
+                                if (response.isSuccessful()) {
+                                    EatSightAPI eatSightAPI = response.body();
+                                    ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
+
+                                    InsertFood = foodArrayList.get(0);
+                                    edtName.setText(InsertFood.getFoodName());
+
+                                    InsertFood.setIsFromGallery(false);
+                                    Picasso.with(getApplicationContext())
+                                            .load(InsertFood.getThumbnailUrl())
+                                            .into(ivFoodImage);
+                                    btnFoodImage.setVisibility(View.INVISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<EatSightAPI> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
+
+                    public void parseJsonFromFoodID() {
+                        Call<ResponseBody> call = mApiInterface.getDetailFoodInformation("10016026");
+
+                        call.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        String jsonInfo = response.body().string();
+                                        //tvExpirationDate.setText(jsonInfo);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected Void doInBackground(String... strings) {
+                        parseJsonFromBarcode(strings[0]);
+                        parseJsonFromFoodID();
+                        return null;
+                    }
+                }
+
+                APIProcessing api = new APIProcessing();
+                api.execute(myBarcode);
+
+                //InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
+
             }
 
         }
