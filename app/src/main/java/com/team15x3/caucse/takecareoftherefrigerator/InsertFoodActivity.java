@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -140,7 +141,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             setFoodInformation();
             InsertFood.setFoodName(edtName.getText().toString());
             InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
-            InsertFood.setExpirationDate(new Date(Year,Month,Day));
+            InsertFood.setExpirationDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
             InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
@@ -375,6 +376,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Year = year;
         Month = monthOfYear;
         Day= dayOfMonth;
+
     }
 
     private void setFoodInformation(){

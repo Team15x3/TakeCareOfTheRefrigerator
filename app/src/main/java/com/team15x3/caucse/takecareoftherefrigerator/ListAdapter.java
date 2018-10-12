@@ -23,9 +23,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Ref;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class ListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
@@ -88,8 +90,12 @@ public class ListAdapter extends BaseAdapter {
     private void setExpirationdate(Food curFood,View view){
 
         try {
-            Date curDate = new Date(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-            Date expdate = curFood.getExpirationDate();
+            SimpleDateFormat simple = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+
+//            Date tempDate = new Date();
+            String str= Integer.toString(calendar.get(Calendar.YEAR)*10000 + (calendar.get(Calendar.MONTH) + 1)*100 + calendar.get(Calendar.DAY_OF_MONTH));
+            Date curDate = simple.parse(str);
+            Date expdate = simple.parse(curFood.getExpirationDate());
 
             long calDate = expdate.getTime() - curDate.getTime();
             long calDateDays = calDate/(24*60*60*1000);

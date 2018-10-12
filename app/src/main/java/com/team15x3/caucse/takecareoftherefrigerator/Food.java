@@ -72,7 +72,7 @@ public class Food implements Serializable{
 
     private int mD_Day; /* d-day variable for expiration date */
 
-    private Date mExpirationDate;
+    private String mExpirationDate;
 
     private int mCount;
 
@@ -166,9 +166,9 @@ public class Food implements Serializable{
 
     public void setCount(int count) { mCount = count; }
 
-    public Date getExpirationDate() { return mExpirationDate; }
+    public String getExpirationDate() { return mExpirationDate; }
 
-    public void setExpirationDate(Date expirationDate) { mExpirationDate = expirationDate; }
+    public void setExpirationDate(String expirationDate) { mExpirationDate = expirationDate; }
 
     public int getD_Day() { return mD_Day; }
 
