@@ -4,15 +4,16 @@ import java.util.ArrayList;
 
 public class User {
 
-    private int defaultRefrigerator;
-    private int currentRefrigerator;
     private String mID;
     private String mPassword;
     private ArrayList<Refrigerator> mRefrigeratorList;
 
+    private int defaultRefrigerator;
+    private int currentRefrigerator;
 
     //To make only one instance, I define private constructor
     public static final User INSTANCE = new User();
+
     private User(){
 
         mRefrigeratorList = new ArrayList<Refrigerator>();
@@ -20,7 +21,7 @@ public class User {
         currentRefrigerator = defaultRefrigerator;
         mID = null;
         mPassword = null;
-        }
+    }
 
 
     public int getCurrentRefrigerator() {

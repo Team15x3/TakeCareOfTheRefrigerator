@@ -22,5 +22,4 @@ public interface APIInterface {
 
     @GET("foodinfo/1.0/foods/{foodId}")
     Call<ResponseBody> getDetailFoodInformation(@Path("foodId") String foodID);
-
 }

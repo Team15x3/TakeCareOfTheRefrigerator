@@ -46,23 +46,29 @@ public class RegisterActivity extends AppCompatActivity {
     public String email = "";
     public String username = "";
     private String password = "";
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    public FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    public DatabaseReference databaseReference = firebaseDatabase.getReference();
     public static String checkuid;
     public String jsonparing;
     private ChildEventListener mChild;
-    private Button btnRegister;
 
+    Button btnRegister;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        initViews();
+        firebaseAuth = FirebaseAuth.getInstance();
+        edtUserName = findViewById(R.id.edtUserName);
+        edtPassword = findViewById(R.id.edtPassword);
+        edtEmail = findViewById(R.id.edtEmail);
+        //databaseReference = FirebaseDatabase.getInstance().getReference("recipe");
+        edtUserName = (EditText)findViewById(R.id.edtUserName);
+        edtPassword = (EditText)findViewById(R.id.edtPassword);
         initDatabase();
-
         //output();
-        databaseReference = firebaseDatabase.getReference("users");
+
+          databaseReference = firebaseDatabase.getReference("users"+"/"+checkuid);
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,22 +93,92 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+      /*  if(Build.VERSION.SDK_INT >=21) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorBackground));
+        }
+
+        btnRegister = (Button)findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent returnIntent = new Intent();
-                if(checkValid(returnIntent)){
+                if(!putUserInfoToIntent(returnIntent)){
+                    Toast.makeText(getApplicationContext(),"wrong input!",Toast.LENGTH_SHORT).show();
+                }else{
                     setResult(Activity.RESULT_OK,returnIntent);
                     finish();
-                }else{
-                    Toast.makeText(getApplicationContext(),"wrong input",Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
     }
 
+/*    private boolean putUserInfoToIntent(Intent intent){
+
+        String UserName, Password, ConfirmPassword, Email;
+
+        edtUserName = (EditText)findViewById(R.id.edtUserName);
+        edtPassword = (EditText)findViewById(R.id.edtPassword);
+        edtConfirmPassword = (EditText)findViewById(R.id.edtConfirmPassword);
+        edtEmail = (EditText)findViewById(R.id.edtEmail);
+
+        UserName = edtUserName.getText().toString();
+        Password = edtPassword.getText().toString();
+        ConfirmPassword = edtConfirmPassword.getText().toString();
+        Email = edtEmail.getText().toString();
+        //check correction of information
+        if(Password.equals(ConfirmPassword)){
+            return true;
+    }
+        return false;
+
+    }*/
+
+    public void singUp(View view) {
+        email = edtEmail.getText().toString();
+        password = edtPassword.getText().toString();
+        username  = edtUserName.getText().toString();
+
+        if(isValidEmail() && isValidPasswd()) {
+            createUser(email, password,username);
+        }
+    }
+
+    public void signIn(View view) {
+        email = edtEmail.getText().toString();
+        password = edtPassword.getText().toString();
+
+
+    }
+
+    // 이메일 유효성 검사
+    private boolean isValidEmail() {
+        if (email.isEmpty()) {
+            // 이메일 공백
+            return false;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            // 이메일 형식 불일치
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    private boolean isValidPasswd() {
+        if (password.isEmpty()) {
+            // 비밀번호 공백
+            return false;
+        } else if (!PASSWORD_PATTERN.matcher(password).matches()) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private void createUser(final String email, final String password,final String username) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -219,41 +295,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
-    }
-
-    private void initViews(){
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        edtUserName = findViewById(R.id.edtUserName);
-        edtPassword = findViewById(R.id.edtPassword);
-        edtEmail = findViewById(R.id.edtEmail);
-        //databaseReference = FirebaseDatabase.getInstance().getReference("recipe");
-        edtUserName = (EditText)findViewById(R.id.edtUserName);
-        edtPassword = (EditText)findViewById(R.id.edtPassword);
-        btnRegister = (Button)findViewById(R.id.btnSignup);
-
-
-    }
-
-    private boolean checkValid(Intent intent){
-
-        String usrname = edtUserName.getText().toString();
-        String password = edtPassword.getText().toString();
-        String confirmPassword = edtPassword.getText().toString();
-        String email = edtEmail.getText().toString();
-
-        //check username
-        if(usrname.equals("")) return false;
-
-        //check password
-        if (password.isEmpty() || !PASSWORD_PATTERN.matcher(password).matches() || !password.equals(confirmPassword)) return false;
-
-        //check email
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) return false;
-
-
-        createUser(email, password,usrname);
-        return true;
     }
 }
 
