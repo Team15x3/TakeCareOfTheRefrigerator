@@ -12,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -27,6 +29,10 @@ public class ListAdapter extends BaseAdapter {
     private ArrayList<Food> lists = new ArrayList<Food>();
     private Bitmap FoodPic;
     private int layout;
+    private Food curFood;
+    private ImageView ivPicture;
+    TextView tvName,tvNumberOfFood, tvExpirationDate;
+
 
     public ListAdapter(Context context, int layout, ArrayList<Food> data){
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -59,35 +65,42 @@ public class ListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.food_list,viewGroup,false);
         }
 
-        ImageView ivPicture = (ImageView)view.findViewById(R.id.ivPictureOfFood);
-        TextView tvName = (TextView)view.findViewById(R.id.tvNameOfFood);
-        TextView tvNumberOfFood = (TextView)view.findViewById(R.id.tvCountFood);
-        TextView tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
+        ivPicture = (ImageView)view.findViewById(R.id.ivPictureOfFood);
+        tvName = (TextView)view.findViewById(R.id.tvNameOfFood);
+        tvNumberOfFood = (TextView)view.findViewById(R.id.tvCountFood);
+        tvExpirationDate = (TextView)view.findViewById(R.id.tvExpirationDate);
 
-        Food curFood = (Food)getItem(pos);
-        final String imageUrl=curFood.getThumbnailUrl();
+        curFood = (Food)getItem(pos);
         tvName.setText(curFood.getFoodName());
-        //tvNumberOfFood.setText("count : "+curFood.getmCount());
+        tvNumberOfFood.setText("Quantity : "+curFood.getCount());
 
        /* if(curFood.getExpirationDate() == 1){
             tvExpirationDate.setText(""+curFood.getExpirationDate()+" Day");
         }else if(curFood.getExpirationDate()>1) {
             tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");*/
         //
-       /* Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
+
+        setPictureOnList(view);
+        return view;
+    }
+
+    private void setPictureOnList(View view){
         if(curFood.getThumbnailUrl().equals("")){
+            Log.d("PICTURE_ADDRESS","NULL");
             ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
-        }else {
+        }else if(curFood.getIsFromGallery() == true){
+            Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
             File imgFile = new File(curFood.getThumbnailUrl());
             if (imgFile.exists()) {
                 Log.d("PICTURE_ADDRESS","called!");
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivPicture.setImageBitmap(myBitmap);
             }
-
-        }*/
-
-        return view;
+        }else{
+            Picasso.with(view.getContext())
+                    .load(curFood.getThumbnailUrl())
+                    .into(ivPicture);
+        }
     }
 
 

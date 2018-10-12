@@ -80,9 +80,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="동원 황다랑어 포도씨유 참치"
                         android:singleLine="true"
-                        android:textSize="25dp"
+                        android:text="sample"
+                        android:textSize="20dp"
                         android:fontFamily="sans-serif-medium"/>
 
                     <TextView
@@ -91,8 +91,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="count : 3"
-                        android:textSize="20dp"/>
+                        android:text="Quantity : "
+                        android:textSize="15dp"/>
 
                     <TextView
                         android:gravity="center_vertical"
@@ -100,8 +100,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:text="Expriation date : 4 days"
-                        android:textSize="20dp"/>
+                        android:text="Exp date : "
+                        android:textSize="15dp"/>
 
                 </LinearLayout>
 
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Ingredients_"
-                android:textSize="20dp"/>
+                android:textSize="15dp"/>
 
             <TextView
 
@@ -148,7 +148,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Allergy ingredient_"
-                android:textSize="20dp"/>
+                android:textSize="15dp"/>
 
             <TextView
                 android:layout_marginEnd="10dp"
@@ -173,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Nutrient_"
-                android:textSize="20dp"/>
+                android:textSize="15dp"/>
 
             <TextView
                 android:id="@+id/tvNutrientServing"
@@ -181,8 +181,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="총 제공량 (250ml)"
-                android:textSize="25dp"/>
+                android:textSize="20dp"/>
 
 
             <TableLayout

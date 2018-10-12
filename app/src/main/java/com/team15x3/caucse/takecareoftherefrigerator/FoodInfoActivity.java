@@ -1,8 +1,15 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,8 +23,13 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class FoodInfoActivity extends AppCompatActivity implements View.OnClickListener{
     private Food food;
@@ -57,11 +69,11 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvAllergyIngredient = findViewById(R.id.tvAllergyIngredient);
         tvNutrientServing = findViewById(R.id.tvNutrientServing);
 
-        //tvFoodName.setText(food.getFoodName());
-        /*tvCountFood.setText("Quantity : "+food.getmCount());
-        tvExpirationDate.setText("Expiration date : "+food.getExpirationDate()) ;
+        tvFoodName.setText(food.getFoodName());
+        tvCountFood.setText("Quantity : "+food.getCount());
+        tvExpirationDate.setText("Exp date : "+food.getExpirationDate()) ;
 
-        if(food.getMaterials().size() != 0){
+        /*if(food.getMaterials().size() != 0){
             for(int i = 0; i<food.getMaterials().size()-1;i++){
                 tvIngredients.append(food.getMaterials().get(i).getMaterialName() +", ");
             }
@@ -150,7 +162,6 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         dialog.show();
 
     }
-
 
 
 }

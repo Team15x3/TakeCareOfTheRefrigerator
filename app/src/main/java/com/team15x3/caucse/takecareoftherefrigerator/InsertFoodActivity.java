@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
@@ -218,11 +219,11 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         Log.d("REQUEST_TAKE_PHOTO","OK");
                         galleryAddpic();
 
-                        ivFoodImage.setImageURI(ImageCaptureUri);
-                        InsertFood.setThumbnailUrl(ImageCaptureUri.toString());
-                        InsertFood.setIsFromGallery(true);
                         btnFoodImage.setVisibility(View.INVISIBLE);
                         ivFoodImage.setVisibility(View.VISIBLE);
+                        ivFoodImage.setImageURI(ImageCaptureUri);
+                        InsertFood.setIsFromGallery(true);
+
                     }catch (Exception e){
                         Log.d("REQUEST_TAKE_PHOTO",e.toString());
                     }
@@ -234,7 +235,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             case REQUEST_IMAGE_CROP:{
                 if(resultCode == RESULT_OK){
                     galleryAddpic();
-                    InsertFood.setThumbnailUrl(albumURI.toString());
                     InsertFood.setIsFromGallery(true);
                     ivFoodImage.setImageURI(albumURI);
                     btnFoodImage.setVisibility(View.INVISIBLE);
@@ -251,6 +251,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                 InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
                 edtName.setText(InsertFood.getFoodName());
+
                 InsertFood.setIsFromGallery(false);
                 Picasso.with(this)
                         .load(InsertFood.getThumbnailUrl())
@@ -305,7 +306,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setFoodInformation(){
-        InsertFood.setThumbnailUrl(absolutePath);
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
     }
@@ -320,10 +320,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             Log.i("CurrentPhotoPath",storageDir.toString());
             storageDir.mkdir();
         }
-
         imageFile = new File(storageDir,imageFileName);
         absolutePath = imageFile.getAbsolutePath();
-
+        InsertFood.setThumbnailUrl(absolutePath);
         return imageFile;
     }
 
@@ -399,4 +398,16 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    public String getRealPathFromURI(Uri contentUri) {
+
+        String[] proj = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        cursor.moveToNext();
+        String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+        Uri uri = Uri.fromFile(new File(path));
+
+        cursor.close();
+        return path;
+    }
 }
