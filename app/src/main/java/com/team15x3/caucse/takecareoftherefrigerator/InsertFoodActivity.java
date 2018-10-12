@@ -68,7 +68,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     EditText edtName;
     TextView tvExpirationDate;
     ImageView ivFoodImage;
-    public APIProcessing mApiProcessing = new APIProcessing();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +85,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         btnExpirationDate = (Button)findViewById(R.id.btnExpirationDate);
         tvExpirationDate = (TextView)findViewById(R.id.tvExpirationDate);
 
-
-
-
         final ArrayList<Integer> spinQuantityList = new ArrayList<>();
         for(int i = 0; i<100 ;i++){
             spinQuantityList.add(i+1);
@@ -97,9 +93,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         ArrayAdapter spinQuantityAdapter;
         spinQuantityAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,spinQuantityList);
         spinQuantity.setAdapter(spinQuantityAdapter);
-
-
-
 
         final ArrayList<String> spinAlarmDateList = new ArrayList<>();
         for(int i = 0; i<15;i++){
@@ -117,7 +110,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         ivFoodImage.setOnClickListener(this);
 
         checkPermission();
-
     }
 
 
@@ -268,6 +260,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                                     InsertFood = foodArrayList.get(0);
                                     edtName.setText(InsertFood.getFoodName());
 
+                                    parseJsonFromFoodID(InsertFood.getFoodID());
+
                                     InsertFood.setIsFromGallery(false);
                                     Picasso.with(getApplicationContext())
                                             .load(InsertFood.getThumbnailUrl())
@@ -283,24 +277,24 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         });
                     }
 
-                    public void parseJsonFromFoodID() {
-                        Call<ResponseBody> call = mApiInterface.getDetailFoodInformation("10016026");
+                    public void parseJsonFromFoodID(String foodID) {
+                        Call<Food> call = mApiInterface.getDetailFoodInformation(foodID);
 
-                        call.enqueue(new Callback<ResponseBody>() {
+                        call.enqueue(new Callback<Food>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            public void onResponse(Call<Food> call, Response<Food> response) {
                                 if (response.isSuccessful()) {
-                                    try {
-                                        String jsonInfo = response.body().string();
-                                        //tvExpirationDate.setText(jsonInfo);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                    if (response.body().getAllergyList() != null) {
+                                        InsertFood.setAllergyList(response.body().getAllergyList());
+                                    }
+                                    if (response.body().getMaterialList() != null) {
+                                        InsertFood.setMaterialList(response.body().getMaterialList());
                                     }
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            public void onFailure(Call<Food> call, Throwable t) {
                                 t.printStackTrace();
                             }
                         });
@@ -309,7 +303,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     protected Void doInBackground(String... strings) {
                         parseJsonFromBarcode(strings[0]);
-                        parseJsonFromFoodID();
                         return null;
                     }
                 }

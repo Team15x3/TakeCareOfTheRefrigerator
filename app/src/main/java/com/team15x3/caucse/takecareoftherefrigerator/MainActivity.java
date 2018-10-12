@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
     public String datap;
     public String strContact;
 
-    public APIProcessing mApiProcessing = new APIProcessing();
-
     String myBarcode;
     Button btnOpenBarcode;
     TextView text;
