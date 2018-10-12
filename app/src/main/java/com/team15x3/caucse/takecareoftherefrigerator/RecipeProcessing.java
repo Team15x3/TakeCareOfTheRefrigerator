@@ -1,8 +1,11 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.os.AsyncTask;
+import android.provider.ContactsContract;
+
 import java.util.ArrayList;
 
-public class RecipeProcessing {
+public class RecipeProcessing extends AsyncTask<Void, Void, ArrayList<Recipe>> {
 
     private ArrayList<Food> mFoodList;
     private ArrayList<Food> mRecipeList;
@@ -13,6 +16,8 @@ public class RecipeProcessing {
         mFoodList = foodList;
         mFoodProcessing = foodProcessing;
     }
+
+    public FoodProcessing getFoodProcessing() { return mFoodProcessing; }
 
     public void tempRecipeAlgorithm() {
 
@@ -27,8 +32,13 @@ public class RecipeProcessing {
         ArrayList<Recipe> recipe_list = new ArrayList<Recipe>();
         ArrayList<Food> expiration_food_list = mFoodProcessing.getFoodListNearExpirationDate();
 
-        // search recipe from food list
+        for (int i = 0; i < expiration_food_list.size(); i++) {
+            expiration_food_list.get(i).setFoodName("쌀");
 
+            Recipe recipe = new Recipe();
+            recipe.setRecipeID("A");
+            recipe_list.add(recipe);
+        }
 
         return recipe_list;
     }
@@ -43,6 +53,11 @@ public class RecipeProcessing {
         ArrayList<Recipe> recipe_list = new ArrayList<Recipe>();
 
         return recipe_list;
+    }
+
+    @Override
+    protected ArrayList<Recipe> doInBackground(Void... voids) {
+        return recipieAlgorithmByExpirationDate();
     }
 }
 
