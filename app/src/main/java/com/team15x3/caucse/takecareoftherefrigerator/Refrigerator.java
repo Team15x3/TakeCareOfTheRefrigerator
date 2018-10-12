@@ -42,6 +42,10 @@ public class Refrigerator {
 
     public ArrayList<Recipe> getRecipeList() { return mRecipeList; };
 
+    public RecipeProcessing getRecipeProcess() { return mRecipePrcess; }
+
+    public FoodProcessing getFoodProcess() { return mFoodProcess; }
+
 
     // 같은 food에 대해서 여러개가 있을 때 어떻게 할지 결정 안 함.
 
