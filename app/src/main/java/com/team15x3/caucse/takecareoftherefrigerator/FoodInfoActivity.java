@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +31,11 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 import static java.security.AccessController.getContext;
@@ -42,6 +47,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
     private ImageView ivFoodImage;
     private TableLayout table;
     public static final int LIST_CHANGED = 220;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +65,19 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvFoodName = findViewById(R.id.tvName);
         tvCountFood = findViewById(R.id.tvCountFood);
         tvExpirationDate = findViewById(R.id.tvExpirationDate);
+        ivFoodImage = findViewById(R.id.ivFoodImage);
         tvIngredients = findViewById(R.id.tvIngredients);
         tvAllergyIngredient = findViewById(R.id.tvAllergyIngredient);
         tvNutrientServing = findViewById(R.id.tvNutrientServing);
 
         tvFoodName.setText(food.getFoodName());
         tvCountFood.setText("Quantity : "+food.getCount());
-        tvExpirationDate.setText("Exp date : "+food.getExpirationDate()) ;
 
-        //setPicture(food);
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        String string = date.format(food.getExpirationDate());
+
+        tvExpirationDate.setText(string);
+        setPicture(food);
 
         SetInformationOfFood(food, tvIngredients, tvAllergyIngredient, tvNutrientServing, table,this);
 
@@ -160,9 +170,10 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void setPicture(Food food){
-        if(food.getThumbnailUrl().equals("")){
+        if(food.getThumbnailUrl() == null || food.getThumbnailUrl().equals("")){
             Log.d("PICTURE_ADDRESS","NULL");
             ivFoodImage.setImageDrawable(getResources().getDrawable(R.drawable.empty_pic));
+            return;
         }else if(food.getIsFromGallery() == true){
             Log.d("PICTURE_ADDRESS",food.getThumbnailUrl());
             File imgFile = new File(food.getThumbnailUrl());

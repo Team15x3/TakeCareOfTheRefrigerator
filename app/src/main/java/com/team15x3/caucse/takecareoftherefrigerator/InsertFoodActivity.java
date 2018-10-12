@@ -138,6 +138,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
             //Todo: check there is no error
             setFoodInformation();
+            InsertFood.setFoodName(edtName.getText().toString());
+            InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
+            InsertFood.setExpirationDate(new Date(Year,Month,Day));
+            InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();

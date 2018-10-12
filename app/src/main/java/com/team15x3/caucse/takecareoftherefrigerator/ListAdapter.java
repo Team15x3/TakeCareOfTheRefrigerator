@@ -3,6 +3,7 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Ref;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
@@ -31,6 +34,7 @@ public class ListAdapter extends BaseAdapter {
     private int layout;
     private Food curFood;
     private ImageView ivPicture;
+    final Calendar calendar = Calendar.getInstance();
     TextView tvName,tvNumberOfFood, tvExpirationDate;
 
 
@@ -74,16 +78,34 @@ public class ListAdapter extends BaseAdapter {
         tvName.setText(curFood.getFoodName());
         tvNumberOfFood.setText("Quantity : "+curFood.getCount());
 
-       /* if(curFood.getExpirationDate() == 1){
-            tvExpirationDate.setText(""+curFood.getExpirationDate()+" Day");
-        }else if(curFood.getExpirationDate()>1) {
-            tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");*/
-        //
-
         setPictureOnList(view);
+        setExpirationdate(curFood,view);
+
         return view;
     }
 
+
+    private void setExpirationdate(Food curFood,View view){
+
+        try {
+            Date curDate = new Date(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            Date expdate = curFood.getExpirationDate();
+
+            long calDate = expdate.getTime() - curDate.getTime();
+            long calDateDays = calDate/(24*60*60*1000);
+            calDateDays = Math.abs(calDateDays);
+
+            if(calDate<0){
+                tvExpirationDate.setText("-"+calDateDays+" Day");
+                tvExpirationDate.setTextColor(ContextCompat.getColor(view.getContext(),R.color.wine));
+            }else{
+                tvExpirationDate.setText(calDateDays+" Day");
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     private void setPictureOnList(View view){
         if( curFood.getThumbnailUrl() == null || curFood.getThumbnailUrl().isEmpty()){
             Log.d("PICTURE_ADDRESS","NULL");

@@ -61,9 +61,10 @@ class AscendingExpirationDate implements Comparator<Food> {
 
     @Override
     public int compare(Food o1, Food o2) {
-        if (o1.getExpirationDate() > o2.getExpirationDate()) { return 1; }
+        /*if (o1.getExpirationDate() > o2.getExpirationDate()) { return 1; }
         else if (o1.getExpirationDate() < o2.getExpirationDate()) { return -1; }
-        else { return 0; }
+        else { return 0; }*/
+        return 1;
     }
 }
 
