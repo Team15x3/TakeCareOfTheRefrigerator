@@ -33,13 +33,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
 
     private final int NO_DATA = 3;
-    private static final int PICK_FROM_CAMERA = 100;
+    private static final int REQUEST_TAKE_PHOTO = 100;
     private static final int PICK_FROM_ALBUM = 101;
     private static final int CROP_FROM_IMAGE = 102;
     final Calendar calendar = Calendar.getInstance();
@@ -184,17 +186,19 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             case PICK_FROM_ALBUM:{
                 ImageCaptureUri = data.getData();
             }
-            case PICK_FROM_CAMERA:{
-                Intent intent = new Intent("com.android.camera.action.CROP");
-                intent.setDataAndType(ImageCaptureUri,"image/*");
+            case REQUEST_TAKE_PHOTO:{
+                if(resultCode == RESULT_OK){
+                    try{
+                        Log.d("REQUEST_TAKE_PHOTO","OK");
+                        galleryAddpic();
 
-                intent.putExtra("outputX",200);
-                intent.putExtra("outputY",200);
-                intent.putExtra("aspectX",1);
-                intent.putExtra("aspectY",1);
-                intent.putExtra("scale",true);
-                intent.putExtra("return-data",true);
-                startActivityForResult(intent, CROP_FROM_IMAGE);
+                        ivFoodImage.setImageURI(ImageCaptureUri);
+                    }catch (Exception e){
+                        Log.d("REQUEST_TAKE_PHOTO",e.toString());
+                    }
+                }else{
+                    Toast.makeText(this, "stop taking picture",Toast.LENGTH_SHORT).show();
+                }
                 break;
             }
             case CROP_FROM_IMAGE:{
@@ -228,20 +232,29 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
 
     public void doTakePhotoAction(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String url = "tmp_"+String.valueOf(System.currentTimeMillis());
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        try {
-            File image = File.createTempFile(url,".jpg",storageDir);
-            absolutePath = image.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //ImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
-        ImageCaptureUri = FileProvider.getUriForFile(getApplicationContext(), "com.team15x3.caucse.takecareoftherefrigerator.fileprovider",new File(Environment.getExternalStorageDirectory(),url));
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            Intent TakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageCaptureUri);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
+            if(TakePictureIntent.resolveActivity(getPackageManager())!=null){
+                File photoFile = null;
+                try{
+                    photoFile = createImageFile();
+                }catch(IOException e){
+                    Log.e("captureCamera Error",e.toString());
+                }
+                if(photoFile != null){
+                    Uri providerURI = FileProvider.getUriForFile(this, getPackageName(),photoFile);
+                    ImageCaptureUri = providerURI;
+
+                    TakePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, providerURI);
+                    startActivityForResult(TakePictureIntent, REQUEST_TAKE_PHOTO);
+                }
+            }
+        }else{
+            Toast.makeText(this, "You cannot access to device",Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void doTakeAlbumAction(){
@@ -289,5 +302,32 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setThumbnailUrl(absolutePath);
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
+    }
+
+    private File createImageFile() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_"+timeStamp+".jpg";
+        File imageFile = null;
+        File storageDir = new File(Environment.getExternalStorageDirectory()+"/Pictures","TakeCareOfTheRefrigerator");
+
+        if(!storageDir.exists()){
+            Log.i("CurrentPhotoPath",storageDir.toString());
+            storageDir.mkdir();
+        }
+
+        imageFile = new File(storageDir,imageFileName);
+        absolutePath = imageFile.getAbsolutePath();
+
+        return imageFile;
+    }
+
+    private void galleryAddpic(){
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(absolutePath);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        sendBroadcast(mediaScanIntent);
+        Toast.makeText(this, "stored in Album completely",Toast.LENGTH_SHORT).show();
+
     }
 }

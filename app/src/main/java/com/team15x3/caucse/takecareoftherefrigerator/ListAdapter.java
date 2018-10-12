@@ -74,7 +74,7 @@ public class ListAdapter extends BaseAdapter {
         }else if(curFood.getExpirationDate()>1) {
             tvExpirationDate.setText("" + curFood.getExpirationDate() + " Days");*/
         //
-        Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
+       /* Log.d("PICTURE_ADDRESS",curFood.getThumbnailUrl());
         if(curFood.getThumbnailUrl().equals("")){
             ivPicture.setImageDrawable(view.getResources().getDrawable(R.drawable.empty_pic));
         }else {
@@ -85,7 +85,7 @@ public class ListAdapter extends BaseAdapter {
                 ivPicture.setImageBitmap(myBitmap);
             }
 
-        }
+        }*/
 
         return view;
     }
