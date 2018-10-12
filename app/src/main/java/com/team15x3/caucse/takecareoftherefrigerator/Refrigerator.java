@@ -17,7 +17,7 @@ public class Refrigerator {
         mName = name;
 
         mFoodList     = new ArrayList<Food>();
-        mRecipeList = new ArrayList<Recipe>();
+        mRecipeList   = new ArrayList<Recipe>();
         mFoodProcess  = new FoodProcessing(mFoodList);
         mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);
     }
