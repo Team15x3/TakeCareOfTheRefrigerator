@@ -67,6 +67,7 @@ public class Food implements Serializable{
 
     private int mCount;
 
+    private boolean IsUriFromGallery;
     public Food(){}
     public Food(String foodID, String foodName) {
         mFoodID = foodID;
@@ -75,6 +76,8 @@ public class Food implements Serializable{
         mD_Day = 7; /* default value */
     }
 
+    public void setIsFromGallery( boolean f){IsUriFromGallery = f;}
+    public boolean getIsFromGallery(){return IsUriFromGallery;}
     public void setFoodID(String foodId) { mFoodID = foodId; }
 
     public String getFoodID() { return mFoodID; }

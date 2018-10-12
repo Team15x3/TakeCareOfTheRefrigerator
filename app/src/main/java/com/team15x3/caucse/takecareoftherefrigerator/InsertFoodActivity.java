@@ -59,7 +59,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     private int Day = calendar.get(Calendar.DAY_OF_MONTH);
     private int Month =calendar.get(Calendar.MONTH);
     private int Year = calendar.get(Calendar.YEAR);
-    private Food InsertFood;
+    private Food InsertFood = new Food();
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
@@ -219,6 +219,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         galleryAddpic();
 
                         ivFoodImage.setImageURI(ImageCaptureUri);
+                        InsertFood.setThumbnailUrl(ImageCaptureUri.toString());
+                        InsertFood.setIsFromGallery(true);
                         btnFoodImage.setVisibility(View.INVISIBLE);
                         ivFoodImage.setVisibility(View.VISIBLE);
                     }catch (Exception e){
@@ -232,6 +234,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             case REQUEST_IMAGE_CROP:{
                 if(resultCode == RESULT_OK){
                     galleryAddpic();
+                    InsertFood.setThumbnailUrl(albumURI.toString());
+                    InsertFood.setIsFromGallery(true);
                     ivFoodImage.setImageURI(albumURI);
                     btnFoodImage.setVisibility(View.INVISIBLE);
                     ivFoodImage.setVisibility(View.VISIBLE);
@@ -247,21 +251,13 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                 InsertFood = mApiProcessing.parseJsonFromBarcode(myBarcode);
                 edtName.setText(InsertFood.getFoodName());
+                InsertFood.setIsFromGallery(false);
                 Picasso.with(this)
                         .load(InsertFood.getThumbnailUrl())
                         .into(ivFoodImage);
             }
 
         }
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            Log.d("BARCODE REQUESTCODE",requestCode+"");
-            //myBarcode = result.getContents(); //get barcode number
-            //Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
-            //api parsing , get information
-
-
-        //Food f = mApiProcessing.parseJsonFromBarcode(myBarcode);
-        //edtName.setText(f.getFoodName().toString());
     }
 
 
@@ -309,7 +305,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setFoodInformation(){
-        InsertFood = new Food();
         InsertFood.setThumbnailUrl(absolutePath);
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
@@ -389,7 +384,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     public void cropImage(){
 
-        Intent cropIntent = new Intent("com.android.camera,action.CROP");
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         cropIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         cropIntent.setDataAndType(photoURI,"image/*");
