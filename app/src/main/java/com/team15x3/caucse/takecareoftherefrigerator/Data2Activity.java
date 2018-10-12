@@ -1,210 +1,318 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.DatabaseError;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
 
 public class Data2Activity extends AppCompatActivity {
-    private ArrayAdapter<String> dataAdapter;
-    EditText editText;
-    Button button;
-    public String foodname="";
+
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    public String data1="";
-    public String data2="";
-    public String data3="";
+    public int i = 0;
+    public String data1;
+    public String data2;
+    public String data3;
+    public int j = 0;
+    public int ii=0;
+    final ArrayList<String> list = new ArrayList<>();
+    final ArrayList<String> list2 = new ArrayList<>();
+    final ArrayList<String> list3 = new ArrayList<>();
+    final ArrayList<String> list4 = new ArrayList<>();
+    final ArrayList<String> list5 = new ArrayList<>();
+    final ArrayList<String> list6 = new ArrayList<>();
+    String[] array1 = new String[10];
+    public String zz = "";
+    public String z1 = "";
+    public String zzz="";
+    public String z2="";
+    public String zzzz="";
+    public String z3="";
+    public String data4;
+    public String abend="";
     public String data5="";
     public String data6="";
-    public int data4;
-    public int foodcode;
-    public int recipeid;
-    public String recipe1end="";
-    public String recipe3end="";
-    public String recipe2end="";
-    private ListView listView;
-    public int a;
-    public int num1;
-    public int num2=0;
-    public int num3=0;
-    public int count;
+    int num2=0;
+    public String endcc="";
+    public String foodname="굴";
+    public String endbb="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data2);
-        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
-        listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(dataAdapter);
-        editText=(EditText)findViewById(R.id.edt1);
-        button = (Button)findViewById(R.id.btn1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dataAdapter.clear();
-                foodname = editText.getText().toString();
-                num2=0;
-                num3=0;
-                if(foodname!="")
-                {
-                    Recipe3(0);
-                    Log.d("food1",foodname);
-                }
-            }
-        });
-    }
-    public void Recipe3(int b) {
 
+        Log.d("시작1", "ㅇㅇ");
+        aa(0);
+        ab();
+        Log.d("끝1", "ㄴㅇㄹㅇㄴㄹ");
+
+    }
+
+    public String aa(int a) {
         databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
-        num1=b;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-       
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    String enddata= dataSnapshot.child(String.valueOf(num1)).child("RN").getValue().toString();
-                       data1=dataSnapshot.child(String.valueOf(num1)).child("IRDNT_NM").getValue().toString();
+                    Log.d("데이터", "sdfdsf");
+                    data1 = dataSnapshot.child(String.valueOf(i)).child("IRDNT_NM").getValue().toString();
 
-                        if(data1.equals(foodname))
-                        {
-                            foodcode=Integer.parseInt(dataSnapshot.child(String.valueOf(num1)).child("RECIPE_ID").getValue().toString());
+                    if (data1.equals(foodname)) {
+                        data2 = dataSnapshot.child(String.valueOf(i)).child("RECIPE_ID").getValue().toString();
+                        Log.d("data22",data2);
+                        //bb();
+                        list.add( dataSnapshot.child(String.valueOf(i)).child("IRDNT_SN").getValue().toString());
+                        //list2.add(dataSnapshot.child(String.valueOf(i)).child("RECIPE_ID").getValue().toString());
+                        Log.d("쌀", dataSnapshot.child(String.valueOf(i)).child("IRDNT_SN").getValue().toString());
+                        list.add( dataSnapshot.child(String.valueOf(i)).child("IRDNT_TY_NM").getValue().toString());
+                        Log.d("쌀", dataSnapshot.child(String.valueOf(i)).child("IRDNT_TY_NM").getValue().toString());
+                        list.add( dataSnapshot.child(String.valueOf(i)).child("RECIPE_ID").getValue().toString());
+                        Log.d("쌀", dataSnapshot.child(String.valueOf(i)).child("RECIPE_ID").getValue().toString());
+                        list.add( dataSnapshot.child(String.valueOf(i)).child("IRDNT_CPCTY").getValue().toString());
+                        Log.d("쌀", dataSnapshot.child(String.valueOf(i)).child("IRDNT_CPCTY").getValue().toString());
+                        list.add( dataSnapshot.child(String.valueOf(i)).child("IRDNT_TY_CODE").getValue().toString());
+                        Log.d("쌀", dataSnapshot.child(String.valueOf(i)).child("IRDNT_TY_CODE").getValue().toString());
 
-                            FindRecipe2(num2);
-                          
-                            recipe3end="end";
-                        }
-                    if(recipe3end.equals("end")||Integer.parseInt(enddata)==6104)
-                        break;
-                        else
-                    {
-                        recipe3end="";
+                        Log.d("쌀2", data2);
+
+                        Log.d("쌀3", list.toString());
+                        zz = list.toString();
+                        Log.d("쌀4", zz);
+
+                        save();
+                        list.clear();
                     }
-                    num1++;
+                    i++;
+                    if (i == 6105) {
+                        break;
+                    }
                 }
+                Log.d("쌀5", zz);
+                z1 = zz;
+                Log.d("쌀6", z1);
             }
-
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+        Log.d("쌀7", z1);
+        return z1;
 
     }
 
-    public void FindRecipe2(int bb)
+    public String save()
     {
-        databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe2"+"/"+"data");
-        num2=bb;
+        z1 = zz;
+        Log.d("세이브",z1);
 
+        return z1;
+    }
+    public void ab()
+    {
+
+
+        num2=0;
+        databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe3"+"/"+"data");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("j다",String.valueOf(num2));
+                Log.d("ababab","abab");
+                Log.d("data5",data5);
+                Log.d("abend2",abend);
+                Log.d("num2",String.valueOf(num2));
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
-               // dataAdapter.clear();
+                for(DataSnapshot dd:dataSnapshot.getChildren())
+                {
 
-                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
- 
-                    recipe3end="abcd";
-           
-                        data4=Integer.parseInt(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
+                    String enddata= dataSnapshot.child(String.valueOf(num2)).child("RN").getValue().toString();
 
+                    Log.d("num2다2",String.valueOf(num2));
+                    if (dataSnapshot.child(String.valueOf(num2)).child("IRDNT_NM").getValue().toString().equals(foodname)) {
+                        list3.add(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
 
-                        if(foodcode== data4)
-                        {
-                            recipeid = Integer.parseInt(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_ID").getValue().toString());
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("RECIPE_NM_KO").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("SUMRY").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("CALORIE").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("COOKING_TIME").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-/*                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("COOKING_TIME").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("IRDNT_CODE").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);*/
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("LEVEL_NM").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            dataAdapter.add(dataSnapshot.child(String.valueOf(num2)).child("TY_NM").getValue().toString());
-                            dataAdapter.notifyDataSetChanged();
-                            listView.setSelection(dataAdapter.getCount() - 1);
-                            num2++;
-                            FindRecipe1(num3);
-                            recipe2end="end";
-                        }
-      
-
-                    if(recipe2end.equals("end")||data4==195453)
+                    }
+                    if(Integer.parseInt(enddata)==6103)
+                    {
+                        bb();
+                        //cc();
                         break;
+                    }
                     num2++;
                 }
+
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
-    public void FindRecipe1(int bbb)
-    {
-        databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe1"+"/"+"data");
 
-            num3=0;
-            num2++;
-        count =10000;
+    public void bb()
+    {
+        databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe2"+"/"+"data");
+
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int cc=0;
+                int count =10000;
+                Log.d("123123","123");
+                for(DataSnapshot messageData:dataSnapshot.getChildren())
+                {
 
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                    //if(dataSnapshot.child(String.valueOf(j)).child("RECIPE_ID").getValue()!=null) {
+                    data3 = dataSnapshot.child(String.valueOf(j)).child("RECIPE_ID").getValue().toString();
 
-                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    recipe2end="abcd";
-                    recipe1end="abcd";
-                    data6 = dataSnapshot.child(String.valueOf(num3)).child("RECIPE_ID").getValue().toString();
-                    if (Integer.parseInt(data6) == recipeid) {
-                        count =0;
-                        Log.d("qwqwqw", dataSnapshot.child(String.valueOf(num3)).child("COOKING_DC").getValue().toString() + "/");
-                        dataAdapter.add(dataSnapshot.child(String.valueOf(num3)).child("COOKING_DC").getValue().toString());
-
-                    }
-                    if(count==2)
+                    Log.d("data3",data3);
+                    for(int i=0;i<list3.size();i++)
+                        Log.d("리스트3",list3.get(i));
+                    if(data3.equals(list3.get(cc)))
                     {
-                        recipe1end = "end";
+                        count =0;
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("RECIPE_ID").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("RECIPE_NM_KO").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("SUMRY").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("NATION_CODE").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("NATION_NM").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("TY_CODE").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("TY_NM").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("COOKING_TIME").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("CALORIE").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("QNT").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("LEVEL_NM").getValue().toString());
+                                if(dataSnapshot.child(String.valueOf(j)).child("IRDNT_CODE").getValue()!=null)
+                                list5.add( dataSnapshot.child(String.valueOf(j)).child("IRDNT_CODE").getValue().toString());
+                                if(dataSnapshot.child(String.valueOf(j)).child("PC_NM").getValue()!=null)
+                                list5.add( dataSnapshot.child(String.valueOf(j)).child("PC_NM").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("IMG_URL").getValue().toString());
+                        list5.add( dataSnapshot.child(String.valueOf(j)).child("DET_URL").getValue().toString());
+
+                        zzz = list5.toString();
+                        save2();
+
+                        list5.clear();
+                        cc++;
                     }
 
-                    if (recipe1end.equals("end")||Integer.parseInt(data6)==195453) {
 
-                        Recipe3(num1 + 1);
-                        num3++;
+
+                    j++;
+                    if(list3.size()==cc) {
+                        Log.d("cc값3",String.valueOf(cc));
+                        endbb = "end";
+                    }
+                    if(endbb.equals("end")) {
                         break;
                     }
-                    num3++;
                 }
+
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+
+
+    }
+
+    public void cc()
+    {
+
+        databaseReference = firebaseDatabase.getReference("Recipe"+"/"+"Recipe1"+"/"+"data");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int dd=0;
+                int count =10000;
+
+                for(DataSnapshot aa:dataSnapshot.getChildren())
+                {
+
+
+                    data6 = dataSnapshot.child(String.valueOf(ii)).child("RECIPE_ID").getValue().toString();
+                    if(data6.equals(list3.get(dd)))
+                    {
+                        count=0;
+
+                        list4.add( dataSnapshot.child(String.valueOf(ii)).child("RECIPE_ID").getValue().toString());
+                        list4.add( dataSnapshot.child(String.valueOf(ii)).child("COOKING_NO").getValue().toString());
+                        list4.add( dataSnapshot.child(String.valueOf(ii)).child("COOKING_DC").getValue().toString());
+                            /*list4.add( dataSnapshot.child(String.valueOf(ii)).child("STRE_STEP_IMAGE_URL").getValue().toString());
+                            list4.add( dataSnapshot.child(String.valueOf(ii)).child("STEP_TIP").getValue().toString());*/
+                        //Log.d("히히히히히",list4.get(dd));
+                        zzzz = list4.toString();
+
+                        save3();
+
+                        list4.clear();
+
+                    }
+
+
+                    if(count==1)
+                        dd++;
+                    count++;
+                    ii++;
+                    if(list3.size()==dd)
+                        endcc="end";
+                    if(endcc.equals("end")) {
+                        break;
+                    }
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    public String save2()
+    {
+        z2 = zzz;
+        Log.d("세이브2",z2);
+
+        return list5.toString();
+
+
+
+    }
+    public String save3()
+    {
+        z3 = zzzz;
+        Log.d("세이브3",list4.toString());
+
+
+        return list4.toString();
+    }
+
+    public void pp()
+    {
+        String a = save2();
+        Log.d("세이브2값",a);
     }
 }
