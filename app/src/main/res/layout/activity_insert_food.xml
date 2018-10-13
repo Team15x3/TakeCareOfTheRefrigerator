@@ -155,32 +155,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        >
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
                             android:text="Nutrients"
-                            android:textSize="15dp" />
+                            android:textSize="20dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_weight="2"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/tvNutrientServing"
-                                android:layout_width="0dp"
-                                android:layout_weight="2"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:textSize="20dp" />
@@ -188,12 +189,13 @@
                             <TableLayout
                                 android:id="@+id/table"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"></TableLayout>
+                                android:layout_height="wrap_content"></TableLayout>
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -201,15 +203,15 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
                             android:text="Allergy Ingredients"
-                            android:textSize="15dp" />
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/tvAllergyIngredient"
                             android:layout_width="0dp"
                             android:layout_weight="2"
-                            android:text ="No Allergy Ingredient"
+                            android:text =" -"
                             android:gravity="center_vertical"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -218,7 +220,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -227,9 +229,9 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:gravity="center_vertical"
                             android:text="Ingredients"
-                            android:textSize="15dp" />
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/tvIngredients"

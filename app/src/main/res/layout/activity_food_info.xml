@@ -131,7 +131,8 @@
                 android:layout_marginBottom="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"/>
+                android:textSize="20dp"
+                android:text=" -"/>
 
 
             <TableLayout
@@ -162,6 +163,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:textSize="20dp"
+                android:text=" -"
                 android:id="@+id/tvAllergyIngredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -189,6 +191,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:textSize="20dp"
+                android:text=" -"
                 android:id="@+id/tvIngredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -48,6 +48,8 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
     private TableLayout table;
     public static final int LIST_CHANGED = 220;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,8 +137,9 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         if(view == btnBack){ finish(); }
         if(view == btnDelete){ deletion(); }
         if(view == btnRevise){
+            DialogRevise revise = new DialogRevise(this );
+            revise.callFunction(food);
 
-            //ToDo
         }
     }
 
@@ -191,4 +194,6 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
                     .into(ivFoodImage);
         }
     }
+
+
 }

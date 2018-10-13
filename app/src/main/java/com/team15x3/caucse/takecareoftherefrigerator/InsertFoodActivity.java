@@ -3,6 +3,7 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -96,22 +97,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         tvNutrientServing = (TextView)findViewById(R.id.tvNutrientServing);
         table = (TableLayout)findViewById(R.id.table);
 
-        final ArrayList<Integer> spinQuantityList = new ArrayList<>();
-        for(int i = 0; i<100 ;i++){
-            spinQuantityList.add(i+1);
-        }
 
-        ArrayAdapter spinQuantityAdapter;
-        spinQuantityAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,spinQuantityList);
-        spinQuantity.setAdapter(spinQuantityAdapter);
-
-        final ArrayList<String> spinAlarmDateList = new ArrayList<>();
-        for(int i = 0; i<15;i++){
-            spinAlarmDateList.add((i+1)+"days before exp");
-        }
-        ArrayAdapter spinAlarmAdapter;
-        spinAlarmAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item,spinAlarmDateList);
-        spinAlarmDate.setAdapter(spinAlarmAdapter);
+        setSpinners(this, spinQuantity, spinAlarmDate);
 
         btnExpirationDate.setOnClickListener(this);
         btnBarcode.setOnClickListener(this);
@@ -368,7 +355,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, REQUEST_TAKE_ALBUM);
     }
-
     @Override
     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
         String msg = String.format("%d / %d / %d",year, monthOfYear+1, dayOfMonth);
@@ -483,5 +469,25 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
         cursor.close();
         return path;
+    }
+
+    public static void setSpinners(Context context ,Spinner spinQuantity, Spinner spinAlarmDate){
+        final ArrayList<Integer> spinQuantityList = new ArrayList<>();
+        for(int i = 0; i<100 ;i++){
+            spinQuantityList.add(i+1);
+        }
+
+        ArrayAdapter spinQuantityAdapter;
+        spinQuantityAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item,spinQuantityList);
+        spinQuantity.setAdapter(spinQuantityAdapter);
+
+        final ArrayList<String> spinAlarmDateList = new ArrayList<>();
+        for(int i = 0; i<15;i++){
+            spinAlarmDateList.add((i+1)+"days before exp");
+        }
+        ArrayAdapter spinAlarmAdapter;
+        spinAlarmAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item,spinAlarmDateList);
+        spinAlarmDate.setAdapter(spinAlarmAdapter);
+
     }
 }
