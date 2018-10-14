@@ -42,12 +42,12 @@ public class Recipe {
 
     public void addCookingCourse(Cooking cooking) {
         mCookingCourseList.add(cooking);
-        this.sortCookingList();
+        //this.sortCookingList();
     }
 
     public void addIngredient(Ingredient ingredient) {
         mIngredientList.add(ingredient);
-        this.sortIngredientList();
+        //this.sortIngredientList();
     }
 
     public void sortCookingList() {
@@ -58,9 +58,7 @@ public class Recipe {
         Collections.sort(mIngredientList);
     }
 
-    public void searchRecipe(String ingredientName) {
-
-    }
+    public void searchRecipe(String ingredientName) { }
 
     public String getRecipeID() {
         return mRecipeID;
@@ -97,9 +95,7 @@ class Ingredient implements Comparable<Ingredient> {
         mTypeName = ingredient_type_name;
     }
 
-    public void searchIngredient(String ingredientName) {
-
-    }
+    public void searchIngredient(String ingredientName) { }
 
     public String getmRecipeID() {
         return mRecipeID;
@@ -130,7 +126,7 @@ class Ingredient implements Comparable<Ingredient> {
 
         return 1;
 
-       /* if (this.getOrderNumber() > o.getOrderNumber()) { return 1; }
+        /*if (this.getOrderNumber() > o.getOrderNumber()) { return 1; }
         else if (this.getOrderNumber() < o.getOrderNumber()) { return -1; }
         else { return 0; }*/
     }
@@ -172,12 +168,10 @@ class Cooking implements Comparable<Cooking> {
 
     @Override
     public int compareTo(@NonNull Cooking o) {
-
         return 1;
 
-
-       /* if (this.getOrderNumber() > o.getOrderNumber()) { return 1; }
-        else if (this.getOrderNumber() < o.getOrderNumber()) { return -1; }
+        /*if (this.getOrderNumber().compareTo(o.getOrderNumber()) > 0 ) { return 1; }
+        else if (this.getOrderNumber().compareTo(o.getOrderNumber()) < 0) { return -1; }
         else { return 0; }*/
     }
 }
