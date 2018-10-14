@@ -28,7 +28,7 @@ public class RecipeProcessing extends AsyncTask<Void, Void, ArrayList<Recipe>> {
         /* find recipe courses with recipe ID in 레시피_과정정보.json */
     }
 
-    public ArrayList<Recipe> recipieAlgorithmByExpirationDate() {
+    public ArrayList<Recipe> recipeAlgorithmByExpirationDate() {
         ArrayList<Recipe> recipe_list = new ArrayList<Recipe>();
         ArrayList<Food> expiration_food_list = mFoodProcessing.getFoodListNearExpirationDate();
 
@@ -57,7 +57,7 @@ public class RecipeProcessing extends AsyncTask<Void, Void, ArrayList<Recipe>> {
 
     @Override
     protected ArrayList<Recipe> doInBackground(Void... voids) {
-        return recipieAlgorithmByExpirationDate();
+        return recipeAlgorithmByExpirationDate();
     }
 }
 

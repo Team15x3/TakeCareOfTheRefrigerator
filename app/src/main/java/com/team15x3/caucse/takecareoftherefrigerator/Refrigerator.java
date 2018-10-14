@@ -1,25 +1,33 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.support.annotation.NonNull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class Refrigerator {
     private String mName;
 
     private ArrayList<Food>   mFoodList;
     private ArrayList<Recipe> mRecipeList;
-    private FoodProcessing   mFoodProcess;
-    private RecipeProcessing mRecipePrcess;
+
+    private FoodProcessing    mFoodProcess;
+    private RecipeProcessing  mRecipeProcess;
 
     public Refrigerator(String name) {
         mName = name;
 
         mFoodList     = new ArrayList<Food>();
         mRecipeList   = new ArrayList<Recipe>();
+
         mFoodProcess  = new FoodProcessing(mFoodList);
-        mRecipePrcess = new RecipeProcessing(mFoodList, mFoodProcess);
+        mRecipeProcess = new RecipeProcessing(mFoodList, mFoodProcess);
     }
 
     public String getName() {
@@ -42,7 +50,7 @@ public class Refrigerator {
 
     public ArrayList<Recipe> getRecipeList() { return mRecipeList; };
 
-    public RecipeProcessing getRecipeProcess() { return mRecipePrcess; }
+    public RecipeProcessing getRecipeProcess() { return mRecipeProcess; }
 
     public FoodProcessing getFoodProcess() { return mFoodProcess; }
 
@@ -62,13 +70,22 @@ public class Refrigerator {
 }
 
 class AscendingExpirationDate implements Comparator<Food> {
-
     @Override
     public int compare(Food o1, Food o2) {
-        /*if (o1.getExpirationDate() > o2.getExpirationDate()) { return 1; }
-        else if (o1.getExpirationDate() < o2.getExpirationDate()) { return -1; }
-        else { return 0; }*/
-        return 1;
+        SimpleDateFormat simple_date_format = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        try {
+            Date o1_date = simple_date_format.parse(o1.getExpirationDate());
+            Date o2_date = simple_date_format.parse(o2.getExpirationDate());
+
+            if (o1_date.getTime() > o2_date.getTime()) { return 1; }
+            else if (o1_date.getTime() < o2_date.getTime()) { return 1; }
+            else { return 0; }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }
 
