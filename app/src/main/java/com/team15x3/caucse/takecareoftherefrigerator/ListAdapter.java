@@ -1,11 +1,14 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,4 +135,75 @@ public class ListAdapter extends BaseAdapter {
     }
 
 
+}
+
+class RecipeAdapter extends BaseAdapter{
+
+    private LayoutInflater inflater;
+    private ArrayList<Recipe> lists = new ArrayList<>();
+    private Bitmap FoodPic;
+    private int layout;
+    private Recipe curRecipe;
+    private ImageView ivRecipeImage;
+    TextView tvRecipeName;
+
+    public RecipeAdapter(Context context, int layout, ArrayList<Recipe> data){
+        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.lists = data;
+        this.layout = layout;
+
+    }
+
+    @Override
+    public int getCount() {
+        return lists.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return lists.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        final int pos = position;
+        final Context context = viewGroup.getContext();
+
+        if(view == null){
+            inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.recipe_list,viewGroup,false);
+        }
+
+        ivRecipeImage = (ImageView)view.findViewById(R.id.ivRecipeImage);
+        tvRecipeName = (TextView)view.findViewById(R.id.tvRecipeName);
+
+        curRecipe = (Recipe)getItem(pos);
+        tvRecipeName.setText(curRecipe.getRecpieName());
+
+
+        /*HttpURLConnection connection = null;
+        if( curRecipe.getImageURL() != null &&!curRecipe.getImageURL().equals("")) {
+            try {
+                URL url = new URL(curRecipe.getImageURL());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                ivRecipeImage.setImageBitmap(myBitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            } finally {
+                if (connection != null) connection.disconnect();
+            }
+        }*/
+        return view;
+    }
 }

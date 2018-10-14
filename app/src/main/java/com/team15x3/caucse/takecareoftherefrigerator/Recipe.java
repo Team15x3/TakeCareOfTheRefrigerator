@@ -22,6 +22,10 @@ public class Recipe {
 
     public Recipe() {}
 
+    public String getImageURL() {
+        return mImageURL;
+    }
+
     public void setRecipeID(String recipeID) { mRecipeID = recipeID; }
 
     public void setRecipeName(String recipeName) { mRecipeName = recipeName; }

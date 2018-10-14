@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,21 +34,32 @@ public class TabRecipeFragment extends Fragment {
 
     ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
     ArrayList<Food>   foodArrayList = new ArrayList<Food>();
-
+    private ListView lvRecipeList;
+    private static RecipeAdapter listAdapter;
     TextView textView;
+    View view;
 
     Button btnButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_recipe_fragment, container,false);
+        view = inflater.inflate(R.layout.tab_recipe_fragment, container,false);
         btnButton = (Button)view.findViewById(R.id.btnButton);
         textView  = (TextView)view.findViewById(R.id.textView);
+        lvRecipeList = (ListView)view.findViewById(R.id.lvRecipeList);
+
+        listAdapter = new RecipeAdapter(view.getContext(),R.layout.recipe_list, recipeArrayList );
+        lvRecipeList.setAdapter(listAdapter);
+        lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Todo
+            }
+        });
 
         btnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 class DataToActivity extends AsyncTask<Void, Void, Void> {
                     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                     private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -72,6 +86,8 @@ public class TabRecipeFragment extends Fragment {
                                             recipe.setRecipeID(recipe_id);
                                             recipe.getIngredientList().add(ingredient);
                                             recipeArrayList.add(recipe);
+                                            listAdapter.notifyDataSetChanged();
+
                                         }
                                     }
 
@@ -172,9 +188,30 @@ public class TabRecipeFragment extends Fragment {
 
                 DataToActivity dataToActivity = new DataToActivity();
                 dataToActivity.execute();
+
+                //setRecipeList();
+
             }
         });
 
         return view;
+    }
+
+
+    private void setRecipeList(){
+
+        if(recipeArrayList.isEmpty()) return;
+
+
+        listAdapter = new RecipeAdapter(view.getContext(),R.layout.recipe_list, recipeArrayList );
+        lvRecipeList.setAdapter(listAdapter);
+        lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Todo
+            }
+        });
+
+
     }
 }
