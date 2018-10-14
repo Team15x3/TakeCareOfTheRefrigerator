@@ -1,5 +1,6 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,10 +33,12 @@ import retrofit2.Response;
 
 public class TabRecipeFragment extends Fragment {
 
-    ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
+    private static RecipeAdapter listAdapter;
+    public static ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
+    final int SHOW_RECIPE_INFORMATION_REQUEST = 3333;
     ArrayList<Food>   foodArrayList = new ArrayList<Food>();
     private ListView lvRecipeList;
-    private static RecipeAdapter listAdapter;
+    //private static RecipeAdapter listAdapter;
     TextView textView;
     View view;
 
@@ -48,170 +51,156 @@ public class TabRecipeFragment extends Fragment {
         textView  = (TextView)view.findViewById(R.id.textView);
         lvRecipeList = (ListView)view.findViewById(R.id.lvRecipeList);
 
-        listAdapter = new RecipeAdapter(view.getContext(),R.layout.recipe_list, recipeArrayList );
-        lvRecipeList.setAdapter(listAdapter);
-        lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Todo
-            }
-        });
+        setRecipeList();
 
-        btnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                class DataToActivity extends AsyncTask<Void, Void, Void> {
-                    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
-                    public void getRecipeIngredientFromFirbase() {
-                        databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
-                        databaseReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                                    String str = messageData.child("IRDNT_NM").getValue().toString();
+        class DataToActivity extends AsyncTask<Void, Void, Void> {
+            private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+            private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
-                                    for (int i = 0 ; i < foodArrayList.size(); i++) {
-                                        if (foodArrayList.get(i).getFoodName().equals(str)) {
-                                            String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
-                                            String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
-                                            String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
-                                            String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
-                                            String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
-                                            String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
+            public void getRecipeIngredientFromFirbase() {
+                databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                            String str = messageData.child("IRDNT_NM").getValue().toString();
 
-                                            Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
-                                            Recipe recipe = new Recipe();
-                                            recipe.setRecipeID(recipe_id);
-                                            recipe.getIngredientList().add(ingredient);
-                                            recipeArrayList.add(recipe);
-                                            listAdapter.notifyDataSetChanged();
+                            for (int i = 0 ; i < foodArrayList.size(); i++) {
+                                if (foodArrayList.get(i).getFoodName().equals(str)) {
+                                    String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
+                                    String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
+                                    String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
+                                    String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
+                                    String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
+                                    String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
 
-                                        }
-                                    }
+                                    Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
+                                    Recipe recipe = new Recipe();
+                                    recipe.setRecipeID(recipe_id);
+                                    recipe.getIngredientList().add(ingredient);
+                                    recipeArrayList.add(recipe);
+                                    listAdapter.notifyDataSetChanged();
 
-                                    if(Integer.parseInt(messageData.child("RN").getValue().toString())==6105)
-                                        break;
-                                }
-
-                                getRecipeBasicFromFirebase();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                    public void getRecipeBasicFromFirebase() {
-                        databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe2" + "/" + "data");
-                        databaseReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (int i = 0; i < recipeArrayList.size(); i++) {
-                                     for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                                        if (recipeArrayList.get(i).getRecipeID().equals(messageData.child("RECIPE_ID").getValue().toString())) {
-                                            recipeArrayList.get(i).setRecipeName(messageData.child("RECIPE_NM_KO").getValue().toString());
-                                            recipeArrayList.get(i).setSummary(messageData.child("SUMRY").getValue().toString());
-                                            recipeArrayList.get(i).setCookingTime(messageData.child("COOKING_TIME").getValue().toString());
-                                            recipeArrayList.get(i).setQuantity(messageData.child("QNT").getValue().toString());
-                                            recipeArrayList.get(i).setDifficulty(messageData.child("LEVEL_NM").getValue().toString());
-                                            recipeArrayList.get(i).setImageURL(messageData.child("IMG_URL").getValue().toString());
-
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                getRecipeCourseFromFirebase();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                    public void getRecipeCourseFromFirebase() {
-                        databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe1" + "/" + "data");
-                        databaseReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (int i = 0; i < recipeArrayList.size(); i++) {
-                                    for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-
-                                        if (i == 15) {
-                                            Log.d("SS","SS");
-                                        }
-
-                                        if (recipeArrayList.get(i).getRecipeID().equals(messageData.child("RECIPE_ID").getValue().toString())) {
-                                            String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
-                                            String cooking_no = messageData.child("COOKING_NO").getValue().toString();
-                                            String cooking_dc = messageData.child("COOKING_DC").getValue().toString();
-
-                                            String image_url = null;
-                                            if (messageData.child("STRE_STEP_IMAGE_URL").getValue() != null) {
-                                                image_url = messageData.child("STRE_STEP_IMAGE_URL").getValue().toString();
-                                            }
-
-                                            String tip = null;
-                                            if (messageData.child("STEP_TIP").getValue() != null) {
-                                                tip = messageData.child("STEP_TIP").getValue().toString();
-                                            }
-
-                                            Cooking cooking = new Cooking(recipe_id, cooking_no, cooking_dc, image_url, tip);
-                                            recipeArrayList.get(i).getCookingCourseList().add(cooking);
-                                        }
-                                    }
                                 }
                             }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            if(Integer.parseInt(messageData.child("RN").getValue().toString())==6105)
+                                break;
+                        }
 
-                            }
-                        });
+                        getRecipeBasicFromFirebase();
                     }
 
                     @Override
-                    protected Void doInBackground(Void... voids) {
-                        getRecipeIngredientFromFirbase();
-                        return null;
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
-                }
-
-                FoodProcessing foodProcessing = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodProcess();
-                foodArrayList = foodProcessing.getFoodListNearExpirationDate();
-
-                DataToActivity dataToActivity = new DataToActivity();
-                dataToActivity.execute();
-
-                //setRecipeList();
-
+                });
             }
-        });
 
+            public void getRecipeBasicFromFirebase() {
+                databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe2" + "/" + "data");
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (int i = 0; i < recipeArrayList.size(); i++) {
+                            for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                                if (recipeArrayList.get(i).getRecipeID().equals(messageData.child("RECIPE_ID").getValue().toString())) {
+                                    recipeArrayList.get(i).setRecipeName(messageData.child("RECIPE_NM_KO").getValue().toString());
+                                    recipeArrayList.get(i).setSummary(messageData.child("SUMRY").getValue().toString());
+                                    recipeArrayList.get(i).setCookingTime(messageData.child("COOKING_TIME").getValue().toString());
+                                    recipeArrayList.get(i).setQuantity(messageData.child("QNT").getValue().toString());
+                                    recipeArrayList.get(i).setDifficulty(messageData.child("LEVEL_NM").getValue().toString());
+                                    recipeArrayList.get(i).setImageURL(messageData.child("IMG_URL").getValue().toString());
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        getRecipeCourseFromFirebase();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            public void getRecipeCourseFromFirebase() {
+                databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe1" + "/" + "data");
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (int i = 0; i < recipeArrayList.size(); i++) {
+                            for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+
+                                if (i == 15) {
+                                    Log.d("SS","SS");
+                                }
+
+                                if (recipeArrayList.get(i).getRecipeID().equals(messageData.child("RECIPE_ID").getValue().toString())) {
+                                    String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
+                                    String cooking_no = messageData.child("COOKING_NO").getValue().toString();
+                                    String cooking_dc = messageData.child("COOKING_DC").getValue().toString();
+
+                                    String image_url = null;
+                                    if (messageData.child("STRE_STEP_IMAGE_URL").getValue() != null) {
+                                        image_url = messageData.child("STRE_STEP_IMAGE_URL").getValue().toString();
+                                    }
+
+                                    String tip = null;
+                                    if (messageData.child("STEP_TIP").getValue() != null) {
+                                        tip = messageData.child("STEP_TIP").getValue().toString();
+                                    }
+
+                                    Cooking cooking = new Cooking(recipe_id, cooking_no, cooking_dc, image_url, tip);
+                                    recipeArrayList.get(i).getCookingCourseList().add(cooking);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                getRecipeIngredientFromFirbase();
+                return null;
+            }
+        }
+
+        FoodProcessing foodProcessing = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodProcess();
+        foodArrayList = foodProcessing.getFoodListNearExpirationDate();
+
+        DataToActivity dataToActivity = new DataToActivity();
+        dataToActivity.execute();
         return view;
     }
 
+    private void showRecipeInformation(Recipe recipe, int idx ){
+        Intent intent = new Intent(view.getContext(),RecipeInfoActivity.class);
+        intent.putExtra("list_number",idx);
+
+        startActivityForResult(intent, SHOW_RECIPE_INFORMATION_REQUEST);
+    }
 
     private void setRecipeList(){
-
-        if(recipeArrayList.isEmpty()) return;
-
-
-        listAdapter = new RecipeAdapter(view.getContext(),R.layout.recipe_list, recipeArrayList );
+        listAdapter = new RecipeAdapter(getActivity(),R.layout.recipe_list, recipeArrayList );
         lvRecipeList.setAdapter(listAdapter);
         lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Todo
+                showRecipeInformation(recipeArrayList.get(i),i);
             }
         });
-
 
     }
 }

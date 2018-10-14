@@ -187,7 +187,7 @@ class RecipeAdapter extends BaseAdapter{
 
 
         /*HttpURLConnection connection = null;
-        if( curRecipe.getImageURL() != null &&!curRecipe.getImageURL().equals("")) {
+        if( curRecipe.getImageURL() != null && !curRecipe.getImageURL().equals("")) {
             try {
                 URL url = new URL(curRecipe.getImageURL());
                 connection = (HttpURLConnection) url.openConnection();
@@ -204,6 +204,8 @@ class RecipeAdapter extends BaseAdapter{
                 if (connection != null) connection.disconnect();
             }
         }*/
+
+
         return view;
     }
 }

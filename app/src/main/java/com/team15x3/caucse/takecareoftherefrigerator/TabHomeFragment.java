@@ -163,7 +163,6 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }
-
         adapter.notifyDataSetChanged();
     }
 
