@@ -1,11 +1,14 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,30 +38,50 @@ import retrofit2.Response;
 public class TabRecipeFragment extends Fragment {
 
     private static RecipeAdapter listAdapter;
-    public static ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
+    //public static ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
+    public static ArrayList<Recipe> recipeArrayList;
     final int SHOW_RECIPE_INFORMATION_REQUEST = 3333;
     ArrayList<Food>   foodArrayList = new ArrayList<Food>();
+    protected ArrayList<Recipe> cpRecipeList;
     private ListView lvRecipeList;
-    //private static RecipeAdapter listAdapter;
-    TextView textView;
+    private EditText edtSearch;
+    private static RecipeAdapter adapter;
+    private ArrayList<Integer> findIndex = new ArrayList<>();
     View view;
 
-    Button btnButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_recipe_fragment, container,false);
         lvRecipeList = (ListView)view.findViewById(R.id.lvRecipeList);
-
+        edtSearch = (EditText)view.findViewById(R.id.edtRecipeSearch);
+        //if(cpRecipeList != null && cpRecipeList.size() !=0) cpRecipeList.clear();
         class DataToActivity extends AsyncTask<Void, Void, Void> {
             private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             private DatabaseReference databaseReference = firebaseDatabase.getReference();
+            ProgressDialog asyncDialog = new ProgressDialog(view.getContext());
+            @Override
+            protected void onPreExecute() {
+                asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                asyncDialog.setMessage("please wait..");
+
+                asyncDialog.show();
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                asyncDialog.dismiss();
+                setRecipeList();
+            }
 
             public void getRecipeIngredientFromFirbase() {
                 databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        recipeArrayList = new ArrayList<Recipe>();
                         for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                             String str = messageData.child("IRDNT_NM").getValue().toString();
 
@@ -76,7 +99,6 @@ public class TabRecipeFragment extends Fragment {
                                     recipe.setRecipeID(recipe_id);
                                     recipe.getIngredientList().add(ingredient);
                                     recipeArrayList.add(recipe);
-                                    //listAdapter.notifyDataSetChanged();
 
                                 }
                             }
@@ -86,6 +108,8 @@ public class TabRecipeFragment extends Fragment {
                         }
 
                         getRecipeBasicFromFirebase();
+                        setRecipeList();
+                        //adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -115,8 +139,9 @@ public class TabRecipeFragment extends Fragment {
                             }
                         }
 
+                        //setRecipeList();
                         getRecipeCourseFromFirebase();
-                       // setRecipeList();
+
                     }
 
                     @Override
@@ -179,28 +204,31 @@ public class TabRecipeFragment extends Fragment {
 
         DataToActivity dataToActivity = new DataToActivity();
         dataToActivity.execute();
-        setRecipeList();
+
         return view;
     }
 
     private void showRecipeInformation(Recipe recipe, int idx ){
         Intent intent = new Intent(view.getContext(),RecipeInfoActivity.class);
-        intent.putExtra("list_number",idx);
+        if(edtSearch.getText().toString().length() == 0){
+            intent.putExtra("list_number,",idx);
+        }else{
+            intent.putExtra("list_number",findIndex.get(idx));
+        }
         startActivityForResult(intent, SHOW_RECIPE_INFORMATION_REQUEST);
     }
 
     private void setRecipeList(){
 
         try{
-           ArrayList<Recipe> recipe =  User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getRecipeList();
-           ArrayList<Recipe> cpRecipeList = new ArrayList<Recipe>();
-           cpRecipeList.addAll(recipe);
+           cpRecipeList = new ArrayList<Recipe>();
+           cpRecipeList.clear();
+           cpRecipeList.addAll(recipeArrayList);
 
-
-           if(recipe.isEmpty()){
+           if(recipeArrayList.isEmpty()){
                Toast.makeText(getContext(),"empty",Toast.LENGTH_SHORT).show();
            }else {
-               RecipeAdapter adapter = new RecipeAdapter(view.getContext(), R.layout.recipe_list, cpRecipeList);
+               adapter = new RecipeAdapter(view.getContext(), R.layout.recipe_list, cpRecipeList);
                lvRecipeList.setAdapter(adapter);
                lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                    @Override
@@ -211,6 +239,19 @@ public class TabRecipeFragment extends Fragment {
                    }
                });
 
+               edtSearch.addTextChangedListener(new TextWatcher() {
+                   @Override
+                   public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                   @Override
+                   public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                   @Override
+                   public void afterTextChanged(Editable s) {
+                        String str = edtSearch.getText().toString();
+                        search(str);
+
+                   }
+               });
+
            }
         }catch(Exception e){
             e.printStackTrace();
@@ -218,4 +259,25 @@ public class TabRecipeFragment extends Fragment {
 
 
     }
+
+    private void search(String text){
+        Log.d("SEARCH",text);
+        findIndex.clear();
+        cpRecipeList.clear();
+        if(text.length() == 0){
+            cpRecipeList.addAll(recipeArrayList);
+        }else{
+            for(int i = 0; i<recipeArrayList.size();i++){
+
+                if(recipeArrayList.get(i).getRecpieName() == null) continue;
+                if(recipeArrayList.get(i).getRecpieName().toLowerCase().contains(text)){
+                    cpRecipeList.add(recipeArrayList.get(i));
+                    findIndex.add(i);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+        Log.d("SEARCH","notify clear");
+    }
+
 }

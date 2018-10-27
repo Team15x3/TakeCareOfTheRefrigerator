@@ -142,8 +142,7 @@ class RecipeAdapter extends BaseAdapter{
 
     protected  Bitmap bitmap;
     private LayoutInflater inflater;
-    private ArrayList<Recipe> lists = new ArrayList<>();
-    private Bitmap FoodPic;
+    private ArrayList<Recipe> lists ;
     private int layout;
     private Recipe curRecipe;
     private ImageView ivRecipeImage;
@@ -187,26 +186,6 @@ class RecipeAdapter extends BaseAdapter{
         tvRecipeName.setText(curRecipe.getRecpieName());
 
         setPicture(curRecipe.getImageURL(),ivRecipeImage);
-        /*HttpURLConnection connection = null;
-        if( curRecipe.getImageURL() != null && !curRecipe.getImageURL().equals("")) {
-            try {
-                URL url = new URL(curRecipe.getImageURL());
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                ivRecipeImage.setImageBitmap(myBitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            } finally {
-                if (connection != null) connection.disconnect();
-            }
-        }*/
-
-
         return view;
     }
 
