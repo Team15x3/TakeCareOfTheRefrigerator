@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -59,22 +60,18 @@ public class TabRecipeFragment extends Fragment {
         class DataToActivity extends AsyncTask<Void, Void, Void> {
             private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             private DatabaseReference databaseReference = firebaseDatabase.getReference();
-            ProgressDialog asyncDialog = new ProgressDialog(view.getContext());
+            ProgressDialog asyncDialog = new ProgressDialog(getActivity());
             @Override
             protected void onPreExecute() {
+                Log.d("Progress","onpreExcute called");
                 asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 asyncDialog.setMessage("please wait..");
-
                 asyncDialog.show();
+
+                Log.d("Progress","progress showed");
                 super.onPreExecute();
             }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                asyncDialog.dismiss();
-                setRecipeList();
-            }
 
             public void getRecipeIngredientFromFirbase() {
                 databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
@@ -108,7 +105,7 @@ public class TabRecipeFragment extends Fragment {
                         }
 
                         getRecipeBasicFromFirebase();
-                        setRecipeList();
+                        //setRecipeList();
                         //adapter.notifyDataSetChanged();
                     }
 
@@ -139,7 +136,7 @@ public class TabRecipeFragment extends Fragment {
                             }
                         }
 
-                        //setRecipeList();
+                        setRecipeList();
                         getRecipeCourseFromFirebase();
 
                     }
@@ -190,6 +187,15 @@ public class TabRecipeFragment extends Fragment {
 
                     }
                 });
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        asyncDialog.dismiss();
+                    }
+                },1500);
+
             }
 
             @Override
