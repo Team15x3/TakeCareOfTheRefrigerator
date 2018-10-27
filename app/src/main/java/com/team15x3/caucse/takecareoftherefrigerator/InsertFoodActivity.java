@@ -130,7 +130,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
             InsertFood.setExpirationDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
             InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
-            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).addFood(InsertFood);
+            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();
             setResult(RESULT_OK,returnIntent);
@@ -261,7 +261,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                                     InsertFood = foodArrayList.get(0);
                                     edtName.setText(InsertFood.getFoodName());
-
                                     parseJsonFromFoodID(InsertFood.getFoodID());
                                 }
                             }

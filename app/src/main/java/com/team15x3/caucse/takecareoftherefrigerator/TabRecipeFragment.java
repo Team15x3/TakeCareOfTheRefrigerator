@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,12 +48,7 @@ public class TabRecipeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_recipe_fragment, container,false);
-        btnButton = (Button)view.findViewById(R.id.btnButton);
-        textView  = (TextView)view.findViewById(R.id.textView);
         lvRecipeList = (ListView)view.findViewById(R.id.lvRecipeList);
-
-        setRecipeList();
-
 
         class DataToActivity extends AsyncTask<Void, Void, Void> {
             private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -80,7 +76,7 @@ public class TabRecipeFragment extends Fragment {
                                     recipe.setRecipeID(recipe_id);
                                     recipe.getIngredientList().add(ingredient);
                                     recipeArrayList.add(recipe);
-                                    listAdapter.notifyDataSetChanged();
+                                    //listAdapter.notifyDataSetChanged();
 
                                 }
                             }
@@ -120,6 +116,7 @@ public class TabRecipeFragment extends Fragment {
                         }
 
                         getRecipeCourseFromFirebase();
+                       // setRecipeList();
                     }
 
                     @Override
@@ -182,25 +179,43 @@ public class TabRecipeFragment extends Fragment {
 
         DataToActivity dataToActivity = new DataToActivity();
         dataToActivity.execute();
+        setRecipeList();
         return view;
     }
 
     private void showRecipeInformation(Recipe recipe, int idx ){
         Intent intent = new Intent(view.getContext(),RecipeInfoActivity.class);
         intent.putExtra("list_number",idx);
-
         startActivityForResult(intent, SHOW_RECIPE_INFORMATION_REQUEST);
     }
 
     private void setRecipeList(){
-        listAdapter = new RecipeAdapter(getActivity(),R.layout.recipe_list, recipeArrayList );
-        lvRecipeList.setAdapter(listAdapter);
-        lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showRecipeInformation(recipeArrayList.get(i),i);
-            }
-        });
+
+        try{
+           ArrayList<Recipe> recipe =  User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getRecipeList();
+           ArrayList<Recipe> cpRecipeList = new ArrayList<Recipe>();
+           cpRecipeList.addAll(recipe);
+
+
+           if(recipe.isEmpty()){
+               Toast.makeText(getContext(),"empty",Toast.LENGTH_SHORT).show();
+           }else {
+               RecipeAdapter adapter = new RecipeAdapter(view.getContext(), R.layout.recipe_list, cpRecipeList);
+               lvRecipeList.setAdapter(adapter);
+               lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                   @Override
+                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                       Toast.makeText(getContext(), position + " item clicked ", Toast.LENGTH_SHORT).show();
+                       showRecipeInformation(recipeArrayList.get(position),position);
+                       //todo
+                   }
+               });
+
+           }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 }

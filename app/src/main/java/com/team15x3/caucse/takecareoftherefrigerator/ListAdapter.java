@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Ref;
 import java.text.SimpleDateFormat;
@@ -139,6 +140,7 @@ public class ListAdapter extends BaseAdapter {
 
 class RecipeAdapter extends BaseAdapter{
 
+    protected  Bitmap bitmap;
     private LayoutInflater inflater;
     private ArrayList<Recipe> lists = new ArrayList<>();
     private Bitmap FoodPic;
@@ -147,11 +149,10 @@ class RecipeAdapter extends BaseAdapter{
     private ImageView ivRecipeImage;
     TextView tvRecipeName;
 
-    public RecipeAdapter(Context context, int layout, ArrayList<Recipe> data){
-        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public RecipeAdapter(Context context, int layout, ArrayList<Recipe> data) {
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.lists = data;
         this.layout = layout;
-
     }
 
     @Override
@@ -185,7 +186,7 @@ class RecipeAdapter extends BaseAdapter{
         curRecipe = (Recipe)getItem(pos);
         tvRecipeName.setText(curRecipe.getRecpieName());
 
-
+        setPicture(curRecipe.getImageURL(),ivRecipeImage);
         /*HttpURLConnection connection = null;
         if( curRecipe.getImageURL() != null && !curRecipe.getImageURL().equals("")) {
             try {
@@ -207,5 +208,46 @@ class RecipeAdapter extends BaseAdapter{
 
 
         return view;
+    }
+
+    private void setPicture(final String url,ImageView ivRecipeImage){
+
+        if(url == null || url.equals("")) return;
+
+        Thread imageThread = new Thread(){
+            @Override
+            public void run() {
+                try{
+                    URL imageUrl = new URL(url);
+                    //web에서 이미지 가져오고 bitmap 만들기
+                    HttpURLConnection connection = (HttpURLConnection)imageUrl.openConnection();
+                    connection.setDoInput(true);//서버로부터 응답수신
+                    connection.connect();
+
+                    InputStream is = connection.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);//bitmap으로 변경
+
+                }catch(MalformedURLException e){
+                    e.printStackTrace();
+                }catch(IOException e){
+                    e.printStackTrace();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        imageThread.start();
+
+        try{
+            imageThread.join();
+            ivRecipeImage.setImageBitmap(bitmap);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 }
