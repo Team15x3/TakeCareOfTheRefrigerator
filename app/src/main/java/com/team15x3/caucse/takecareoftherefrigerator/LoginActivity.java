@@ -46,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button btnRegister;
     final int REGISTER_REQUEST = 10;
     CallbackManager mCallbackManager;
+    FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     //animation splash
     RelativeLayout rellay1,rellay2;
