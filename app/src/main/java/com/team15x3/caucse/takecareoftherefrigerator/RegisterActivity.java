@@ -67,22 +67,22 @@ public class RegisterActivity extends AppCompatActivity {
         initDatabase();
         //output();
 
-          databaseReference = firebaseDatabase.getReference("users"+"/"+checkuid);
+        databaseReference = firebaseDatabase.getReference("users"+"/"+checkuid);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                   String data1 = dataSnapshot.getValue().toString();
+                    String data1 = dataSnapshot.getValue().toString();
                     //String data2 = databaseReference.orderByChild("users").toString();
 
                     // child 내에 있는 데이터만큼 반복합니다.
-                //String data = dataSnapshot.getChildren().toString();
+                    //String data = dataSnapshot.getChildren().toString();
 
-               // Log.d("ooooo",data);
+                    // Log.d("ooooo",data);
                     Log.d("ooooo",data1);
-                   // Log.d("ooooo",data2);
+                    // Log.d("ooooo",data2);
 
                 }
             }
@@ -99,7 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
       /*  if(Build.VERSION.SDK_INT >=21) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorBackground));
         }
-
         btnRegister = (Button)findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,14 +116,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 /*    private boolean putUserInfoToIntent(Intent intent){
-
         String UserName, Password, ConfirmPassword, Email;
-
         edtUserName = (EditText)findViewById(R.id.edtUserName);
         edtPassword = (EditText)findViewById(R.id.edtPassword);
         edtConfirmPassword = (EditText)findViewById(R.id.edtConfirmPassword);
         edtEmail = (EditText)findViewById(R.id.edtEmail);
-
         UserName = edtUserName.getText().toString();
         Password = edtPassword.getText().toString();
         ConfirmPassword = edtConfirmPassword.getText().toString();
@@ -134,7 +130,6 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
     }
         return false;
-
     }*/
 
     public void singUp(View view) {
@@ -192,8 +187,8 @@ public class RegisterActivity extends AppCompatActivity {
                             checkuid = uid;
                             Log.d("ppppp",uid);
                             writeNewUser("1234","NEW");
-
-                           // databaseReference.push().child().child("users").setValue(email);
+                            login();
+                            // databaseReference.push().child().child("users").setValue(email);
                             Log.d("1111111111111111111","dddddddddddddddd");
                         } else {
                             // 회원가입 실패
@@ -296,5 +291,12 @@ public class RegisterActivity extends AppCompatActivity {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
     }
-}
 
+    public void login()
+    {
+        firebaseAuth.signOut();
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
+
+    }
+}
