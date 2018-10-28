@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,10 +16,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -31,10 +44,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button btnSearchID;
     ProgressDialog progressDialog;
     //define firebase object
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     Button btnRegister;
     final int REGISTER_REQUEST = 10;
-
+    CallbackManager mCallbackManager;
 
     //animation splash
     RelativeLayout rellay1,rellay2;
@@ -45,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (firebaseAuth.getCurrentUser() != null) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             } else {
                 rellay1.setVisibility(View.VISIBLE);
                 rellay2.setVisibility(View.VISIBLE);
@@ -56,9 +70,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
+
         initViews();
+        firebaseAuth = FirebaseAuth.getInstance();
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+
+                    }
+                });
+
+
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -66,6 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(requestCode == REGISTER_REQUEST && resultCode == RESULT_OK){
             Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
         }
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void userLogin(){
@@ -119,14 +162,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void initViews(){
+    private void initViews() {
 
-        rellay1 =(RelativeLayout)findViewById(R.id.rellay1);
-        rellay2 =(RelativeLayout)findViewById(R.id.rellay2);
-        handler.postDelayed(runnable,2000);
+        rellay1 = (RelativeLayout) findViewById(R.id.rellay1);
+        rellay2 = (RelativeLayout) findViewById(R.id.rellay2);
+        handler.postDelayed(runnable, 2000);
 
         //initializig firebase auth object
-        firebaseAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            public void onAuthStateChanged (@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Toast.makeText(LoginActivity.this, "Login signed in", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login signed out", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
 
 
         edtUserName = (EditText) findViewById(R.id.edtUserName);
@@ -142,4 +199,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnSearchID.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
     }
+
+    private void handleFacebookAccessToken(AccessToken token)
+    {
+        Log.d("token",token.toString());
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(!task.isSuccessful())
+                        {
+                            Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, "Facebook Login Success", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
+
+
 }
