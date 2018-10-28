@@ -43,9 +43,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView textviewMessage;
     Button btnSearchID;
     ProgressDialog progressDialog;
-    //define firebase object
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     Button btnRegister;
     final int REGISTER_REQUEST = 10;
     CallbackManager mCallbackManager;
@@ -59,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (firebaseAuth.getCurrentUser() != null) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
             } else {
                 rellay1.setVisibility(View.VISIBLE);
                 rellay2.setVisibility(View.VISIBLE);
@@ -177,7 +174,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (user != null) {
                     Toast.makeText(LoginActivity.this, "Login signed in", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "Login signed out", Toast.LENGTH_SHORT).show();
@@ -209,12 +206,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful())
+                            if(!task.isSuccessful())
                         {
-                            Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Facebook Login Failed", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
                         }
                         else{
-                            Toast.makeText(LoginActivity.this, "Facebook Login Success", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Facebook Login Success", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
