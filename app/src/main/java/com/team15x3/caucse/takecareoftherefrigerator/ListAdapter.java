@@ -230,3 +230,41 @@ class RecipeAdapter extends BaseAdapter{
 
     }
 }
+
+
+
+class SettingAdapter extends BaseAdapter{
+
+
+    private int layout;
+    private LayoutInflater inflater;
+    private ArrayList<Refrigerator> list;
+
+
+    public SettingAdapter(Context context, int layout, ArrayList<Refrigerator> data){
+        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.list = data;
+        this.layout = layout;
+    }
+
+
+    @Override
+    public int getCount() {
+        return list.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
+    }
+}
