@@ -15,6 +15,11 @@
             id="@+id/tab_setting"
             title="setting"
             />
+        <tab
+            id="@+id/tab_friend"
+            title="friend"
+            />
+
 
     </tabs>
 </PreferenceScreen>

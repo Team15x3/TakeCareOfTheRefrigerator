@@ -25,6 +25,7 @@
             android:textColor="@color/beige"
             android:textSize="30sp"
             android:layout_marginTop="20dp" />
+
         <LinearLayout
             android:layout_marginTop="20dp"
             android:id="@+id/line1"
@@ -32,6 +33,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/ic_addphoto"
+                    android:id="@+id/imageview_profile"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,36 +101,7 @@
                     android:paddingRight="15dp"
                     android:fontFamily="sans-serif-light"/>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_marginTop="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Confirm Password"
-                    android:textAllCaps="true"
-                    android:textSize="15sp"
-                    android:textColor="@color/beige"
-                    android:fontFamily="sana-serif-light"
-                    />
-
-                <EditText
-                    android:singleLine="true"
-                    android:id="@+id/edtConfirmPassword"
-                    android:inputType="textPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="5dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/beige"
-                    android:background="@drawable/et_bg"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:fontFamily="sans-serif-light"/>
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +136,6 @@
 
         <Button
             android:id="@+id/btnSignup"
-            android:onClick="singUp"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@+id/line1"

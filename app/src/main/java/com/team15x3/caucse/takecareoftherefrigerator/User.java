@@ -7,14 +7,16 @@ public class User {
     private String mID;
     private String mPassword;
     private ArrayList<Refrigerator> mRefrigeratorList;
-
+    public String UserName;
+    public String profileImageUrl;
+    public String uid;
     private int defaultRefrigerator;
     private int currentRefrigerator;
 
     //To make only one instance, I define private constructor
     public static final User INSTANCE = new User();
 
-    private User(){
+    public User(){
 
         mRefrigeratorList = new ArrayList<Refrigerator>();
         defaultRefrigerator = 0;

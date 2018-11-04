@@ -28,6 +28,8 @@ public class HomeActivity extends FragmentActivity {
     private TabHomeFragment tabHomeFragment;
     private TabRecipeFragment tabRecipeFragment;
     private TabSettingFragment tabSettingFragment;
+    private TabFriendFragment tabFriendFragment;
+
     private ArrayList<Refrigerator> friger;
     private long backKeyPressedTime = 0;
 
@@ -46,6 +48,7 @@ public class HomeActivity extends FragmentActivity {
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();
         tabSettingFragment = new TabSettingFragment();
+        tabFriendFragment = new TabFriendFragment();
 
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -60,6 +63,9 @@ public class HomeActivity extends FragmentActivity {
                         break;
                     case R.id.tab_setting: transaction.replace(R.id.contentContainer, tabSettingFragment).commit();
                         break;
+                    case R.id.tab_friend: transaction.replace(R.id.contentContainer, tabFriendFragment).commit();
+                        break;
+
                     default: break;
                 }
             }
