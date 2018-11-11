@@ -377,9 +377,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Month = monthOfYear;
         Day= dayOfMonth;
         UseByDate useByDate= new UseByDate();
-        String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem().toString(),Year,Month-1,Day);
+       // String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
 
-        tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
+       // tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
     }
 
     private void setFoodInformation(){
@@ -685,8 +685,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 UseByDate useDate = new UseByDate();
-                String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
-                tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));
+                //String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
+               // tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));
             }
 
             @Override
