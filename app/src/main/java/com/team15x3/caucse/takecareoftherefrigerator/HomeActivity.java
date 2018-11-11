@@ -12,11 +12,9 @@ import android.widget.Toast;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class HomeActivity extends FragmentActivity {
@@ -74,6 +72,8 @@ public class HomeActivity extends FragmentActivity {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(HomeActivity.this, Broadcast.class);
 
+
+
         PendingIntent sender = PendingIntent.getBroadcast(HomeActivity.this, 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.set(2018, 11, 11);
@@ -98,6 +98,8 @@ public class HomeActivity extends FragmentActivity {
 
         }*/
     }
+
+
 
     public void initFragment(){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
