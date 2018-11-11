@@ -1,7 +1,5 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
-import android.support.annotation.NonNull;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +41,8 @@ public class Refrigerator {
         AscendingExpirationDate ascending_expiration_date = new AscendingExpirationDate();
         Collections.sort(mFoodList, ascending_expiration_date);
     }
+
+    public void setRecipieList(ArrayList<Recipe> recipieList) { mRecipeList = recipieList; }
 
     public ArrayList<Food> getFoodList() {
         return mFoodList;
