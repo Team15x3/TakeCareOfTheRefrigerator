@@ -129,6 +129,12 @@ public class TabRecipeFragment extends Fragment {
                             }
                         }
 
+                        for (int i = 0; i < recipeArrayList.size(); i++) {
+                            if (recipeArrayList.get(i).getRecpieName() == null) {
+                                recipeArrayList.remove(i);
+                            }
+                        }
+
                         setRecipeList();
                         getRecipeCourseFromFirebase();
 
@@ -207,10 +213,10 @@ public class TabRecipeFragment extends Fragment {
         return view;
     }
 
-    private void showRecipeInformation(Recipe recipe, int idx ){
+    private void showRecipeInformation(int idx ){
         Intent intent = new Intent(view.getContext(),RecipeInfoActivity.class);
         if(edtSearch.getText().toString().length() == 0){
-            intent.putExtra("list_number,",idx);
+            intent.putExtra("list_number",idx);
         }else{
             intent.putExtra("list_number",findIndex.get(idx));
         }
@@ -232,8 +238,9 @@ public class TabRecipeFragment extends Fragment {
                lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                    @Override
                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                       Log.d("scs","scs");
                        Toast.makeText(getContext(), position + " item clicked ", Toast.LENGTH_SHORT).show();
-                       showRecipeInformation(recipeArrayList.get(position),position);
+                       showRecipeInformation(position);
                        //todo
                    }
                });

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -22,8 +23,11 @@ public class RecipeInfoActivity extends AppCompatActivity {
         tvRecipeName = (TextView)findViewById(R.id.tvRecipeName);
 
         int idx = getIntent().getIntExtra("list_number",-1);
+        if(idx == -1){
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            setResult(-1);
+        }
         Recipe curRecipe = TabRecipeFragment.recipeArrayList.get(idx);
-
         if(curRecipe.getRecpieName() != null) {
             tvRecipeName.setText(curRecipe.getRecpieName());
         }
