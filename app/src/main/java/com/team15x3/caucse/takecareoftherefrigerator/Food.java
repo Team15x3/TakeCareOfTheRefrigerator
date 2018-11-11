@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class Food implements Serializable{
 
@@ -70,9 +68,15 @@ public class Food implements Serializable{
     @Expose
     private ArrayList<Material> mMaterialList = new ArrayList<Material>();
 
+    @SerializedName("foodClassifyName")
+    @Expose
+    private String mFoodClassifyName;
+
     private int mD_Day; /* d-day variable for expiration date */
 
-    private String mExpirationDate;
+    private String mExpirationDate; /* sell by date */
+
+    private String mUseByDate;
 
     private int mCount;
 
@@ -177,6 +181,10 @@ public class Food implements Serializable{
     public int getD_Day() { return mD_Day; }
 
     public void setD_Day(int d_day) { mD_Day = d_day; }
+
+    public String getFoodClassifyName() { return mFoodClassifyName; }
+
+    public void getFoodClassifyName(String foodClassifyName) { mFoodClassifyName = foodClassifyName; }
 }
 
 class Nutrient {
