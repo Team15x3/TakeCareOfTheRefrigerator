@@ -2,7 +2,6 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,22 +14,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.annotations.SerializedName;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
-import android.support.v4.widget.DrawerLayout;
 
 
 public class TabHomeFragment extends Fragment implements View.OnClickListener {
@@ -71,8 +62,8 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
             friger.add(new Refrigerator("My Friger"));
         }
-
         setFoodList();
+
         return view;
     }
 

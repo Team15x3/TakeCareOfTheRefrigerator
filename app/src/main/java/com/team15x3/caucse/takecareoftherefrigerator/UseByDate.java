@@ -107,11 +107,13 @@ public class UseByDate {
 
 
 
-    public String getUseByDate(String category, int year, int month, int day) {
-
+    public String getUseByDate(String category, String date) {
+        try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            Date stand_date = formatter.parse(date);
 
             int index = 0;
+
             for (int i = 0; i < categoryList.size(); i++) {
                 if (categoryList.get(i).compareTo(category) == 0) {
                     index = i;
@@ -121,21 +123,23 @@ public class UseByDate {
 
             Integer integer = usebydateList.get(index);
 
+
             Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, day);
+            calendar.setTime(stand_date);
 
-            int tempDate = integer.intValue();
-            calendar.add(Calendar.YEAR, tempDate / 365);
+            calendar.add(Calendar.DAY_OF_YEAR, integer.intValue());
 
-            tempDate = tempDate - tempDate / 365;
-            calendar.add(Calendar.MONTH,  tempDate / 30);
-
-            tempDate = tempDate - tempDate / 30;
-            calendar.add(Calendar.DAY_OF_YEAR, tempDate);
 
             String usebydate = formatter.format(calendar.getTime());
 
             return usebydate;
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 }

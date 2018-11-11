@@ -1,26 +1,23 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
-import android.content.DialogInterface;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class HomeActivity extends FragmentActivity {
 
@@ -42,8 +39,8 @@ public class HomeActivity extends FragmentActivity {
       /*  Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(HomeActivity.this, R.color.transparent));
 */
-        friger = User.INSTANCE.getRefrigeratorList();
 
+        friger = User.INSTANCE.getRefrigeratorList();
 
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();
@@ -71,6 +68,32 @@ public class HomeActivity extends FragmentActivity {
             }
         });
 
+
+        SimpleDateFormat simple_date_format = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(HomeActivity.this, Broadcast.class);
+
+        PendingIntent sender = PendingIntent.getBroadcast(HomeActivity.this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+
+
+        for (int i = 0; i < friger.size(); i++) {
+            ArrayList<Food> foodList = friger.get(i).getFoodList();
+            for (int j = 0; j < foodList.size(); j++) {
+                Food food = foodList.get(j);
+                try {
+                    Date expiration_date = simple_date_format.parse(food.getUseByDate());
+                    calendar.setTime(expiration_date);
+
+                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
 
     public void initFragment(){

@@ -34,7 +34,7 @@ public class FoodProcessing {
                 long calDate = expiration_date.getTime() - curDate.getTime();
                 long calDateDays = calDate / (24 * 60 * 60 * 1000);
 
-                if ((int)calDateDays <= food.getD_Day()) {
+                if ((int)calDateDays == food.getD_Day()) {
                     food_list.add(food);
                 }
             }
