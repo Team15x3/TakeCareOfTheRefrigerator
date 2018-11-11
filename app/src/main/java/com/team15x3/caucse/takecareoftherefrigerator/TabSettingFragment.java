@@ -39,9 +39,6 @@ public class TabSettingFragment extends Fragment {
         });
 
 
-
-
-
         return view;
     }
 }

@@ -507,6 +507,20 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinBiggest.setAdapter(spinCategoryAdapter);
         SpinnerListener();
 
+
+
+        spinSmallest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String category =(String) spinSmallest.getSelectedItem();
+                //todo : bring the category use-by-date
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void SpinnerListener(){
@@ -615,13 +629,54 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                             list = new ArrayList<>(Arrays.asList("국산꿀","수입꿀","꿀가공품","로얄젤리/프로폴리스"));
                         }else if(position == 1){
                             list = new ArrayList<>(Arrays.asList("인삼차","인삼","건강즙/과일즙","산삼배양근","어린이홍삼","홍삼선물세트","홍인삼음료/홍삼차/사탕","홍삼절편/정과/양갱","홍삼분말/캡슐/환","홍삼액","홍삼뿌리군/농축액"));
+                        }else if(position == 2){
+                            list = new ArrayList<>(Arrays.asList("통조림/쨈","커피/차","과자/캔디","면류/시리얼/즉석식품","우유/요구르트/치즈/유가공","음료/건강식품","분말류/장류/유지류/소스류","친환경 가공 선물세트","냉장냉동"));
+                        }else if(position == 3){
+                            list = new ArrayList<>(Arrays.asList("한차","건강차재료"));
+                        }else if(position ==4){
+                            list = new ArrayList<>(Arrays.asList("다이어트보조식품","헬스보충식"));
+                        }else if(position == 5){
+                            list = new ArrayList<>(Arrays.asList("종합비타민","비오틴","비타민A","비파민B","비타민C","비타민D","비타민E","빌베리추출물","오메가3","감마리놀렌산","철분","엽산","칼슘","아연",
+                                    "초유","마그네슘","쏘팔메토","글루코사민","루테인","콜라겐","하알루론산","코엔자임큐텐","키토산",
+                                    "스쿠알렌","유산균","알로에","식이섬유","클로렐라","스피루리나","기타 건강식품","일반의약품","어린이건강","밀크씨슬","녹차추출물","옥타코사놀","엠에스엠","공액리놀렌산","대두이소플라본",
+                                    "매실추출물","백수오","레시틴","가르시니아캄보지아추출물","회화나무 열매 추출물","홍경전 추출물","난소화성말토덱스트린","은행잎추출물","셀레늄","베타카로틴","피크노제놀-프랑스해안송껍질추출물","잔티젠"));
                         }
+                        break;
                     case 3:
+                        if(position == 0){
+                            list = new ArrayList<>(Arrays.asList("메추리알"));
+                        }else if(position == 1){
+                            list = new ArrayList<>(Arrays.asList("계육"));
+                        }
+                        break;
                     case 4:
+                        if(position == 0){
+                            list = new ArrayList<>(Arrays.asList("혼합곡","기능성잡곡"));
+                        }else if(position == 1){
+                            list = new ArrayList<>(Arrays.asList("수수","조류","기장","깨","율무/녹두","기타잡곡"));
+                        }else if(position == 2){
+                            list = new ArrayList<>(Arrays.asList("보리","콩","팥","서리태"));
+                        }else if(position == 3){
+                            list = new ArrayList<>(Arrays.asList("찹쌀","현미","흑미"));
+                        }else if(position == 4){
+                            list = new ArrayList<>(Arrays.asList("쌀"));
+                        }
+                        break;
                     case 5:
+                        if(position == 0){
+                            list = new ArrayList<>(Arrays.asList("두부/콩나물"));
+                        }
+                        break;
                     case 6:
+                        if(position == 0){
+                            list = new ArrayList<>(Arrays.asList("조미김/생김"));
+                        }else if(position == 1){
+                            list = new ArrayList<>(Arrays.asList("건오징어/어포/육포"));
+                        }
 
                 }
+                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, list);
+                spinSmallest.setAdapter(adapter);
             }
 
             @Override
