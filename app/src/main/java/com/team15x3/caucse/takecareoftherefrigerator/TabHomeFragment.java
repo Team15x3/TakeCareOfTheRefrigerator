@@ -179,7 +179,6 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("ON_ACTIVITY_CALLED",requestCode + "METHOD CALLED" + resultCode);
-
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==SHOW_INFORMATION_REQUEST && resultCode == FoodInfoActivity.LIST_CHANGED){
             Log.d("DELETE_CEHCK","CALL!");

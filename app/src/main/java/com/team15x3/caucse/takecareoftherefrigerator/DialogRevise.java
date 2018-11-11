@@ -46,7 +46,7 @@ public class DialogRevise implements View.OnClickListener, DatePickerDialog.OnDa
         btnCancel = (Button)dialog.findViewById(R.id.btnCancel);
         btnRevise = (Button)dialog.findViewById(R.id.btnRevise);
 
-        InsertFoodActivity.setSpinners(context, spinQuantitiy, spinAlarmDate);
+        //InsertFoodActivity.setSpinners(context, spinQuantitiy, spinAlarmDate);
         edtFoodName.setText(food.getFoodName());
         tvExpirationDate.setText(food.getExpirationDate());
         spinAlarmDate.setSelection(food.getD_Day()-1);
