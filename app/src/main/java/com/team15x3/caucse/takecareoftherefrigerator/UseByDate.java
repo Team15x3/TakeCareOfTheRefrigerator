@@ -106,40 +106,26 @@ public class UseByDate {
             30 ));
 
 
+    public String getUseByDate(String category, int year, int month, int day) {
+        int index = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 
-    public String getUseByDate(String category, String date) {
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-            Date stand_date = formatter.parse(date);
-
-            int index = 0;
-
-            for (int i = 0; i < categoryList.size(); i++) {
-                if (categoryList.get(i).compareTo(category) == 0) {
-                    index = i;
-                    break;
-                }
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).compareTo(category) == 0) {
+                index = i;
+                break;
             }
-
-            Integer integer = usebydateList.get(index);
-
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(stand_date);
-
-            calendar.add(Calendar.DAY_OF_YEAR, integer.intValue());
-
-
-            String usebydate = formatter.format(calendar.getTime());
-
-            return usebydate;
-
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-
-            return null;
         }
-    }
 
+        int date = usebydateList.get(index).intValue();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        calendar.add(Calendar.DAY_OF_YEAR, date);
+
+        String usebydate = formatter.format(calendar.getTime());
+
+        return usebydate;
+    }
 }

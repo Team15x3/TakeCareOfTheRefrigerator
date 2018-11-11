@@ -11,7 +11,7 @@ public class APIClient {
 
     private static final String baseUrl = "https://apis.eatsight.com/";
 
-    static Retrofit getClient(){
+    static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

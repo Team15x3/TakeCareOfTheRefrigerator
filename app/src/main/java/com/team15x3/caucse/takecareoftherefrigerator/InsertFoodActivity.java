@@ -3,6 +3,7 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -66,7 +67,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     protected TextView tvIngredients, tvAllergyIngredient, tvNutrientServing;
     protected TableLayout table;
 
-    final ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
+    final private ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
@@ -75,6 +76,109 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     TextView tvSellByDate, tvUseByDate;
     ImageView ivFoodImage;
     LinearLayout linShowInformation;
+
+
+    class APIProcessing extends AsyncTask<String, String, Void> {
+        ProgressDialog asyncDialog = new ProgressDialog(InsertFoodActivity.this);
+        protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            asyncDialog.dismiss();
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.d("Progress","onpreExcute called");
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("please wait..");
+            asyncDialog.show();
+
+            Log.d("Progress","progress showed");
+            super.onPreExecute();
+        }
+
+        /* get food information from barcode */
+        public void parseJsonFromBarcode(String barcode) {
+            Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
+                    barcode, null, null, null,
+                    null, 0, 2);
+
+            call.enqueue(new Callback<EatSightAPI>() {
+                @Override
+                public void onResponse(Call<EatSightAPI> call, Response<EatSightAPI> response) {
+                    if (response.isSuccessful()) {
+                        EatSightAPI eatSightAPI = response.body();
+                        ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
+
+                        if (foodArrayList.size() != 00) {
+                            InsertFood = foodArrayList.get(0);
+
+                            edtName.setText(InsertFood.getFoodName());
+                            parseJsonFromFoodID(InsertFood.getFoodID());
+                        } else {
+                            Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d("CheckResponce","response not successfill : "+response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EatSightAPI> call, Throwable t) {
+                    t.printStackTrace();
+                    Log.d("CheckResponce","response onfail : ");
+                }
+            });
+        }
+
+        public void parseJsonFromFoodID(String foodID) {
+            Call<Food> call = mApiInterface.getDetailFoodInformation(foodID);
+
+            call.enqueue(new Callback<Food>() {
+                @Override
+                public void onResponse(Call<Food> call, Response<Food> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getAllergyList() != null) {
+                            InsertFood.setAllergyList(response.body().getAllergyList());
+                        }
+                        if (response.body().getMaterialList() != null) {
+                            InsertFood.setMaterialList(response.body().getMaterialList());
+                        }
+
+                        //setting information on the activity
+                        InsertFood.setIsFromGallery(false);
+                        Picasso.with(getApplicationContext())
+                                .load(InsertFood.getThumbnailUrl())
+                                .into(ivFoodImage);
+                        btnFoodImage.setVisibility(View.INVISIBLE);
+                        linShowInformation.setVisibility(View.VISIBLE);
+
+                        FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
+
+                        //asyncDialog.dismiss();
+                    } else {
+                        Log.d("CheckResponce","response not successfill eeeee : "+response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Food> call, Throwable t) {
+                    t.printStackTrace();
+
+                    Log.d("CheckResponce","response not successfill : vvvvvvv");
+                }
+            });
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            parseJsonFromBarcode(strings[0]);
+            return null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +299,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode !=RESULT_OK) return;
 
+
+
+
         switch (requestCode){
             case REQUEST_TAKE_ALBUM:{
                 if(resultCode == RESULT_OK){
@@ -251,88 +358,13 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
                 //api parsing , get information
 
-                class APIProcessing extends AsyncTask<String, String, Void> {
-                    protected APIInterface mApiInterface = APIClient.getClient().create(APIInterface.class);
-
-                    /* get food information from barcode */
-                    public void parseJsonFromBarcode(String barcode) {
-
-                        barcode="DDDD";
-
-                        Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
-                                barcode, null, null, null,
-                                null, 0, 2);
-
-                        call.enqueue(new Callback<EatSightAPI>() {
-                            @Override
-                            public void onResponse(Call<EatSightAPI> call, Response<EatSightAPI> response) {
-                                if (response.isSuccessful()) {
-                                    EatSightAPI eatSightAPI = response.body();
-                                    ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
-
-
-                                    edtName.setText(InsertFood.getFoodName());
-                                    parseJsonFromFoodID(InsertFood.getFoodID());
-                                } else {
-
-
-                                    System.out.println("밥");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<EatSightAPI> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
-                    }
-
-                    public void parseJsonFromFoodID(String foodID) {
-                        Call<Food> call = mApiInterface.getDetailFoodInformation(foodID);
-
-                        call.enqueue(new Callback<Food>() {
-                            @Override
-                            public void onResponse(Call<Food> call, Response<Food> response) {
-                                if (response.isSuccessful()) {
-                                    if (response.body().getAllergyList() != null) {
-                                        InsertFood.setAllergyList(response.body().getAllergyList());
-                                    }
-                                    if (response.body().getMaterialList() != null) {
-                                        InsertFood.setMaterialList(response.body().getMaterialList());
-                                    }
-
-                                    //setting information on the activity
-                                    InsertFood.setIsFromGallery(false);
-                                    Picasso.with(getApplicationContext())
-                                            .load(InsertFood.getThumbnailUrl())
-                                            .into(ivFoodImage);
-                                    btnFoodImage.setVisibility(View.INVISIBLE);
-                                    linShowInformation.setVisibility(View.VISIBLE);
-
-                                    FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Food> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
-                    }
-
-                    @Override
-                    protected Void doInBackground(String... strings) {
-                        parseJsonFromBarcode(strings[0]);
-                        return null;
-                    }
-                }
-
                 APIProcessing api = new APIProcessing();
                 api.execute(myBarcode);
             }
 
         }
+
+
     }
 
 
@@ -377,9 +409,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Month = monthOfYear;
         Day= dayOfMonth;
         UseByDate useByDate= new UseByDate();
-       // String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
+        String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
 
-       // tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
+        tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
     }
 
     private void setFoodInformation(){
@@ -514,13 +546,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinCategoryAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, biggest);
         spinBiggest.setAdapter(spinCategoryAdapter);
         SpinnerListener();
-
-
-
-
     }
 
-    private void SpinnerListener(){
+
+    private void SpinnerListener() {
 
 
         spinBiggest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -685,8 +714,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 UseByDate useDate = new UseByDate();
-                //String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
-               // tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));
+                String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
+                tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));
             }
 
             @Override

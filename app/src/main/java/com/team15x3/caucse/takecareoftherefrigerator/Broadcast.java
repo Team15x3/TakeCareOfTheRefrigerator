@@ -17,7 +17,7 @@ public class Broadcast extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         Notification.Builder builder = new Notification.Builder(context);
         builder.setSmallIcon(R.drawable.com_facebook_button_icon).setTicker("HETT").setWhen(System.currentTimeMillis())
-                .setNumber(1).setContentTitle("푸쉬 제목").setContentText("푸쉬내용")
+                .setNumber(1).setContentTitle("Take my refrigerator").setContentText("check food near use by date")
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE).setContentIntent(pendingIntent).setAutoCancel(true);
 
         notificationmanager.notify(1, builder.build());

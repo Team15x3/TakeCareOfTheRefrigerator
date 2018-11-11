@@ -76,8 +76,11 @@ public class HomeActivity extends FragmentActivity {
 
         PendingIntent sender = PendingIntent.getBroadcast(HomeActivity.this, 0, intent, 0);
         Calendar calendar = Calendar.getInstance();
+        calendar.set(2018, 11, 11);
 
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
+/*
         for (int i = 0; i < friger.size(); i++) {
             ArrayList<Food> foodList = friger.get(i).getFoodList();
             for (int j = 0; j < foodList.size(); j++) {
@@ -86,14 +89,14 @@ public class HomeActivity extends FragmentActivity {
                     Date expiration_date = simple_date_format.parse(food.getUseByDate());
                     calendar.setTime(expiration_date);
 
-                    am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
             }
 
-        }
+        }*/
     }
 
     public void initFragment(){

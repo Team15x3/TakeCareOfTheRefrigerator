@@ -19,15 +19,6 @@ public class RecipeProcessing extends AsyncTask<Void, Void, ArrayList<Recipe>> {
 
     public FoodProcessing getFoodProcessing() { return mFoodProcessing; }
 
-    public void tempRecipeAlgorithm() {
-
-        /* find recipes ID with ingredient name in 레시피+재료정보.json */
-
-        /* find recipe information with recipe ID in 레시피_기본정보.json*/
-
-        /* find recipe courses with recipe ID in 레시피_과정정보.json */
-    }
-
     public ArrayList<Recipe> recipeAlgorithmByExpirationDate() {
         ArrayList<Recipe> recipe_list = new ArrayList<Recipe>();
         ArrayList<Food> expiration_food_list = mFoodProcessing.getFoodListNearExpirationDate();
