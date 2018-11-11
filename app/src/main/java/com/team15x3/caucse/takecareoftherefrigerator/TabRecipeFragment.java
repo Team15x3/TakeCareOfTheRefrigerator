@@ -15,10 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,15 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TabRecipeFragment extends Fragment {
 
@@ -57,6 +48,7 @@ public class TabRecipeFragment extends Fragment {
         lvRecipeList = (ListView)view.findViewById(R.id.lvRecipeList);
         edtSearch = (EditText)view.findViewById(R.id.edtRecipeSearch);
         //if(cpRecipeList != null && cpRecipeList.size() !=0) cpRecipeList.clear();
+
         class DataToActivity extends AsyncTask<Void, Void, Void> {
             private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -82,6 +74,7 @@ public class TabRecipeFragment extends Fragment {
                         for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                             String str = messageData.child("IRDNT_NM").getValue().toString();
 
+                            foodArrayList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
                             for (int i = 0 ; i < foodArrayList.size(); i++) {
                                 if (foodArrayList.get(i).getFoodName().equals(str)) {
                                     String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
