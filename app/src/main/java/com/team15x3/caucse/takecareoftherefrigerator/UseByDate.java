@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class UseByDate {
 
@@ -109,7 +110,7 @@ public class UseByDate {
 
     public String getUseByDate(String category, String date) {
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
             Date stand_date = formatter.parse(date);
 
             int index = 0;

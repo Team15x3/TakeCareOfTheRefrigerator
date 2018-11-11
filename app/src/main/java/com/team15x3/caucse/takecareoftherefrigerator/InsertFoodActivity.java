@@ -7,11 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,7 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,15 +38,12 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -261,6 +256,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                     /* get food information from barcode */
                     public void parseJsonFromBarcode(String barcode) {
+
+                        barcode="DDDD";
+
                         Call<EatSightAPI> call = mApiInterface.getFoodInformation("ALL", "barcode",
                                 barcode, null, null, null,
                                 null, 0, 2);
@@ -272,9 +270,13 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                                     EatSightAPI eatSightAPI = response.body();
                                     ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
 
-                                    InsertFood = foodArrayList.get(0);
+
                                     edtName.setText(InsertFood.getFoodName());
                                     parseJsonFromFoodID(InsertFood.getFoodID());
+                                } else {
+
+
+                                    System.out.println("밥");
                                 }
                             }
 
