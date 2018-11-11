@@ -74,7 +74,7 @@ public class Food implements Serializable{
 
     private int mD_Day; /* d-day variable for expiration date */
 
-    private String mExpirationDate; /* sell by date */
+    private String mSellByDate; /* sell by date */
 
     private String mUseByDate;
 
@@ -174,9 +174,13 @@ public class Food implements Serializable{
 
     public void setCount(int count) { mCount = count; }
 
-    public String getExpirationDate() { return mExpirationDate; }
+    public String getSellByDate() { return mSellByDate; }
 
-    public void setExpirationDate(String expirationDate) { mExpirationDate = expirationDate; }
+    public void setSellByDate(String expirationDate) { mSellByDate = expirationDate; }
+
+    public String getUseByDate(){return mUseByDate;}
+
+    public void setUseByDate(String use){mUseByDate = use;}
 
     public int getD_Day() { return mD_Day; }
 
@@ -184,7 +188,10 @@ public class Food implements Serializable{
 
     public String getFoodClassifyName() { return mFoodClassifyName; }
 
-    public void getFoodClassifyName(String foodClassifyName) { mFoodClassifyName = foodClassifyName; }
+    public void setFoodClassifyName(String foodClassifyName) { mFoodClassifyName = foodClassifyName; }
+
+
+
 }
 
 class Nutrient {

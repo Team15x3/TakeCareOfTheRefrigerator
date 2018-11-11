@@ -74,8 +74,8 @@ class AscendingExpirationDate implements Comparator<Food> {
     public int compare(Food o1, Food o2) {
         SimpleDateFormat simple_date_format = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
         try {
-            Date o1_date = simple_date_format.parse(o1.getExpirationDate());
-            Date o2_date = simple_date_format.parse(o2.getExpirationDate());
+            Date o1_date = simple_date_format.parse(o1.getSellByDate());
+            Date o2_date = simple_date_format.parse(o2.getSellByDate());
 
             if (o1_date.getTime() > o2_date.getTime()) { return 1; }
             else if (o1_date.getTime() < o2_date.getTime()) { return 1; }

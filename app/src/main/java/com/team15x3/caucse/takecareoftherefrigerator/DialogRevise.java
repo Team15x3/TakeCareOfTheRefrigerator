@@ -48,10 +48,10 @@ public class DialogRevise implements View.OnClickListener, DatePickerDialog.OnDa
 
         //InsertFoodActivity.setSpinners(context, spinQuantitiy, spinAlarmDate);
         edtFoodName.setText(food.getFoodName());
-        tvExpirationDate.setText(food.getExpirationDate());
+        tvExpirationDate.setText(food.getSellByDate());
         spinAlarmDate.setSelection(food.getD_Day()-1);
         spinQuantitiy.setSelection(food.getCount()-1);
-        int exp = Integer.parseInt(food.getExpirationDate());
+        int exp = Integer.parseInt(food.getSellByDate());
         Year = (int)(exp/10000);
         exp = exp%10000;
         Month = (int)(exp/100);
@@ -77,7 +77,7 @@ public class DialogRevise implements View.OnClickListener, DatePickerDialog.OnDa
             dialog.dismiss();
         }else if(view == btnRevise){
             food.setFoodName(edtFoodName.getText().toString().trim());
-            food.setExpirationDate(Integer.toString(Year*10000 + (Month+1)*100 + Day));
+            food.setSellByDate(Integer.toString(Year*10000 + (Month+1)*100 + Day));
             food.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             food.setCount(spinQuantitiy.getSelectedItemPosition()+1);
             Intent intent = new Intent(context, HomeActivity.class);

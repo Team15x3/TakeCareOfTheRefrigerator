@@ -77,7 +77,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     String myBarcode;
     Spinner spinQuantity, spinAlarmDate, spinBiggest, spinMedium, spinSmallest;
     EditText edtName;
-    TextView tvSellByDate;
+    TextView tvSellByDate, tvUseByDate;
     ImageView ivFoodImage;
     LinearLayout linShowInformation;
 
@@ -104,6 +104,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinBiggest = (Spinner)findViewById(R.id.spinBiggest);
         spinMedium = (Spinner)findViewById(R.id.spinMedium);
         spinSmallest = (Spinner)findViewById(R.id.spinSmallest);
+        tvUseByDate = (TextView)findViewById(R.id.tvUseByDate);
+
 
 
         setSpinners(this);
@@ -138,7 +140,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             setFoodInformation();
             InsertFood.setFoodName(edtName.getText().toString());
             InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
-            InsertFood.setExpirationDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
+            InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
             InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
@@ -156,6 +158,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             Log.d("CHECK_DAY",Year+"/"+Month+"/"+Day);
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, InsertFoodActivity.this, Year, Month, Day);
             datePickerDialog.show();
+
         }
         if(view == ivFoodImage | view == btnFoodImage){
             Log.d("Button Clicked","button clicked!");
@@ -371,12 +374,15 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Year = year;
         Month = monthOfYear;
         Day= dayOfMonth;
+        //todo : set use-by date
 
     }
 
     private void setFoodInformation(){
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
+        InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
+        InsertFood.setUseByDate(tvUseByDate.getText().toString());
     }
 
     private File createImageFile() throws IOException{
@@ -467,7 +473,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    public String getRealPathFromURI(Uri contentUri) {
+    /*public String getRealPathFromURI(Uri contentUri) {
 
         String[] proj = { MediaStore.Images.Media.DATA };
 
@@ -479,9 +485,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         cursor.close();
         return path;
     }
-
-
-
+*/
 
 
     private void setSpinners(Context context){
@@ -509,18 +513,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
 
 
-        spinSmallest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String category =(String) spinSmallest.getSelectedItem();
-                //todo : bring the category use-by-date
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     private void SpinnerListener(){

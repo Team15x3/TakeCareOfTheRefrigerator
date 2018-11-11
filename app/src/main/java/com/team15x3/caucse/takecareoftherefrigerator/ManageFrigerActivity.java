@@ -45,11 +45,10 @@ public class ManageFrigerActivity extends AppCompatActivity {
 
 
     private void setRefrigeratorList(Context context){
-        final ArrayList<String> frigerList = new ArrayList<>();
+        ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1);
         for(int i = 0; i<LIST.size(); i++){
-            frigerList.add(LIST.get(i).getName());
+           adapter.add(LIST.get(i).getName());
         }
-        ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.activity_list_item, frigerList);
         listview.setAdapter(adapter);
     }
 }

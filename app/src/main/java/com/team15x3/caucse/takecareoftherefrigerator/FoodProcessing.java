@@ -29,7 +29,7 @@ public class FoodProcessing {
             Iterator<Food> iterator = mFoodList.iterator();
             while (iterator.hasNext()) {
                 Food food = iterator.next();
-                Date expiration_date = simple_date_format.parse(food.getExpirationDate());
+                Date expiration_date = simple_date_format.parse(food.getSellByDate());
 
                 long calDate = expiration_date.getTime() - curDate.getTime();
                 long calDateDays = calDate / (24 * 60 * 60 * 1000);

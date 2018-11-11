@@ -99,7 +99,7 @@ public class ListAdapter extends BaseAdapter {
 //            Date tempDate = new Date();
             String str= Integer.toString(calendar.get(Calendar.YEAR)*10000 + (calendar.get(Calendar.MONTH) + 1)*100 + calendar.get(Calendar.DAY_OF_MONTH));
             Date curDate = simple.parse(str);
-            Date expdate = simple.parse(curFood.getExpirationDate());
+            Date expdate = simple.parse(curFood.getSellByDate());
 
             long calDate = expdate.getTime() - curDate.getTime();
             long calDateDays = calDate/(24*60*60*1000);
