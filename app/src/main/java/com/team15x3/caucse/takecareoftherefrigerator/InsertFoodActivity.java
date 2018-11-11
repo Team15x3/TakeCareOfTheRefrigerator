@@ -374,8 +374,11 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Year = year;
         Month = monthOfYear;
         Day= dayOfMonth;
-        //todo : set use-by date
+        UseByDate useByDate= new UseByDate();
+        String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year+""+Month+""+Day);
 
+
+        tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
     }
 
     private void setFoodInformation(){
