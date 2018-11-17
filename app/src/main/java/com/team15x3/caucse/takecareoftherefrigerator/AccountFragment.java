@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Account_Activity extends AppCompatActivity {
+public class AccountFragment extends AppCompatActivity {
 
 
     @Override
