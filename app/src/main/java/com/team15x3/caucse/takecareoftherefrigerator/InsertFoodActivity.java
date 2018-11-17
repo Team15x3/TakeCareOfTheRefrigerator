@@ -445,6 +445,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setFoodInformation(){
+
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
@@ -467,6 +468,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         return imageFile;
     }
 
+    
     private void galleryAddpic(){
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File file = new File(absolutePath);
