@@ -7,9 +7,13 @@ public class User {
     private String mID;
     private String mPassword;
     private ArrayList<Refrigerator> mRefrigeratorList;
+
     public String UserName;
     public String profileImageUrl;
     public String uid;
+    public String pushToken;
+    public String comment;
+
     private int defaultRefrigerator;
     private int currentRefrigerator;
 

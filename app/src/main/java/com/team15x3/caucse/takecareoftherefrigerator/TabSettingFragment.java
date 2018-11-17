@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -23,7 +25,8 @@ import java.util.Locale;
 public class TabSettingFragment extends Fragment {
 
     TextView tvUserName;
-    ImageButton ibLogout, ibAlarm, ibFriger;
+    ImageButton ibLogout, ibAlarm, ibFriger,ibGroup,ibAccount;
+    private FirebaseAuth firebaseAuth;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,18 +36,49 @@ public class TabSettingFragment extends Fragment {
         ibLogout = (ImageButton)view.findViewById(R.id.ibLogout);
         ibAlarm = (ImageButton) view.findViewById(R.id.ibAlarm);
         ibFriger = (ImageButton)view.findViewById(R.id.ibFriger);
+        ibGroup = (ImageButton)view.findViewById(R.id.ibGroup);
+        ibAccount = (ImageButton)view.findViewById(R.id.ibAccount);
+
         String userID = User.INSTANCE.getID();
         tvUserName.setText(userID);
 
+        ibLogout.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.signOut();
+                Intent intent = new Intent(getContext(),LoginActivity.class);
+                startActivityForResult(intent,1);
+            }
+        });
 
         ibFriger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),ManageFrigerActivity.class);
                 startActivityForResult(intent,1);
+
             }
         });
 
+        ibGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),SelectFriendActivity.class);
+                startActivityForResult(intent,1);
+
+            }
+        });
+
+        ibAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Account_Activity.class);
+                startActivityForResult(intent,1);
+            }
+        });
 
         return view;
     }
