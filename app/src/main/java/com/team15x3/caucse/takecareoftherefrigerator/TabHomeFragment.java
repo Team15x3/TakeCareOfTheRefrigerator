@@ -1,5 +1,7 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,8 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -31,10 +35,10 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private ImageView ivEmptyFoodList;
     private View view;
     private ArrayList<Refrigerator> friger;
-    private  ArrayList<Food> data ,list;
+    private ArrayList<Food> data ,list;
     private ImageView ivHomeImage;
     private static ListAdapter adapter;
-    private Button btnInsert;
+    private Button btnInsert,btnMenu;
     private String myBarcode;
     private EditText edtSearch;
     private TextView tvName;
@@ -54,8 +58,11 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
         tvName = view.findViewById(R.id.tvName);
         ivEmptyFoodList = (ImageView) view.findViewById(R.id.ivEmptyFoodList);
 
+        btnMenu = view.findViewById(R.id.btnMenu);
+
         edtSearch.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
+        btnMenu.setOnClickListener(this);
 
         if (friger.isEmpty()) {
             friger = User.INSTANCE.getRefrigeratorList();
@@ -137,8 +144,72 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
 
+            case R.id.btnMenu: {
+                // friger
+
+
+                show_dialog();
+
+
+                // User.INSTANCE.setCurrentRefrigerator(); // input current index
+            }
+
         }
     }
+
+    private void show_dialog() {
+
+        final List<String> refri_ListItems = new ArrayList<String>();
+
+        for (int i = 0; i < friger.size(); i++) {
+            refri_ListItems.add(friger.get(i).getName());
+        }
+
+        final CharSequence[] items =  refri_ListItems.toArray(new String[ refri_ListItems.size()]);
+
+
+        final List SelectedItems  = new ArrayList();
+        int defaultItem = 0;
+        SelectedItems.add(defaultItem);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("AlertDialog Title");
+        builder.setSingleChoiceItems(items, defaultItem,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SelectedItems.clear();
+                        SelectedItems.add(which);
+                    }
+                });
+        builder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String msg="";
+
+                        if (!SelectedItems.isEmpty()) {
+                            int index = (int) SelectedItems.get(0);
+                            msg = refri_ListItems.get(index);
+
+                            User.INSTANCE.setCurrentRefrigerator(index);
+                            setFoodList();
+
+                            // index 값을 변화!!
+                        }
+                        Toast.makeText(view.getContext(),
+                                "Items Selected.\n"+ msg , Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
+        builder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        builder.show();
+    }
+
 
     private void search(String text){
         findIndex.clear();

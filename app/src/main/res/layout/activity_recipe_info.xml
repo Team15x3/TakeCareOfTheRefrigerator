@@ -7,15 +7,31 @@
     android:orientation="vertical"
     tools:context=".RecipeInfoActivity">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="  Recipe Information"
-        android:background="@color/wine"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        android:gravity="center_vertical"
-        />
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="  Recipe Information"
+            android:background="@color/wine"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            />
+
+        <Button
+            android:id="@+id/btnScrape"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:background="@drawable/btn_delete"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"/>
+
+    </FrameLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
