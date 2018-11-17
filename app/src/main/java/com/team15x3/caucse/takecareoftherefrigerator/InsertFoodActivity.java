@@ -67,7 +67,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     protected TextView tvIngredients, tvAllergyIngredient, tvNutrientServing;
     protected TableLayout table;
 
-    final private ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
+    ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
+    ArrayList<String> medium_list;
+    ArrayList<String> smallest_list;
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
@@ -156,6 +158,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         linShowInformation.setVisibility(View.VISIBLE);
 
                         FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
+                        //findCategory(InsertFood.getFoodClassifyName());
 
                         //asyncDialog.dismiss();
                     } else {
@@ -177,7 +180,29 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             parseJsonFromBarcode(strings[0]);
             return null;
         }
+
+
     }
+
+    protected void findCategory(String category) {
+        for (int i = 0; i < biggest.size(); i++) {
+
+            spinBiggest.setSelection(i);
+            for (int j = 0; j < medium_list.size(); j++ ) {
+
+                spinMedium.setSelection(j);
+                for (int k = 0; k < smallest_list.size(); k++) {
+
+                    if (smallest_list.get(k).compareTo(category) == 0) {
+                        spinSmallest.setSelection(k);
+                        return;
+                    }
+                }
+
+            }
+        }
+    }
+
 
 
     @Override
@@ -217,8 +242,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         ivFoodImage.setOnClickListener(this);
 
         checkPermission();
-
-
     }
 
 
@@ -242,6 +265,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
             InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
+            //todo:save
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();
             setResult(RESULT_OK,returnIntent);
@@ -289,8 +313,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             builder.setNegativeButton("cancel",cancelListener);
             builder.show();
         }
-
-
     }
 
 

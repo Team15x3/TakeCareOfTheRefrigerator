@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -53,6 +52,7 @@ public class TabRecipeFragment extends Fragment {
             private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             private DatabaseReference databaseReference = firebaseDatabase.getReference();
             ProgressDialog asyncDialog = new ProgressDialog(getActivity());
+
             @Override
             protected void onPreExecute() {
                 Log.d("Progress","onpreExcute called");
@@ -76,20 +76,35 @@ public class TabRecipeFragment extends Fragment {
 
                             foodArrayList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
                             for (int i = 0 ; i < foodArrayList.size(); i++) {
-                                if (foodArrayList.get(i).getFoodName().equals(str)) {
-                                    String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
-                                    String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
-                                    String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
-                                    String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
-                                    String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
-                                    String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
+                                ArrayList<String> foodClassifyNameList = new ArrayList<String>();
 
-                                    Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
-                                    Recipe recipe = new Recipe();
-                                    recipe.setRecipeID(recipe_id);
-                                    recipe.getIngredientList().add(ingredient);
-                                    recipeArrayList.add(recipe);
+                                if (foodArrayList.get(i).getFoodClassifyName().contains("/")) {
+                                    String[] arr = foodArrayList.get(i).getFoodClassifyName().split("/");
+                                    for (int j = 0; j < arr.length; j++) {
+                                        foodClassifyNameList.add(arr[j]);
+                                    }
+                                }
+                                else {
+                                    foodClassifyNameList.add(foodArrayList.get(i).getFoodClassifyName());
+                                }
 
+
+                                for (int j = 0; j < foodClassifyNameList.size(); j++) {
+                                    if (str.equals(foodClassifyNameList.get(j))) {
+                                        String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
+                                        String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
+                                        String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
+                                        String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
+                                        String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
+                                        String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
+
+                                        Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
+                                        Recipe recipe = new Recipe();
+                                        recipe.setRecipeID(recipe_id);
+                                        recipe.getIngredientList().add(ingredient);
+                                        recipeArrayList.add(recipe);
+
+                                    }
                                 }
                             }
 
@@ -98,6 +113,8 @@ public class TabRecipeFragment extends Fragment {
                         }
 
                         getRecipeBasicFromFirebase();
+                        asyncDialog.dismiss();
+
                         //setRecipeList();
                         //adapter.notifyDataSetChanged();
                     }
@@ -137,7 +154,6 @@ public class TabRecipeFragment extends Fragment {
 
                         setRecipeList();
                         getRecipeCourseFromFirebase();
-
                     }
 
                     @Override
@@ -187,13 +203,7 @@ public class TabRecipeFragment extends Fragment {
                     }
                 });
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        asyncDialog.dismiss();
-                    }
-                },1500);
+
 
             }
 
@@ -203,9 +213,6 @@ public class TabRecipeFragment extends Fragment {
                 return null;
             }
         }
-
-        FoodProcessing foodProcessing = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodProcess();
-        foodArrayList = foodProcessing.getFoodListNearExpirationDate();
 
         DataToActivity dataToActivity = new DataToActivity();
         dataToActivity.execute();
@@ -232,7 +239,7 @@ public class TabRecipeFragment extends Fragment {
 
            if(recipeArrayList.isEmpty()){
                Toast.makeText(getContext(),"empty",Toast.LENGTH_SHORT).show();
-           }else {
+           } else {
                adapter = new RecipeAdapter(view.getContext(), R.layout.recipe_list, cpRecipeList);
                lvRecipeList.setAdapter(adapter);
                lvRecipeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
