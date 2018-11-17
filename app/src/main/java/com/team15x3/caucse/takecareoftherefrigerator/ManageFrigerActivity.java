@@ -28,8 +28,8 @@ public class ManageFrigerActivity extends AppCompatActivity {
         setRefrigeratorList(this);
 
         btnAddRefrigerator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                 //todo : add new refrigerator / name, search group, invite person
             }
         });

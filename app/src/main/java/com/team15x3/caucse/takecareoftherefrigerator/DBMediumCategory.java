@@ -12,4 +12,10 @@ public class DBMediumCategory extends RealmObject {
         mediumIndex = m;
         name = n;
     }
+
+    public int getIndex(){ return mediumIndex;}
+    public String getName(){
+        return name;
+    }
+    public int getParentIndex(){return bigIndex;}
 }

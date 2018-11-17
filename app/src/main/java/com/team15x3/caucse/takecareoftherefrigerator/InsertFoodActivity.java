@@ -66,6 +66,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     protected Food InsertFood = new Food();
     protected TextView tvIngredients, tvAllergyIngredient, tvNutrientServing;
     protected TableLayout table;
+    private DBController dbController;
 
     ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
     ArrayList<String> medium_list;
@@ -114,11 +115,19 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         EatSightAPI eatSightAPI = response.body();
                         ArrayList<Food> foodArrayList = eatSightAPI.getFoodList();
 
-                        if (foodArrayList.size() != 00) {
+                        if (foodArrayList.size() != 0) {
                             InsertFood = foodArrayList.get(0);
 
                             edtName.setText(InsertFood.getFoodName());
                             parseJsonFromFoodID(InsertFood.getFoodID());
+
+                            if(InsertFood.getFoodClassifyName() != null) {
+                                ArrayList<Integer> index = dbController.getParentIndex(InsertFood.getFoodClassifyName());
+                                spinBiggest.setSelection(index.get(0));
+                                spinMedium.setSelection(index.get(1));
+                                spinSmallest.setSelection(index.get(2));
+                            }
+
                         } else {
                             Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
                         }
@@ -230,8 +239,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinSmallest = (Spinner)findViewById(R.id.spinSmallest);
         tvUseByDate = (TextView)findViewById(R.id.tvUseByDate);
 
-
-
+        dbController = new DBController(this);
         setSpinners(this);
 
         btnExpirationDate.setOnClickListener(this);
@@ -531,21 +539,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    /*public String getRealPathFromURI(Uri contentUri) {
-
-        String[] proj = { MediaStore.Images.Media.DATA };
-
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        cursor.moveToNext();
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-        Uri uri = Uri.fromFile(new File(path));
-
-        cursor.close();
-        return path;
-    }
-*/
-
-
     private void setSpinners(Context context){
         final ArrayList<Integer> spinQuantityList = new ArrayList<>();
         for(int i = 0; i<100 ;i++){
@@ -570,39 +563,15 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         SpinnerListener();
     }
 
-
     private void SpinnerListener() {
 
 
         spinBiggest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<String> list = null;
-                if(position == 0){
-                    list = new ArrayList<String>(Arrays.asList("라면/컵라면/면식품","분유/두유/이유식",
-                            "우유/요구르트/치즈/아이스크림","초콜릿/캔디/껌","과자/시리얼","커피/녹차/차",
-                            "생수/음료/탄산수","안주류","견과류","밀가루/설탕/소금/조미료","식용유/참기름/파스타/소스",
-                            "간장/고추장/장류","참치캔/통조림류","즉석밥/카레짜장/즉석식품","주류"));
-
-                }else if(position == 1) {
-                    list = new ArrayList<String>(Arrays.asList("간편가정식", "식빵/잼/베이커리",
-                            "떡/특산물음식", "단무지/반찬", "김치", "만두/피자/냉동식품", "햄/어묵/맛살/면류 냉장식품"));
-
-                }else if(position == 2){
-                    list = new ArrayList<String>(Arrays.asList("꿀/로얄젤리","홍상/인삼/건강즙",
-                            "친환경 가공식품","한차/건강차재료","다이어트/헬스보조식품","건강식품(성분별)"));
-                }else if(position ==3){
-                    list = new ArrayList<String>(Arrays.asList("알류/정육"));
-                }else if(position == 4){
-                    list = new ArrayList<String>(Arrays.asList("혼합곡/기능성잡곡","수수/조/깨/잡곡","콩/보리",
-                            "찹쌀/현미/흑미","쌀"));
-                }else if(position == 5){
-                    list = new ArrayList<String>(Arrays.asList("두부/콩나물"));
-                }else if(position == 6){
-                    list = new ArrayList<String>(Arrays.asList("조미김/생김","건오징어/어포/육포"));
-                }
-                ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, list);
-                spinMedium.setAdapter(adapter);
+               ArrayList<String> mList = dbController.getMediumList(position);
+               ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
+               spinMedium.setAdapter(mSpinAdapter);
             }
 
             @Override
@@ -613,7 +582,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinMedium.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                ArrayList<String> mList = dbController.getSmallList(position);
+                ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
+                spinSmallest.setAdapter(mSpinAdapter);
             }
 
             @Override

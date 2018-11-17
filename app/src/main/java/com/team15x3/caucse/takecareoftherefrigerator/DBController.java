@@ -11,8 +11,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class DBController {
     private Realm realm;
@@ -87,5 +89,49 @@ public class DBController {
         }catch (Exception e){
             return;
         }
+    }
+
+    public ArrayList<String> getMediumList(int pos){
+        ArrayList<String> medi = new ArrayList<>();
+        realm.beginTransaction();
+        RealmResults<DBMediumCategory> mediumCategory = realm.where(DBMediumCategory.class).equalTo("bigIndex", pos).findAll();
+        for(int i = 0; i<mediumCategory.size(); i++){
+            DBMediumCategory cur = mediumCategory.get(i);
+            medi.add(cur.getIndex(), cur.getName());
+        }
+        realm.commitTransaction();
+        return medi;
+
+    }
+
+    public ArrayList<String> getSmallList(int pos){
+        ArrayList<String> small = new ArrayList<>();
+        realm.beginTransaction();
+        RealmResults<DBSmallCategory> mediumCategory = realm.where(DBSmallCategory.class).equalTo("mediumIndex", pos).findAll();
+        for(int i = 0; i<mediumCategory.size(); i++){
+            DBSmallCategory cur = mediumCategory.get(i);
+            small.add(cur.getIndex(), cur.getName());
+        }
+        realm.commitTransaction();
+        return small;
+    }
+
+
+    public ArrayList<Integer> getParentIndex(String str){
+
+        realm.beginTransaction();
+        DBSmallCategory small = realm.where(DBSmallCategory.class).equalTo("name",str).findFirst();
+        int sIdx = small.getIndex();
+        int medi = small.getParentIndex();
+        DBMediumCategory medium = realm.where(DBMediumCategory.class).equalTo("mediumIndex",medi).findFirst();
+        int big = medium.getParentIndex();
+
+        ArrayList<Integer> array = new ArrayList<>();
+        array.add(big);
+        array.add(medi);
+        array.add(sIdx);
+
+        realm.commitTransaction();
+        return array;
     }
 }

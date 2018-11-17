@@ -13,4 +13,10 @@ public class DBSmallCategory extends RealmObject {
         smallIndex = s;
         name=n;
     }
+
+    public int getIndex(){ return smallIndex;}
+    public String getName(){
+        return name;
+    }
+    public int getParentIndex(){return mediumIndex;}
 }
