@@ -268,10 +268,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
             //Todo: check there is no error
             setFoodInformation();
-            InsertFood.setFoodName(edtName.getText().toString());
-            InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
-            InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
-            InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             //todo:save
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
@@ -439,17 +435,25 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         Month = monthOfYear;
         Day= dayOfMonth;
         UseByDate useByDate= new UseByDate();
-        String useDate = useByDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
 
-        tvUseByDate.setText(useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6));
+        String sellByDate = Integer.toString(Year * 10000 + (Month + 1) * 100 + Day);
+        InsertFood.setUseByDate(sellByDate);
+        if(sellByDate != null){
+            String useDate = FoodProcessing.getUsebyDateFromSellbyDate(sellByDate);
+            String str = useDate.substring(0,4)+" / "+useDate.substring(4,6)+"/ "+useDate.substring(6);
+            tvUseByDate.setText(str);
+        }
     }
 
     private void setFoodInformation(){
-
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
         InsertFood.setUseByDate(tvUseByDate.getText().toString());
+        InsertFood.setFoodName(edtName.getText().toString());
+        InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
+        InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
+        InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
     }
 
     private File createImageFile() throws IOException{
@@ -468,7 +472,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         return imageFile;
     }
 
-    
     private void galleryAddpic(){
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File file = new File(absolutePath);
@@ -509,7 +512,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         }
 
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
@@ -566,8 +568,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void SpinnerListener() {
-
-
         spinBiggest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -597,9 +597,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinSmallest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                UseByDate useDate = new UseByDate();
+                /*UseByDate useDate = new UseByDate();
                 String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
-                tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));
+                tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));*/
             }
 
             @Override

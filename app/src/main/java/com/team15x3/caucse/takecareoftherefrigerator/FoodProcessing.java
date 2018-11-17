@@ -46,7 +46,7 @@ public class FoodProcessing {
         return food_list;
     }
 
-    public String getUsebyDateFromSellbyDate(String sell_by_date) {
+    public static String getUsebyDateFromSellbyDate(String sell_by_date) {
         Date today = new Date();
         String use_by_date = null;
 
