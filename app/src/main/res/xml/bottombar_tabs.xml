@@ -11,14 +11,17 @@
             id="@+id/tab_recipe"
             title="recipe"
             />
-        <tab
-            id="@+id/tab_setting"
-            title="setting"
-            />
+
         <tab
             id="@+id/tab_friend"
             title="My recipe"
             />
+        
+        <tab
+            id="@+id/tab_setting"
+            title="setting"
+            />
+
 
 
     </tabs>
