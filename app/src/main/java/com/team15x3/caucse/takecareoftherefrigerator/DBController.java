@@ -91,8 +91,8 @@ public class DBController {
         }
     }
 
-    public ArrayList<String> getMediumList(int pos){
-        ArrayList<String> medi = new ArrayList<>();
+    public void getMediumList(ArrayList<String> medi,int pos){
+        medi.clear();
         realm.beginTransaction();
         RealmResults<DBMediumCategory> mediumCategory = realm.where(DBMediumCategory.class).equalTo("bigIndex", pos).findAll();
         for(int i = 0; i<mediumCategory.size(); i++){
@@ -100,12 +100,11 @@ public class DBController {
             medi.add(cur.getIndex(), cur.getName());
         }
         realm.commitTransaction();
-        return medi;
 
     }
 
-    public ArrayList<String> getSmallList(int bigpos, int mpos){
-        ArrayList<String> small = new ArrayList<>();
+    public void getSmallList(ArrayList<String> small,int bigpos, int mpos){
+        small.clear();
         realm.beginTransaction();
         RealmResults<DBSmallCategory> mediumCategory = realm.where(DBSmallCategory.class).equalTo("mediumIndex", mpos).equalTo("bigIndex",bigpos).findAll();
         for(int i = 0; i<mediumCategory.size(); i++){
@@ -113,7 +112,7 @@ public class DBController {
             small.add(cur.getIndex(), cur.getName());
         }
         realm.commitTransaction();
-        return small;
+
     }
 
 

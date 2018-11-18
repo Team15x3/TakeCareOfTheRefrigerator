@@ -50,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
+public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener,DatePickerDialog.OnDateSetListener{
 
 
     private boolean isBarcodeRecognized = false;
@@ -72,17 +72,19 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     private DBController dbController;
 
     ArrayList<String> biggest = new ArrayList<String>(Arrays.asList("가공식품","냉장/냉동/반찬/간편식","건강/친환경 식품","정육/계란류","쌀/잡곡","채소","수산물/해산물/건어물"));
-    ArrayList<String> medium_list;
-    ArrayList<String> smallest_list;
+    ArrayList<String> medium_list = new ArrayList<>();
+    ArrayList<String> smallest_list = new ArrayList<>();
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
     Spinner spinQuantity, spinAlarmDate;
     Spinner spinBiggest, spinMedium, spinSmallest;
+    ArrayAdapter bigadapter, mediadapter, smalladapter;
     EditText edtName;
     TextView tvSellByDate, tvUseByDate;
     ImageView ivFoodImage;
     LinearLayout linShowInformation;
+
 
     class APIProcessing extends AsyncTask<String, String, Void> {
         ProgressDialog asyncDialog = new ProgressDialog(InsertFoodActivity.this);
@@ -223,6 +225,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         dbController = new DBController(this);
         setSpinners(this);
 
+        spinSmallest.setOnItemSelectedListener(this);
+        spinMedium.setOnItemSelectedListener(this);
+        spinBiggest.setOnItemSelectedListener(this);
         btnExpirationDate.setOnClickListener(this);
         btnBarcode.setOnClickListener(this);
         btnAdd.setOnClickListener(this);
@@ -522,15 +527,17 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setAdapter(ArrayList<Integer> list){
-            spinBiggest.setSelection(1);
-            ArrayList<String> medi = dbController.getMediumList(list.get(0));
-            ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, medi);
-            spinMedium.setAdapter(mSpinAdapter);
-            spinMedium.setSelection(1);
-            ArrayList<String> small = dbController.getSmallList(list.get(0), list.get(1));
-            ArrayAdapter sSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, small);
-            spinSmallest.setAdapter(sSpinAdapter);
-            spinSmallest.setSelection(9);
+        synchronized (spinMedium) {
+            synchronized (spinSmallest) {
+                spinBiggest.setSelection(list.get(0));
+                dbController.getMediumList(medium_list, list.get(0));
+                mediadapter.notifyDataSetChanged();
+                spinMedium.setSelection(list.get(1));
+                dbController.getSmallList(smallest_list,list.get(0), list.get(1));
+                smalladapter.notifyDataSetChanged();
+                spinSmallest.setSelection(list.get(2));
+            }
+        }
     }
 
     private void setSpinners(Context context) {
@@ -551,51 +558,33 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinAlarmAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item,spinAlarmDateList);
         spinAlarmDate.setAdapter(spinAlarmAdapter);
 
-        ArrayAdapter spinCategoryAdapter;
-        spinCategoryAdapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, biggest);
-        spinBiggest.setAdapter(spinCategoryAdapter);
-        SpinnerListener();
+        bigadapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, biggest);
+        spinBiggest.setAdapter(bigadapter);
+        mediadapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, medium_list);
+        spinMedium.setAdapter(mediadapter);
+        smalladapter = new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, smallest_list);
+        spinSmallest.setAdapter(smalladapter);
+
     }
 
-    private void SpinnerListener() {
-        spinBiggest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<String> mList = dbController.getMediumList(position);
-                ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
-                spinMedium.setAdapter(mSpinAdapter);
-            }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(parent.getAdapter() == spinBiggest.getAdapter()){
+            dbController.getMediumList(medium_list,position);
+            mediadapter.notifyDataSetChanged();
+            dbController.getSmallList(smallest_list,spinBiggest.getSelectedItemPosition(),position);
+            smalladapter.notifyDataSetChanged();
+        }else if(parent.getAdapter() == spinMedium.getAdapter()){
+            dbController.getSmallList(smallest_list,spinBiggest.getSelectedItemPosition(),position);
+            smalladapter.notifyDataSetChanged();
+        }else if(parent.getAdapter() == spinSmallest.getAdapter()){
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinMedium.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<String> mList = dbController.getSmallList(spinBiggest.getSelectedItemPosition(),position);
-                ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
-                spinSmallest.setAdapter(mSpinAdapter);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinSmallest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                /*UseByDate useDate = new UseByDate();
-                String useStr = useDate.getUseByDate((String)spinSmallest.getSelectedItem(),Year,Month-1,Day);
-                tvUseByDate.setText(useStr.substring(0,4)+" / "+useStr.substring(4,6)+" / "+useStr.substring(6));*/
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        }
     }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
 }
