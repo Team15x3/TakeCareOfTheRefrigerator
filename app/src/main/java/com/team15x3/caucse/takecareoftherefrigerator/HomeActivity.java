@@ -23,7 +23,7 @@ public class HomeActivity extends FragmentActivity {
     private TabHomeFragment tabHomeFragment;
     private TabRecipeFragment tabRecipeFragment;
     private TabSettingFragment tabSettingFragment;
-    private TabFriendFragment tabFriendFragment;
+    private TabScrapeFragment tabFriendFragment;
 
     private ArrayList<Refrigerator> friger;
     private long backKeyPressedTime = 0;
@@ -43,7 +43,7 @@ public class HomeActivity extends FragmentActivity {
         tabHomeFragment = new TabHomeFragment();
         tabRecipeFragment = new TabRecipeFragment();
         tabSettingFragment = new TabSettingFragment();
-        tabFriendFragment = new TabFriendFragment();
+        tabFriendFragment = new TabScrapeFragment();
 
         bottomBar = (BottomBar)findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {

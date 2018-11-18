@@ -128,6 +128,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                                 spinSmallest.setSelection(index.get(2));
                             }
 
+                            InsertFood.getFoodClassifyName();
+
                         } else {
                             Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
                         }
@@ -187,31 +189,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         @Override
         protected Void doInBackground(String... strings) {
             parseJsonFromBarcode(strings[0]);
+
             return null;
         }
-
-
     }
-
-    protected void findCategory(String category) {
-        for (int i = 0; i < biggest.size(); i++) {
-
-            spinBiggest.setSelection(i);
-            for (int j = 0; j < medium_list.size(); j++ ) {
-
-                spinMedium.setSelection(j);
-                for (int k = 0; k < smallest_list.size(); k++) {
-
-                    if (smallest_list.get(k).compareTo(category) == 0) {
-                        spinSmallest.setSelection(k);
-                        return;
-                    }
-                }
-
-            }
-        }
-    }
-
 
 
     @Override
@@ -257,7 +238,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
 
         if(view == btnBarcode){
-            new IntentIntegrator(this).initiateScan();
+            //new IntentIntegrator(this).initiateScan();
+            onActivityResult(REQUEST_BARCODE, RESULT_OK ,  new Intent());
         }
 
         if(view == btnAdd){
@@ -326,8 +308,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         if(resultCode !=RESULT_OK) return;
 
 
-
-
         switch (requestCode){
             case REQUEST_TAKE_ALBUM:{
                 if(resultCode == RESULT_OK){
@@ -378,23 +358,20 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 break;
             }
             case REQUEST_BARCODE:{
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                Log.d("BARCODE REQUESTCODE",requestCode+"");
-                myBarcode = result.getContents(); //get barcode number
+                //IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                //Log.d("BARCODE REQUESTCODE",requestCode+"");
+                //myBarcode = result.getContents(); //get barcode number
+                myBarcode ="8887140112280";
                 Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
                 //api parsing , get information
-
                 APIProcessing api = new APIProcessing();
                 api.execute(myBarcode);
             }
-
         }
-
-
     }
 
 
-    public void doTakePhotoAction(){
+    public void doTakePhotoAction() {
         String state = Environment.getExternalStorageState();
         if(Environment.MEDIA_MOUNTED.equals(state)){
             Intent TakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -440,7 +417,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setUseByDate(sellByDate);
         if(sellByDate != null){
             String useDate = FoodProcessing.getUsebyDateFromSellbyDate(sellByDate);
-            String str = useDate.substring(0,4)+" / "+useDate.substring(4,6)+"/ "+useDate.substring(6);
+            String str = useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6);
             tvUseByDate.setText(str);
         }
     }
@@ -584,7 +561,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinMedium.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<String> mList = dbController.getSmallList(position);
+                ArrayList<String> mList = dbController.getSmallList(spinBiggest.getSelectedItemPosition(),position);
                 ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
                 spinSmallest.setAdapter(mSpinAdapter);
             }

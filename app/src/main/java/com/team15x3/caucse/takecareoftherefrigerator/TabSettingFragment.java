@@ -75,7 +75,7 @@ public class TabSettingFragment extends Fragment {
         ibAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),Account_Activity.class);
+                Intent intent = new Intent(getContext(),AccountFragment.class);
                 startActivityForResult(intent,1);
             }
         });

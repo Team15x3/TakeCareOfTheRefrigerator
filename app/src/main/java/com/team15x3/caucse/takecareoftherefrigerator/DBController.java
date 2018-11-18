@@ -84,7 +84,7 @@ public class DBController {
             for( int i = 0; i<jsonSmall.length(); i++){
                 JSONObject curSmall = jsonSmall.getJSONObject(i);
                 DBSmallCategory dbS = realm.createObject(DBSmallCategory.class);
-                dbS.setData(curSmall.getInt("mediumIndex"),curSmall.getInt("smallIndex"),curSmall.getString("name"));
+                dbS.setData(curSmall.getInt("bigIndex"),curSmall.getInt("mediumIndex"),curSmall.getInt("smallIndex"),curSmall.getString("name"));
             }
         }catch (Exception e){
             return;
@@ -104,10 +104,10 @@ public class DBController {
 
     }
 
-    public ArrayList<String> getSmallList(int pos){
+    public ArrayList<String> getSmallList(int bigpos, int mpos){
         ArrayList<String> small = new ArrayList<>();
         realm.beginTransaction();
-        RealmResults<DBSmallCategory> mediumCategory = realm.where(DBSmallCategory.class).equalTo("mediumIndex", pos).findAll();
+        RealmResults<DBSmallCategory> mediumCategory = realm.where(DBSmallCategory.class).equalTo("mediumIndex", mpos).equalTo("bigIndex",bigpos).findAll();
         for(int i = 0; i<mediumCategory.size(); i++){
             DBSmallCategory cur = mediumCategory.get(i);
             small.add(cur.getIndex(), cur.getName());

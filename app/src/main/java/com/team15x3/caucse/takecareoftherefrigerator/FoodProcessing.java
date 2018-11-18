@@ -64,13 +64,13 @@ public class FoodProcessing {
 
             int sell_year   = sell_calendar.get(Calendar.YEAR);
             int sell_month  = sell_calendar.get(Calendar.MONTH);
-            int sell_day    = sell_calendar.get(Calendar.DAY_OF_YEAR);
+            int sell_day    = sell_calendar.get(Calendar.DAY_OF_MONTH);
 
             int today_year  = today_calendar.get(Calendar.YEAR);
             int today_month = today_calendar.get(Calendar.MONTH);
-            int today_day   = today_calendar.get(Calendar.DAY_OF_YEAR);
+            int today_day   = today_calendar.get(Calendar.DAY_OF_MONTH);
 
-            diff_date = (((sell_year - today_year) * 365 + (sell_month - today_month) * 30 + (sell_day - today_day)) * (2 / 3));
+            diff_date = ((((sell_year - today_year) * 365 + (sell_month - today_month) * 30 + (sell_day - today_day)) * 2) / 3);
 
             sell_calendar.add(Calendar.DAY_OF_YEAR, diff_date);
 

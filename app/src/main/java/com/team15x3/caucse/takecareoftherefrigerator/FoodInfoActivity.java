@@ -58,7 +58,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         tvCountFood.setText("Quantity : "+food.getCount());
 
 
-        tvExpirationDate.setText("Expiration date : "+ food.getSellByDate());
+        tvExpirationDate.setText("Expiration date : "+ food.getUseByDate());
         setPicture(food);
 
         SetInformationOfFood(food, tvIngredients, tvAllergyIngredient, tvNutrientServing, table,this);
