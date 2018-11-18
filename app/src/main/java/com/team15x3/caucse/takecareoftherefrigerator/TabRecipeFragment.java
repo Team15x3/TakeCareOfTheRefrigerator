@@ -39,6 +39,8 @@ public class TabRecipeFragment extends Fragment {
     private ArrayList<Integer> findIndex = new ArrayList<>();
     View view;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class TabRecipeFragment extends Fragment {
             }
 
 
-            public void getRecipeIngredientFromFirbase() {
+            public void getRecipeIngredientFromFirebase() {
                 databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -208,7 +210,7 @@ public class TabRecipeFragment extends Fragment {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                getRecipeIngredientFromFirbase();
+                getRecipeIngredientFromFirebase();
                 return null;
             }
         }
