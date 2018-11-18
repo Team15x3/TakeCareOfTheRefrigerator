@@ -62,7 +62,7 @@ public class DBController {
         return null;
     }
 
-    private void saveCategoryInfoToDB(String str) throws  JSONException{
+    private void saveCategoryInfoToDB(String str) throws JSONException{
         try{
             JSONObject jsonObject = new JSONObject(str);
             JSONArray jsonBig = jsonObject.getJSONArray("DBBigCategory");
