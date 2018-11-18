@@ -52,6 +52,10 @@ public class User {
 
     public String getID() { return mID; }
 
+    public ArrayList<Recipe> getScrapeList() {
+        return scrapeList;
+    }
+
     public String getPssword() { return mPassword; }
 
     public ArrayList<Refrigerator> getRefrigeratorList() { return mRefrigeratorList; }

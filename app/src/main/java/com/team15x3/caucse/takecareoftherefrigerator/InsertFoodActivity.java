@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -51,6 +52,8 @@ import retrofit2.Response;
 
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,DatePickerDialog.OnDateSetListener{
 
+
+    private boolean isBarcodeRecognized = false;
     private final int NO_DATA = 3;
     private static final int MY_PERMISSION_CAMERA = 1111;
     private static final int REQUEST_BARCODE =49374;
@@ -74,12 +77,12 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     Button btnBarcode, btnAdd, btnCancel,btnFoodImage,btnExpirationDate;
     String myBarcode;
-    Spinner spinQuantity, spinAlarmDate, spinBiggest, spinMedium, spinSmallest;
+    Spinner spinQuantity, spinAlarmDate;
+    Spinner spinBiggest, spinMedium, spinSmallest;
     EditText edtName;
     TextView tvSellByDate, tvUseByDate;
     ImageView ivFoodImage;
     LinearLayout linShowInformation;
-
 
     class APIProcessing extends AsyncTask<String, String, Void> {
         ProgressDialog asyncDialog = new ProgressDialog(InsertFoodActivity.this);
@@ -117,16 +120,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
                         if (foodArrayList.size() != 0) {
                             InsertFood = foodArrayList.get(0);
-
                             edtName.setText(InsertFood.getFoodName());
                             parseJsonFromFoodID(InsertFood.getFoodID());
-
-                            if(InsertFood.getFoodClassifyName() != null) {
-                                ArrayList<Integer> index = dbController.getParentIndex(InsertFood.getFoodClassifyName());
-                                spinBiggest.setSelection(index.get(0));
-                                spinMedium.setSelection(index.get(1));
-                                spinSmallest.setSelection(index.get(2));
-                            }
 
                             InsertFood.getFoodClassifyName();
 
@@ -153,6 +148,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onResponse(Call<Food> call, Response<Food> response) {
                     if (response.isSuccessful()) {
+                        InsertFood = response.body();
+
                         if (response.body().getAllergyList() != null) {
                             InsertFood.setAllergyList(response.body().getAllergyList());
                         }
@@ -169,9 +166,12 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         linShowInformation.setVisibility(View.VISIBLE);
 
                         FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
-                        //findCategory(InsertFood.getFoodClassifyName());
 
-                        //asyncDialog.dismiss();
+                        if(InsertFood.getFoodClassifyName() != null) {
+                            //setSpinners(getApplicationContext());
+                            setAdapter(dbController.getParentIndex(InsertFood.getFoodClassifyName()));
+                        }
+
                     } else {
                         Log.d("CheckResponce","response not successfill eeeee : "+response.code());
                     }
@@ -489,6 +489,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
@@ -520,7 +521,19 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void setSpinners(Context context){
+    private void setAdapter(ArrayList<Integer> list){
+            spinBiggest.setSelection(1);
+            ArrayList<String> medi = dbController.getMediumList(list.get(0));
+            ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, medi);
+            spinMedium.setAdapter(mSpinAdapter);
+            spinMedium.setSelection(1);
+            ArrayList<String> small = dbController.getSmallList(list.get(0), list.get(1));
+            ArrayAdapter sSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, small);
+            spinSmallest.setAdapter(sSpinAdapter);
+            spinSmallest.setSelection(9);
+    }
+
+    private void setSpinners(Context context) {
         final ArrayList<Integer> spinQuantityList = new ArrayList<>();
         for(int i = 0; i<100 ;i++){
             spinQuantityList.add(i+1);
@@ -548,9 +561,9 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         spinBiggest.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               ArrayList<String> mList = dbController.getMediumList(position);
-               ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
-               spinMedium.setAdapter(mSpinAdapter);
+                ArrayList<String> mList = dbController.getMediumList(position);
+                ArrayAdapter mSpinAdapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mList);
+                spinMedium.setAdapter(mSpinAdapter);
             }
 
             @Override

@@ -123,8 +123,7 @@ public class DBController {
         DBSmallCategory small = realm.where(DBSmallCategory.class).equalTo("name",str).findFirst();
         int sIdx = small.getIndex();
         int medi = small.getParentIndex();
-        DBMediumCategory medium = realm.where(DBMediumCategory.class).equalTo("mediumIndex",medi).findFirst();
-        int big = medium.getParentIndex();
+        int big = small.getBigIndex();
 
         ArrayList<Integer> array = new ArrayList<>();
         array.add(big);

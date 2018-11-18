@@ -28,10 +28,9 @@ import java.util.ArrayList;
 
 public class TabRecipeFragment extends Fragment {
 
-    private static RecipeAdapter listAdapter;
     //public static ArrayList<Recipe> recipeArrayList = new ArrayList<Recipe>();
     public static ArrayList<Recipe> recipeArrayList;
-    final int SHOW_RECIPE_INFORMATION_REQUEST = 3333;
+    private final int SHOW_RECIPE_INFORMATION_REQUEST = 3333;
     ArrayList<Food>   foodArrayList = new ArrayList<Food>();
     protected ArrayList<Recipe> cpRecipeList;
     private ListView lvRecipeList;

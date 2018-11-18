@@ -54,7 +54,13 @@ public class RecipeInfoActivity extends AppCompatActivity {
                     setResult(-1);
                 }
 
-                User.INSTANCE.addScrape(TabRecipeFragment.recipeArrayList.get(idx));
+                if(User.INSTANCE.getScrapeList().contains(TabRecipeFragment.recipeArrayList.get(idx))){
+                    Toast.makeText(getApplicationContext(),"already exist",Toast.LENGTH_SHORT).show();
+                }else{
+                    User.INSTANCE.addScrape(TabRecipeFragment.recipeArrayList.get(idx));
+                    Toast.makeText(getApplicationContext(),"complete!",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
