@@ -25,7 +25,7 @@ import java.util.Iterator;
 public class FoodInfoActivity extends AppCompatActivity implements View.OnClickListener{
     private Food food;
     private Button btnBack, btnDelete, btnRevise;
-    private TextView tvFoodName,tvCountFood,tvExpirationDate,tvIngredients,tvAllergyIngredient,tvNutrientServing;
+    private TextView tvFoodName,tvCountFood,tvExpirationDate,tvIngredients,tvAllergyIngredient,tvNutrientServing, tvCategory;
     private ImageView ivFoodImage;
     private TableLayout table;
     public static final int LIST_CHANGED = 220;
@@ -46,6 +46,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
         btnRevise = (Button)findViewById(R.id.btnRevise);
         table = findViewById(R.id.table);
 
+        tvCategory = findViewById(R.id.tvCategory);
         tvFoodName = findViewById(R.id.tvName);
         tvCountFood = findViewById(R.id.tvCountFood);
         tvExpirationDate = findViewById(R.id.tvExpirationDate);
@@ -56,7 +57,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
 
         tvFoodName.setText(food.getFoodName());
         tvCountFood.setText("Quantity : "+food.getCount());
-
+        tvCategory.setText("Category : "+ food.getFoodClassifyName());
 
         tvExpirationDate.setText("Expiration date : "+ food.getUseByDate());
         setPicture(food);
