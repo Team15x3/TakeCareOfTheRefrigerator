@@ -33,8 +33,16 @@ import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CallbackManager mCallbackManager;
     FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private List<Refrigerator> friger;
+    private Food food;
 
     //animation splash
     RelativeLayout rellay1, rellay2;
@@ -80,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         checkFirstRun();
         initViews();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
+        //firebaseAuth.signOut();
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
@@ -135,9 +145,55 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-
                         if (task.isSuccessful()) {
+                            friger = new ArrayList<>();
+                            final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                     for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                                     {
+                                         if(myUid.equals(snapshot.getKey())) {
+                                             for (long j = 0 ; j < snapshot.child("refriList").getChildrenCount(); j++) {
+
+                                                 Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
+                                                 while(iter.hasNext()) {
+                                                     DataSnapshot data = iter.next();
+                                                     Refrigerator refri = new Refrigerator(data.getKey());
+
+                                                     Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                                     while (iterator.hasNext()) {
+                                                         DataSnapshot food_data = iterator.next();
+
+                                                         Food a = new Food();
+
+                                                         //a.setFoodName(food_data.getKey());
+                                                         //a = food_data.getValue(Food.class);
+
+                                                         //refri.getFoodList().add(food_data.getValue(Food.class));
+                                                     }
+                                                     // input foods
+
+                                                     User.INSTANCE.addRefrigerator(refri);
+                                                 }
+                                             }
+
+                                             break;
+                                         }
+                                     }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            Log.d("friger00000", FirebaseDatabase.getInstance().getReference().child("users").child("add").toString());
+                            Log.d("friger00000",friger.toString());
+
+                            progressDialog.dismiss();
+
                             finish();
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {

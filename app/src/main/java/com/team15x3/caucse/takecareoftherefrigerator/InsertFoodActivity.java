@@ -34,12 +34,15 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -257,11 +260,17 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             setFoodInformation();
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
             //todo:save
+            String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
+                    get(User.INSTANCE.getCurrentRefrigerator()).
+                    getName()).child(InsertFood.getFoodName()).setValue(InsertFood);
+
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();
             setResult(RESULT_OK,returnIntent);
-            finish();
 
+            finish();
         }
 
         if(view == btnCancel){
@@ -436,6 +445,8 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
         InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
+
+        InsertFood.setBarcode(myBarcode);
     }
 
     private File createImageFile() throws IOException{

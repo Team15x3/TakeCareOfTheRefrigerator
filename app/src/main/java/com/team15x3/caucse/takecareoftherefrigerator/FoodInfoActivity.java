@@ -16,11 +16,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 public class FoodInfoActivity extends AppCompatActivity implements View.OnClickListener{
     private Food food;
@@ -30,7 +33,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
     private TableLayout table;
     public static final int LIST_CHANGED = 220;
 
-
+    protected Food InsertFood = new Food();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +133,6 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void deletion()  {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirm deletion")
                 .setMessage("Are you sure you want to delete this food?")
@@ -140,10 +142,21 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ArrayList<Food> foodlist= User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
                         Intent intent = getIntent();
+
                         int num = intent.getIntExtra("list_number",-1);
                         Log.d("index number",num+"");
+
+                        String food_name = foodlist.get(num).getFoodName();
                         foodlist.remove(num);
                         setResult(LIST_CHANGED,intent);
+
+                        String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        Log.d("food.getFoodName()",food.getFoodName());
+                        FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
+                                get(User.INSTANCE.getCurrentRefrigerator()).
+                                getName()).child(food_name).removeValue();
+                                //.child(InsertFood.getFoodName())
+
                         finish();
                     }
                 })
