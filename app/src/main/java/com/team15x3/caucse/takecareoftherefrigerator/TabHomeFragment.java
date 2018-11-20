@@ -66,7 +66,6 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
         if (friger.isEmpty()) {
             friger = User.INSTANCE.getRefrigeratorList();
-
             friger.add(new Refrigerator("My Friger"));
         }
         setFoodList();
@@ -79,6 +78,9 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
     private void setFoodList() {
 
         try {
+            if(friger.isEmpty()){
+
+            }
              tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());
 
             //data =실제 데이터, list=복사본
