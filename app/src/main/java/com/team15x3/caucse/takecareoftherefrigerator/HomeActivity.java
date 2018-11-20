@@ -7,15 +7,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.internal.bind.ArrayTypeAdapter;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.net.SocketImpl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Locale;
+
 
 public class HomeActivity extends FragmentActivity {
 
@@ -27,16 +39,19 @@ public class HomeActivity extends FragmentActivity {
 
     private ArrayList<Refrigerator> friger;
     private long backKeyPressedTime = 0;
+    private FirebaseAuth firebaseAuth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        data();
       /*  Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(HomeActivity.this, R.color.transparent));
 */
+
 
         friger = User.INSTANCE.getRefrigeratorList();
 
@@ -123,6 +138,63 @@ public class HomeActivity extends FragmentActivity {
             System.exit(0);
         }
     }
+    public void data()
+    {
 
+        final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               // User.INSTANCE.getRefrigeratorList().clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                {
+                    if(myUid.equals(snapshot.getKey())) {
+                        for (long j = 0 ; j < snapshot.child("refriList").getChildrenCount(); j++) {
+
+                            Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
+                            while(iter.hasNext()) {
+                                DataSnapshot data = iter.next();
+                                Refrigerator refri = new Refrigerator(data.getKey());
+
+                                Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot food_data = iterator.next();
+
+                                    Food a = new Food();
+
+                                    a.setFoodName(food_data.getKey());
+                                    a = food_data.getValue(Food.class);
+
+
+
+                                    System.out.println("AAA");
+
+
+
+                                    //a.setFoodName(food_data.getKey());
+                                    //a = food_data.getValue(Food.class);
+                                    User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(a);
+                                    //refri.getFoodList().add(food_data.getValue(Food.class));
+                                }
+
+                                // input foods
+
+                                //User.INSTANCE.addRefrigerator(refri);
+                                System.out.println("AAA");
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

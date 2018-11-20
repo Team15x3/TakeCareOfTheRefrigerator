@@ -60,8 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     CallbackManager mCallbackManager;
     FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private List<Refrigerator> friger;
-    private Food food;
+
 
     //animation splash
     RelativeLayout rellay1, rellay2;
@@ -71,8 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         public void run() {
 
             if (firebaseAuth.getCurrentUser() != null) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+               homeActivityIntent();
             } else {
                 rellay1.setVisibility(View.VISIBLE);
                 rellay2.setVisibility(View.VISIBLE);
@@ -146,56 +144,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            friger = new ArrayList<>();
-                            final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                     for(DataSnapshot snapshot: dataSnapshot.getChildren())
-                                     {
-                                         if(myUid.equals(snapshot.getKey())) {
-                                             for (long j = 0 ; j < snapshot.child("refriList").getChildrenCount(); j++) {
 
-                                                 Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
-                                                 while(iter.hasNext()) {
-                                                     DataSnapshot data = iter.next();
-                                                     Refrigerator refri = new Refrigerator(data.getKey());
-
-                                                     Iterator<DataSnapshot> iterator = data.getChildren().iterator();
-                                                     while (iterator.hasNext()) {
-                                                         DataSnapshot food_data = iterator.next();
-
-                                                         Food a = new Food();
-
-                                                         //a.setFoodName(food_data.getKey());
-                                                         //a = food_data.getValue(Food.class);
-
-                                                         //refri.getFoodList().add(food_data.getValue(Food.class));
-                                                     }
-                                                     // input foods
-
-                                                     User.INSTANCE.addRefrigerator(refri);
-                                                 }
-                                             }
-
-                                             break;
-                                         }
-                                     }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                            Log.d("friger00000", FirebaseDatabase.getInstance().getReference().child("users").child("add").toString());
-                            Log.d("friger00000",friger.toString());
 
                             progressDialog.dismiss();
 
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            homeActivityIntent();
                         } else {
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
                             /*textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");*/
@@ -298,5 +252,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    public void homeActivityIntent()
+    {
+        finish();
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+    }
 }

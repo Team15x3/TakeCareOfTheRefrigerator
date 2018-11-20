@@ -99,6 +99,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         User user = new User();
 
+                                        user.email = email.getText().toString();
+                                        user.password = password.getText().toString();
                                         user.UserName = name.getText().toString();
                                         user.profileImageUrl = imageUrl;
                                         user.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
