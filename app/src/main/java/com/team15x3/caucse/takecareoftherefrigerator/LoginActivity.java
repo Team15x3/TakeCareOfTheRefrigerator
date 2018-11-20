@@ -22,14 +22,12 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+
     //animation splash
     RelativeLayout rellay1, rellay2;
     Handler handler = new Handler();
@@ -61,8 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         public void run() {
 
             if (firebaseAuth.getCurrentUser() != null) {
-                finish();
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+               homeActivityIntent();
             } else {
                 rellay1.setVisibility(View.VISIBLE);
                 rellay2.setVisibility(View.VISIBLE);
@@ -80,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         checkFirstRun();
         initViews();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signOut();
+        //firebaseAuth.signOut();
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
@@ -135,11 +133,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-
                         if (task.isSuccessful()) {
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                            progressDialog.dismiss();
+
+                            homeActivityIntent();
                         } else {
                             Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
                             /*textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");*/
@@ -242,5 +240,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    public void homeActivityIntent()
+    {
+        finish();
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+    }
 }

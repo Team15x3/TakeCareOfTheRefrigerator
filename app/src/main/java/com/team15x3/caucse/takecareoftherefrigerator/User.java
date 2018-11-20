@@ -13,6 +13,8 @@ public class User {
     public String uid;
     public String pushToken;
     public String comment;
+    public static String email;
+    public static String password;
 
     private int defaultRefrigerator;
     private int currentRefrigerator;

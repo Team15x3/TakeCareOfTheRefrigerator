@@ -9,13 +9,20 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Locale;
+
 
 public class HomeActivity extends FragmentActivity {
 
@@ -27,16 +34,19 @@ public class HomeActivity extends FragmentActivity {
 
     private ArrayList<Refrigerator> friger;
     private long backKeyPressedTime = 0;
+    private FirebaseAuth firebaseAuth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        data();
       /*  Window window = getWindow();
         window.setStatusBarColor(ContextCompat.getColor(HomeActivity.this, R.color.transparent));
 */
+
 
         friger = User.INSTANCE.getRefrigeratorList();
 
@@ -123,6 +133,83 @@ public class HomeActivity extends FragmentActivity {
             System.exit(0);
         }
     }
+    public void data()
+    {
 
+        final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+               // User.INSTANCE.getRefrigeratorList().clear();
+                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                {
+                    if(myUid.equals(snapshot.getKey())) {
+                        for (long j = 0 ; j < snapshot.child("refriList").getChildrenCount(); j++) {
+
+                            Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
+                            while(iter.hasNext()) {
+                                DataSnapshot data = iter.next();
+                                Refrigerator refri = new Refrigerator(data.getKey());
+
+                                for (int i = 0; i < User.INSTANCE.getRefrigeratorList().size(); i++) {
+                                    if (User.INSTANCE.getRefrigeratorList().get(i).getName().equals(refri.getName())) {
+                                        User.INSTANCE.setCurrentRefrigerator(i);
+                                        break;
+                                    }
+                                }
+
+                                Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot food_data = iterator.next();
+                                    Food newFood = food_data.getValue(Food.class);
+
+                                    boolean isFood = false;
+                                    if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
+                                        for (int i = 0; i < User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size(); i++) {
+                                            Food exFood = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i);
+
+                                            if (newFood.getFoodID() == null && newFood.getFoodName().equals(exFood.getFoodName()))  {
+                                                if (newFood.getUseByDate() == null) {
+                                                    isFood = true;
+                                                    break;
+                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                    isFood = true;
+                                                    break;
+                                                }
+                                            } else if (newFood.getFoodID() != null && newFood.getFoodID().equals(exFood.getFoodID())){
+                                                if (newFood.getUseByDate() == null) {
+                                                    isFood = true;
+                                                    break;
+                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                    isFood = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (!isFood) {
+                                            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                        }
+
+                                    } else {
+                                        User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                    }
+                                }
+                            }
+                        }
+
+                        tabHomeFragment.setFoodList();
+
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

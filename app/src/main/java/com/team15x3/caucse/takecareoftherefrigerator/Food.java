@@ -18,7 +18,7 @@ public class Food implements Serializable {
 
     @SerializedName("volume")
     @Expose
-    private Number mVolume;
+    private int mVolume;
 
     @SerializedName("volumeUnit")
     @Expose
@@ -50,7 +50,7 @@ public class Food implements Serializable {
 
     @SerializedName("mainNutrientServingMeasureAmount")
     @Expose
-    private Number mainNutrientServingMeasureAmount;
+    private int mainNutrientServingMeasureAmount;
 
     @SerializedName("mainNutrientServingMeasureUnit")
     @Expose
@@ -110,11 +110,11 @@ public class Food implements Serializable {
 
     public void setThumbnailUrl(String thumbnailUrl) { mThumbnailUrl = thumbnailUrl; }
 
-    public void setMainNutrientServingMeasureAmount(Number mainNutrientServingMeasureAmount) { this.mainNutrientServingMeasureAmount = mainNutrientServingMeasureAmount; }
+    public void setMainNutrientServingMeasureAmount(int mainNutrientServingMeasureAmount) { this.mainNutrientServingMeasureAmount = mainNutrientServingMeasureAmount; }
 
     public int getMainNutrientServingMeasureAmount() {
         try {
-            return mainNutrientServingMeasureAmount.intValue();
+            return mainNutrientServingMeasureAmount; //.intValue();
         } catch(NumberFormatException e) {
             e.printStackTrace();
             return 0;
@@ -130,7 +130,7 @@ public class Food implements Serializable {
 
     public int getVolume() {
         try {
-            return mVolume.intValue();
+            return mVolume; //.intValue();
         } catch(NumberFormatException e) {
             e.printStackTrace();
             return 0;
@@ -140,7 +140,7 @@ public class Food implements Serializable {
         }
     }
 
-    public void setVolume(Number volume) { mVolume = volume; }
+    public void setVolume(int volume) { mVolume = volume; }
 
     public String getFoodType() { return mFoodType; }
 
@@ -206,7 +206,7 @@ class Nutrient {
 
     @SerializedName("rate")
     @Expose
-    private Number rate;
+    private int rate;
 
     @SerializedName("servingAmountUnit")
     @Expose
@@ -214,9 +214,9 @@ class Nutrient {
 
     @SerializedName("servingAmount")
     @Expose
-    private Number servingAmount = 0;
+    private int servingAmount = 0;
 
-    public Nutrient(String nutrientID, String nutrientName, Number rate, String servingAmountUnit, Number servingAmount) {
+    public Nutrient(String nutrientID, String nutrientName, int rate, String servingAmountUnit, int servingAmount) {
         this.nutrientID = nutrientID;
         this.nutrientName = nutrientName;
         this.rate = rate;
@@ -232,11 +232,11 @@ class Nutrient {
         this.nutrientName = nutrientName;
     }
 
-    public void setRate(Number rate) {
+    public void setRate(int rate) {
         this.rate = rate;
     }
 
-    public void setServingAmount(Number servingAmount) {
+    public void setServingAmount(int servingAmount) {
         this.servingAmount = servingAmount;
     }
 
@@ -252,7 +252,7 @@ class Nutrient {
 
     public int getRate() {
         try {
-            return rate.intValue();
+            return rate; // .intValue();
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return 0;
@@ -266,7 +266,7 @@ class Nutrient {
 
     public int getServingAmount() {
         try {
-            return servingAmount.intValue();
+            return servingAmount; // .intValue();
         } catch(NumberFormatException e) {
             e.printStackTrace();
             return 0;
@@ -281,17 +281,17 @@ class Allergy {
 
     @SerializedName("materialId")
     @Expose
-    private Number mMaterialID;
+    private int mMaterialID;
 
     @SerializedName("materialName")
     @Expose
     private String mMaterialName;
 
-    public void setMaterialID(Number materialID) { mMaterialID = materialID; }
+    public void setMaterialID(int materialID) { mMaterialID = materialID; }
 
     public int getMaterialID() {
         try {
-            return mMaterialID.intValue();
+            return mMaterialID; //.intValue();
         } catch(NumberFormatException e) {
             e.printStackTrace();
             return 0;

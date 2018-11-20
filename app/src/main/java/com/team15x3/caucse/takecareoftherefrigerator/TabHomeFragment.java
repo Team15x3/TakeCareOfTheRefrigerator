@@ -75,7 +75,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
 
 
-    private void setFoodList() {
+    public void setFoodList() {
 
         try {
             if(friger.isEmpty()){

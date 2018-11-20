@@ -1,6 +1,7 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -51,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView profile;
     private Uri imageUri;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+   private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivityForResult(intent, PICK_FROM_ALBUM);
             }
         });
-
+        progressDialog = new ProgressDialog(this);
         email = (EditText)findViewById(R.id.edtEmail);
         name = (EditText)findViewById(R.id.edtUserName);
         password = (EditText)findViewById(R.id.edtPassword);
@@ -81,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
                 //todo : insert progress bar
+                progressDialog.setMessage("회원가입중입니다. 잠시 기다려 주세요...");
+                progressDialog.show();
+
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString(),password.getText().toString())
                         .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -93,6 +98,9 @@ public class RegisterActivity extends AppCompatActivity {
                                         String imageUrl = task.getResult().getDownloadUrl().toString();
 
                                         User user = new User();
+
+                                        user.email = email.getText().toString();
+                                        user.password = password.getText().toString();
                                         user.UserName = name.getText().toString();
                                         user.profileImageUrl = imageUrl;
                                         user.uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

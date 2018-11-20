@@ -253,10 +253,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 return;
             }
 
+            //Todo: check there is no error
             setFoodInformation();
             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
-            //todo : add new alarm using alarmDate & useDate
-
+            //todo:save
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();
             setResult(RESULT_OK,returnIntent);
@@ -422,7 +422,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setUseByDate(sellByDate);
         if(sellByDate != null){
             String useDate = FoodProcessing.getUsebyDateFromSellbyDate(sellByDate);
-            InsertFood.setUseByDate(useDate);
             String str = useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6);
             tvUseByDate.setText(str);
         }

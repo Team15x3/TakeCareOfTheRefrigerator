@@ -53,9 +53,8 @@
         <activity android:name=".FindActivity" />
         <activity android:name=".SelectFriendActivity" />
         <activity android:name=".Account_Activity" />
-        <activity android:name=".SettingFrigerActivity"></activity>
+        <activity android:name=".SettingFrigerActivity" />
         SelectFriendActivity
-
     </application>
 
 </manifest>
