@@ -34,6 +34,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
@@ -98,7 +100,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected void onPreExecute() {
-            Log.d("Progress","onpreExcute called");
+            Log.d("Progress","on preExecute called");
             asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             asyncDialog.setMessage("please wait..");
             asyncDialog.show();
@@ -124,21 +126,18 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                             InsertFood = foodArrayList.get(0);
                             edtName.setText(InsertFood.getFoodName());
                             parseJsonFromFoodID(InsertFood.getFoodID());
-
-                            InsertFood.getFoodClassifyName();
-
                         } else {
                             Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.d("CheckResponce","response not successfill : "+response.code());
+                        Log.d("Check Response","response not successful : "+response.code());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<EatSightAPI> call, Throwable t) {
                     t.printStackTrace();
-                    Log.d("CheckResponce","response onfail : ");
+                    Log.d("CheckResponse","response on fail : ");
                 }
             });
         }
@@ -175,15 +174,14 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                         }
 
                     } else {
-                        Log.d("CheckResponce","response not successfill eeeee : "+response.code());
+                        Log.d("Check Response","response not successful : "+response.code());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Food> call, Throwable t) {
                     t.printStackTrace();
-
-                    Log.d("CheckResponce","response not successfill : vvvvvvv");
+                    Log.d("Check Response","response not successful");
                 }
             });
         }
@@ -243,7 +241,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
 
         if(view == btnBarcode){
-            //new IntentIntegrator(this).initiateScan();
+            new IntentIntegrator(this).initiateScan();
             onActivityResult(REQUEST_BARCODE, RESULT_OK ,  new Intent());
         }
 
@@ -255,25 +253,60 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
             //Todo: check there is no error
             setFoodInformation();
-            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
+
+            ArrayList<Food> exFoodList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+
+            int i = 0;
+            boolean isFood = false;
+            for (i = 0; i < exFoodList.size(); i++) {
+                if (InsertFood.getFoodID() == null && InsertFood.getFoodName().equals(exFoodList.get(i).getFoodName())) {
+                    if (InsertFood.getUseByDate().equals(exFoodList.get(i).getUseByDate()) && InsertFood.getFoodClassifyName().equals(exFoodList.get(i).getFoodClassifyName())) {
+                        isFood = true;
+                        break;
+                    }
+                }
+                else if (InsertFood.getFoodID() != null && InsertFood.getFoodID().equals(exFoodList.get(i).getFoodID())) {
+                    if (InsertFood.getUseByDate().equals(exFoodList.get(i).getUseByDate()) && InsertFood.getFoodClassifyName().equals(exFoodList.get(i).getFoodClassifyName())) {
+                        isFood = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isFood) {
+                User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
+            } else {
+                int count = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i).getCount();
+                count += InsertFood.getCount();
+                User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i).setCount(count);
+                InsertFood.setCount(count);
+            }
+
             //todo:save
+            String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
+                    get(User.INSTANCE.getCurrentRefrigerator()).
+                    getName()).child(InsertFood.getFoodName() + InsertFood.getUseByDate()).setValue(InsertFood);
+
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
+
             Intent returnIntent = new Intent();
             setResult(RESULT_OK,returnIntent);
             finish();
-
         }
 
         if(view == btnCancel){
             setResult(RESULT_CANCELED);
             finish();
         }
+
         if(view == btnExpirationDate){
             Log.d("CHECK_DAY",Year+"/"+Month+"/"+Day);
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, InsertFoodActivity.this, Year, Month, Day);
             datePickerDialog.show();
-
         }
+
         if(view == ivFoodImage | view == btnFoodImage){
             Log.d("Button Clicked","button clicked!");
             DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
@@ -311,7 +344,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode !=RESULT_OK) return;
-
 
         switch (requestCode){
             case REQUEST_TAKE_ALBUM:{
@@ -363,10 +395,10 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 break;
             }
             case REQUEST_BARCODE:{
-                //IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 //Log.d("BARCODE REQUESTCODE",requestCode+"");
-                //myBarcode = result.getContents(); //get barcode number
-                myBarcode ="8887140112280";
+                myBarcode = result.getContents(); //get barcode number
+                //myBarcode ="8887140112280";
                 Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
                 //api parsing , get information
                 APIProcessing api = new APIProcessing();
@@ -431,7 +463,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
-        InsertFood.setUseByDate(tvUseByDate.getText().toString());
+        InsertFood.setUseByDate(tvUseByDate.getText().toString().replace('/', '-'));
         InsertFood.setFoodName(edtName.getText().toString());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
@@ -586,5 +618,4 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
 }

@@ -187,6 +187,7 @@ public class HomeActivity extends FragmentActivity {
                                                 }
                                             }
                                         }
+
                                         if (!isFood) {
                                             User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
                                         }
@@ -199,7 +200,6 @@ public class HomeActivity extends FragmentActivity {
                         }
 
                         tabHomeFragment.setFoodList();
-
                         break;
                     }
                 }

@@ -170,16 +170,15 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
 
         AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
 
     private void setPicture(Food food){
-        if(food.getThumbnailUrl() == null || food.getThumbnailUrl().equals("")){
+        if (food.getThumbnailUrl() == null || food.getThumbnailUrl().equals("")){
             Log.d("PICTURE_ADDRESS","NULL");
             ivFoodImage.setImageDrawable(getResources().getDrawable(R.drawable.empty_pic));
             return;
-        }else if(food.getIsFromGallery() == true){
+        } else if(food.getIsFromGallery() == true){
             Log.d("PICTURE_ADDRESS",food.getThumbnailUrl());
             File imgFile = new File(food.getThumbnailUrl());
             if (imgFile.exists()) {
@@ -187,12 +186,10 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivFoodImage.setImageBitmap(myBitmap);
             }
-        }else{
+        } else{
             Picasso.with(this)
                     .load(food.getThumbnailUrl())
                     .into(ivFoodImage);
         }
     }
-
-
 }
