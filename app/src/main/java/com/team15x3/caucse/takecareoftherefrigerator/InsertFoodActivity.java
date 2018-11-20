@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -36,13 +35,10 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +50,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener,DatePickerDialog.OnDateSetListener{
-
 
     private boolean isBarcodeRecognized = false;
     private final int NO_DATA = 3;
@@ -127,9 +122,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                             InsertFood = foodArrayList.get(0);
                             edtName.setText(InsertFood.getFoodName());
                             parseJsonFromFoodID(InsertFood.getFoodID());
-
-                            InsertFood.getFoodClassifyName();
-
                         } else {
                             Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
                         }
@@ -258,13 +250,46 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
             //Todo: check there is no error
             setFoodInformation();
-            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
+
+            ArrayList<Food> exFoodList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+
+            int i = 0;
+            boolean isFood = false;
+            for (i = 0; i < exFoodList.size(); i++) {
+                if (InsertFood.getFoodID() == null && InsertFood.getFoodName().equals(exFoodList.get(i).getFoodName())) {
+                    if (InsertFood.getUseByDate().equals(exFoodList.get(i).getUseByDate()) && InsertFood.getFoodClassifyName().equals(exFoodList.get(i).getFoodClassifyName())) {
+                        isFood = true;
+                        break;
+                    } else {
+                        isFood = false;
+                    }
+                }
+                if (InsertFood.getFoodID() != null && InsertFood.getFoodID().equals(exFoodList.get(i).getFoodID())) {
+                    if (InsertFood.getUseByDate().equals(exFoodList.get(i).getUseByDate()) && InsertFood.getFoodClassifyName().equals(exFoodList.get(i).getFoodClassifyName())) {
+                        isFood = true;
+                        break;
+                    } else {
+                        isFood = false;
+                    }
+                }
+            }
+            if (!isFood) {
+                User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(InsertFood);
+            } else {
+                int count = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i).getCount();
+                count += InsertFood.getCount();
+
+                User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i).setCount(count);
+                InsertFood.setCount(count);
+            }
+
             //todo:save
             String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+
             FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
                     get(User.INSTANCE.getCurrentRefrigerator()).
-                    getName()).child(InsertFood.getFoodName()).setValue(InsertFood);
+                    getName()).child(InsertFood.getFoodName() + InsertFood.getUseByDate()).setValue(InsertFood);
 
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();
@@ -440,7 +465,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
-        InsertFood.setUseByDate(tvUseByDate.getText().toString());
+        InsertFood.setUseByDate(tvUseByDate.getText().toString().replace('/', '-'));
         InsertFood.setFoodName(edtName.getText().toString());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));

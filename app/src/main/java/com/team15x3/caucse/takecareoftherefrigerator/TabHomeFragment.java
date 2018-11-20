@@ -76,7 +76,7 @@ public class TabHomeFragment extends Fragment implements View.OnClickListener {
 
 
 
-    private void setFoodList() {
+    public void setFoodList() {
 
         try {
              tvName.setText(User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getName());

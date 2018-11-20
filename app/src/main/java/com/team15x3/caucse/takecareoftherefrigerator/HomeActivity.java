@@ -7,21 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.internal.bind.ArrayTypeAdapter;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.net.SocketImpl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -157,33 +152,53 @@ public class HomeActivity extends FragmentActivity {
                                 DataSnapshot data = iter.next();
                                 Refrigerator refri = new Refrigerator(data.getKey());
 
+                                for (int i = 0; i < User.INSTANCE.getRefrigeratorList().size(); i++) {
+                                    if (User.INSTANCE.getRefrigeratorList().get(i).getName().equals(refri.getName())) {
+                                        User.INSTANCE.setCurrentRefrigerator(i);
+                                        break;
+                                    }
+                                }
+
                                 Iterator<DataSnapshot> iterator = data.getChildren().iterator();
                                 while (iterator.hasNext()) {
                                     DataSnapshot food_data = iterator.next();
+                                    Food newFood = food_data.getValue(Food.class);
 
-                                    Food a = new Food();
+                                    boolean isFood = false;
+                                    if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
+                                        for (int i = 0; i < User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size(); i++) {
+                                            Food exFood = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i);
 
-                                    a.setFoodName(food_data.getKey());
-                                    a = food_data.getValue(Food.class);
+                                            if (newFood.getFoodID() == null && newFood.getFoodName().equals(exFood.getFoodName()))  {
+                                                if (newFood.getUseByDate() == null) {
+                                                    isFood = true;
+                                                    break;
+                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                    isFood = true;
+                                                    break;
+                                                }
+                                            } else if (newFood.getFoodID() != null && newFood.getFoodID().equals(exFood.getFoodID())){
+                                                if (newFood.getUseByDate() == null) {
+                                                    isFood = true;
+                                                    break;
+                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                    isFood = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if (!isFood) {
+                                            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                        }
 
-
-
-                                    System.out.println("AAA");
-
-
-
-                                    //a.setFoodName(food_data.getKey());
-                                    //a = food_data.getValue(Food.class);
-                                    User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(a);
-                                    //refri.getFoodList().add(food_data.getValue(Food.class));
+                                    } else {
+                                        User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                    }
                                 }
-
-                                // input foods
-
-                                //User.INSTANCE.addRefrigerator(refri);
-                                System.out.println("AAA");
                             }
                         }
+
+                        tabHomeFragment.setFoodList();
 
                         break;
                     }
