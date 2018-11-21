@@ -80,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(email.getText().toString()==null || name.getText().toString()==null || password.getText().toString()==null||imageUri ==null)
                 {
+                    Toast.makeText(RegisterActivity.this,"사진을 넣어주세요",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //todo : insert progress bar
@@ -90,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
                                 final String uid = task.getResult().getUser().getUid();
                                 FirebaseStorage.getInstance().getReference().child("UserImages").child(uid).putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -117,7 +119,12 @@ public class RegisterActivity extends AppCompatActivity {
                                 });
 
 
+                            }else {
+                                    Toast.makeText(getApplicationContext(),"회원가입실패",Toast.LENGTH_SHORT).show();
+                                }
+                                progressDialog.dismiss();
                             }
+
                         });
             }
         });

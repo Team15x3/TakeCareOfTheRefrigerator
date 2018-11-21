@@ -126,15 +126,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        progressDialog.setMessage("로그인중입니다. 잠시 기다려 주세요...");
-        progressDialog.show();
+
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                            progressDialog.setMessage("로그인중입니다. 잠시 기다려 주세요...");
+                            progressDialog.show();
                             progressDialog.dismiss();
 
                             homeActivityIntent();
