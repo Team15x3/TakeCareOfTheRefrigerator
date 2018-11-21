@@ -69,50 +69,51 @@ public class TabRecipeFragment extends Fragment {
             public void getRecipeIngredientFromFirebase() {
                 databaseReference = firebaseDatabase.getReference("Recipe" + "/" + "Recipe3" + "/" + "data");
                 databaseReference.addValueEventListener(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         recipeArrayList = new ArrayList<Recipe>();
+
                         for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                             String str = messageData.child("IRDNT_NM").getValue().toString();
 
+                            ArrayList<String> foodClassifyNameList = new ArrayList<String>();
                             foodArrayList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
-                            for (int i = 0 ; i < foodArrayList.size(); i++) {
-                                ArrayList<String> foodClassifyNameList = new ArrayList<String>();
 
+                            for (int i = 0; i < foodArrayList.size(); i++) {
                                 if (foodArrayList.get(i).getFoodClassifyName().contains("/")) {
                                     String[] arr = foodArrayList.get(i).getFoodClassifyName().split("/");
                                     for (int j = 0; j < arr.length; j++) {
-                                        foodClassifyNameList.add(arr[j]);
+                                        if (!foodClassifyNameList.contains(arr[j])) {
+                                            foodClassifyNameList.add(arr[j]);
+                                        }
                                     }
-                                }
-                                else {
+                                } else {
                                     foodClassifyNameList.add(foodArrayList.get(i).getFoodClassifyName());
-                                }
-
-
-                                for (int j = 0; j < foodClassifyNameList.size(); j++) {
-                                    if (str.equals(foodClassifyNameList.get(j))) {
-                                        String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
-                                        String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
-                                        String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
-                                        String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
-                                        String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
-                                        String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
-
-                                        Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
-                                        Recipe recipe = new Recipe();
-                                        recipe.setRecipeID(recipe_id);
-                                        recipe.getIngredientList().add(ingredient);
-                                        recipeArrayList.add(recipe);
-
-                                    }
                                 }
                             }
 
-                            if(Integer.parseInt(messageData.child("RN").getValue().toString())==6105)
+
+                            for (int j = 0; j < foodClassifyNameList.size(); j++) {
+                                if (str.equals(foodClassifyNameList.get(j))) {
+                                    String recipe_id = messageData.child("RECIPE_ID").getValue().toString();
+                                    String ingredient_name = messageData.child("IRDNT_NM").getValue().toString();
+                                    String ingredient_volume = messageData.child("IRDNT_CPCTY").getValue().toString();
+                                    String ingredient_order_number = messageData.child("IRDNT_SN").getValue().toString();
+                                    String ingredient_type_name = messageData.child("IRDNT_TY_NM").getValue().toString();
+                                    String ingredient_type_code = messageData.child("IRDNT_TY_CODE").getValue().toString();
+
+                                    Ingredient ingredient = new Ingredient(recipe_id, ingredient_name, ingredient_volume, ingredient_order_number, ingredient_type_name, ingredient_type_code);
+                                    Recipe recipe = new Recipe();
+                                    recipe.setRecipeID(recipe_id);
+                                    recipe.getIngredientList().add(ingredient);
+                                    recipeArrayList.add(recipe);
+                                }
+                            }
+
+                            if(Integer.parseInt(messageData.child("RN").getValue().toString()) == 6105)
                                 break;
                         }
-
                         getRecipeBasicFromFirebase();
                         asyncDialog.dismiss();
 
@@ -218,7 +219,7 @@ public class TabRecipeFragment extends Fragment {
 
         DataToActivity dataToActivity = new DataToActivity();
 
-        if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size()!=0) {
+        if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
             dataToActivity.execute();
         }else{
             Toast.makeText(this.getContext(), "empty",Toast.LENGTH_SHORT).show();
@@ -272,11 +273,9 @@ public class TabRecipeFragment extends Fragment {
                });
 
            }
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
-
-
     }
 
     private void search(String text){
@@ -298,5 +297,4 @@ public class TabRecipeFragment extends Fragment {
         adapter.notifyDataSetChanged();
         Log.d("SEARCH","notify clear");
     }
-
 }
