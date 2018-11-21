@@ -46,45 +46,29 @@ public class FoodProcessing {
         return food_list;
     }
 
-    public static String getUsebyDateFromSellbyDate(String sell_by_date) {
+    public static String getUsebyDateFromSellbyDate(Calendar sell_calendar) {
+        int diff_date = 0;
+
         Date today = new Date();
         String use_by_date = null;
 
-        SimpleDateFormat simple_date_format = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
-
-        Calendar sell_calendar = new GregorianCalendar(Locale.KOREA);
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
         Calendar today_calendar = new GregorianCalendar(Locale.KOREA);
 
-        try {
-            int diff_date = 0;
-            Date sell_date = simple_date_format.parse(sell_by_date);
+        today_calendar.setTime(today);
 
-            sell_calendar.setTime(sell_date);
-            today_calendar.setTime(today);
+        int sell_year   = sell_calendar.get(Calendar.YEAR);
+        int sell_month  = sell_calendar.get(Calendar.MONTH);
+        int sell_day    = sell_calendar.get(Calendar.DAY_OF_MONTH);
 
-            int sell_year   = sell_calendar.get(Calendar.YEAR);
-            int sell_month  = sell_calendar.get(Calendar.MONTH);
-            int sell_day    = sell_calendar.get(Calendar.DAY_OF_MONTH);
+        int today_year  = today_calendar.get(Calendar.YEAR);
+        int today_month = today_calendar.get(Calendar.MONTH) + 1;
+        int today_day   = today_calendar.get(Calendar.DAY_OF_MONTH);
 
-            int today_year  = today_calendar.get(Calendar.YEAR);
-            int today_month = today_calendar.get(Calendar.MONTH);
-            int today_day   = today_calendar.get(Calendar.DAY_OF_MONTH);
+        diff_date = (sell_year - today_year) * 365 + (sell_month - today_month) * 30 + (sell_day - today_day);
 
-            diff_date = ((((sell_year - today_year) * 365 + (sell_month - today_month) * 30 + (sell_day - today_day)) * 2) / 3);
-
-            sell_calendar.add(Calendar.DAY_OF_YEAR, diff_date);
-
-            use_by_date = simple_date_format.format(sell_calendar.getTime());
-
-            // sell_date - today * 2/3 == x
-
-            // sell + x == use
-
-            // Date to String
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        today_calendar.add(Calendar.DAY_OF_YEAR, (diff_date * 5 * 2) / 3);
+        use_by_date = date_format.format(today_calendar.getTime());
 
         return use_by_date;
     }

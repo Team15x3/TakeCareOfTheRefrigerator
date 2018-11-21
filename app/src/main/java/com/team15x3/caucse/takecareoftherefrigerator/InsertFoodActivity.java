@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -398,7 +399,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 //Log.d("BARCODE REQUESTCODE",requestCode+"");
                 myBarcode = result.getContents(); //get barcode number
-                //myBarcode ="8887140112280";
+                //myBarcode = "8887140112280";
                 Toast.makeText(getApplicationContext(), myBarcode, Toast.LENGTH_SHORT).show();
                 //api parsing , get information
                 APIProcessing api = new APIProcessing();
@@ -443,18 +444,24 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     }
     @Override
     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-        String msg = String.format("%d / %d / %d",year, monthOfYear+1, dayOfMonth);
+        String msg = String.format("%d - %d - %d",year, monthOfYear+1, dayOfMonth);
         tvSellByDate.setText(msg);
-        Year = year;
-        Month = monthOfYear;
-        Day= dayOfMonth;
-        UseByDate useByDate= new UseByDate();
 
-        String sellByDate = Integer.toString(Year * 10000 + (Month + 1) * 100 + Day);
-        InsertFood.setUseByDate(sellByDate);
-        if(sellByDate != null){
-            String useDate = FoodProcessing.getUsebyDateFromSellbyDate(sellByDate);
-            String str = useDate.substring(0,4)+" / "+useDate.substring(4,6)+" / "+useDate.substring(6);
+        Year = year;
+        Month = monthOfYear + 1;
+        Day = dayOfMonth;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Year, Month, Day);
+
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy - MM - dd", Locale.KOREA);
+        String sellByDate = date_format.format(cal.getTime());
+        //String sellByDate = Integer.toString(Year * 10000 + (Month + 1) * 100 + Day);
+        InsertFood.setSellByDate(sellByDate);
+
+        if(sellByDate != null) {
+            String useDate = FoodProcessing.getUsebyDateFromSellbyDate(cal);
+            String str = useDate.substring(0,4)+" - "+useDate.substring(4,6)+" - "+useDate.substring(6);
             tvUseByDate.setText(str);
         }
     }
@@ -463,10 +470,17 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
         InsertFood.setFoodName(edtName.getText().toString().trim());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
         InsertFood.setFoodClassifyName((String)spinSmallest.getSelectedItem());
-        InsertFood.setUseByDate(tvUseByDate.getText().toString().replace('/', '-'));
+        InsertFood.setUseByDate(tvUseByDate.getText().toString()); // .replace('/', '-'));
         InsertFood.setFoodName(edtName.getText().toString());
         InsertFood.setCount(spinQuantity.getSelectedItemPosition()+1);
-        InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Year, Month, Day);
+        SimpleDateFormat date_format = new SimpleDateFormat("yyyy . MM . dd", Locale.KOREA);
+        String sellByDate = date_format.format(cal.getTime());
+        InsertFood.setSellByDate(sellByDate);
+
+        //InsertFood.setSellByDate(Integer.toString(Year * 10000 + (Month + 1) * 100 + Day));
         InsertFood.setD_Day(spinAlarmDate.getSelectedItemPosition()+1);
     }
 
