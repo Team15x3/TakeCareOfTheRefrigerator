@@ -54,7 +54,14 @@
         <activity android:name=".SelectFriendActivity" />
         <activity android:name=".Account_Activity" />
         <activity android:name=".SettingFrigerActivity" />
-        SelectFriendActivity
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true" />
+
+        <receiver android:name=".NotificationReceiver" />
+
+        <activity android:name=".Alarm"></activity>
     </application>
 
 </manifest>

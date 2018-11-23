@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SelectFriendActivity extends AppCompatActivity {
-
+    InsertFoodActivity insertFoodActivity= new InsertFoodActivity();
     ChatModel chatModel = new ChatModel();
+    private String[] aa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +45,60 @@ public class SelectFriendActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+               final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 chatModel.users.put(myUid,true);
 
                 FirebaseDatabase.getInstance().getReference().child("chatrooms").push().setValue(chatModel);
 
+               // chatModel.users.clear();
+                FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
+                        get(User.INSTANCE.getCurrentRefrigerator()).
+                        getName()).setValue(chatModel);
+                final int a = chatModel.users.size();
+                aa = chatModel.users.keySet().toArray(new String[a]);
+
+
+
+                    FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d("aaaa", Integer.toString(a));
+                                if(aa!=null) {
+                                    for (int i = 0; i < a; i++) {
+
+
+                                        if (snapshot.getKey().equals(aa[i]) && !snapshot.getKey().equals(myUid)) {
+                                            if (!myUid.equals(aa[i])) {
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
+                                                        get(User.INSTANCE.getCurrentRefrigerator()).
+                                                        getName()).child("own").setValue(myUid);
+                                                aa[i] = null;
+                                                break;
+
+                                            }
+                                        } else {
+                                            Log.d("usersno", snapshot.child("users").toString());
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
 
             }
+
+
         });
 
         button2.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +189,7 @@ public class SelectFriendActivity extends AppCompatActivity {
                     //체크 된상태
                     if(b){
                         chatModel.users.put(userModels.get(position).uid,true);
+
                         //체크 취소 상태
                     }else{
                         chatModel.users.remove(userModels.get(position));

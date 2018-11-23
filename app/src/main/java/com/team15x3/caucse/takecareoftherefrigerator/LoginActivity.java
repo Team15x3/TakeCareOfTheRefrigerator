@@ -31,8 +31,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
+
+import java.util.Iterator;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,6 +64,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+
+
 
             if (firebaseAuth.getCurrentUser() != null) {
                homeActivityIntent();
@@ -239,9 +247,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-
     public void homeActivityIntent()
     {
+        //냉장고리스트 불러오기
+        final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                {
+                    if(myUid.equals(snapshot.getKey())) {
+                        Iterator<DataSnapshot> iter2 = snapshot.child("refriList").getChildren().iterator();
+
+
+                        while (iter2.hasNext())
+                        {
+                            DataSnapshot data2 = iter2.next();
+                            String a = data2.getKey();
+                            Log.d("wowowowowo", a);
+
+                            Refrigerator refri2 = new Refrigerator(a);
+                            User.INSTANCE.addRefrigerator(refri2);
+                        }}
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         finish();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }

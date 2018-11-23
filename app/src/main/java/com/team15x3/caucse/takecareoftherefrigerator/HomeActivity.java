@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -135,23 +136,22 @@ public class HomeActivity extends FragmentActivity {
     }
     public void data()
     {
-
         final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-               // User.INSTANCE.getRefrigeratorList().clear();
+
                 for(DataSnapshot snapshot: dataSnapshot.getChildren())
                 {
                     if(myUid.equals(snapshot.getKey())) {
-                        for (long j = 0 ; j < snapshot.child("refriList").getChildrenCount(); j++) {
+                        final Iterator<DataSnapshot> iter2 = snapshot.child("grouprefriList").getChildren().iterator();
 
-                            Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
-                            while(iter.hasNext()) {
+                        Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
+                        for (long j = 0; j < snapshot.child("refriList").getChildrenCount(); j++) {
+                            while (iter.hasNext()) {
                                 DataSnapshot data = iter.next();
                                 Refrigerator refri = new Refrigerator(data.getKey());
-
                                 for (int i = 0; i < User.INSTANCE.getRefrigeratorList().size(); i++) {
                                     if (User.INSTANCE.getRefrigeratorList().get(i).getName().equals(refri.getName())) {
                                         User.INSTANCE.setCurrentRefrigerator(i);
@@ -169,7 +169,7 @@ public class HomeActivity extends FragmentActivity {
                                         for (int i = 0; i < User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size(); i++) {
                                             Food exFood = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i);
 
-                                            if (newFood.getFoodID() == null && newFood.getFoodName().equals(exFood.getFoodName()))  {
+                                            if (newFood.getFoodID() == null && newFood.getFoodName().equals(exFood.getFoodName())) {
                                                 if (newFood.getUseByDate() == null) {
                                                     isFood = true;
                                                     break;
@@ -177,7 +177,7 @@ public class HomeActivity extends FragmentActivity {
                                                     isFood = true;
                                                     break;
                                                 }
-                                            } else if (newFood.getFoodID() != null && newFood.getFoodID().equals(exFood.getFoodID())){
+                                            } else if (newFood.getFoodID() != null && newFood.getFoodID().equals(exFood.getFoodID())) {
                                                 if (newFood.getUseByDate() == null) {
                                                     isFood = true;
                                                     break;
@@ -197,19 +197,125 @@ public class HomeActivity extends FragmentActivity {
                                     }
                                 }
                             }
+
+                        }
+                        //그룹냉장고 추가
+                        if (snapshot.child("grouprefriList").getKey() != null) {
+                            while (iter2.hasNext()) {
+                                final DataSnapshot data2 = iter2.next();
+
+                                String a = data2.getKey();
+
+                                if (snapshot.child("grouprefriList").child(a).child("own").getValue() != null) {
+                                    final String ownUid = snapshot.child("grouprefriList").child(a).child("own").getValue().toString();
+                                    User.INSTANCE.getRefrigeratorList().clear();
+                                    FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                                if (ownUid.equals(snapshot1.getKey())) {
+
+                                                    for (long j = 0; j < snapshot1.child("refriList").child(data2.getKey().toString()).getChildrenCount(); j++) {
+
+                                                        Iterator<DataSnapshot> iter = snapshot1.child("refriList").getChildren().iterator();
+
+
+                                                        while (iter.hasNext()) {
+
+                                                            DataSnapshot data = iter.next();
+                                                            if (snapshot1.child("refriList").child(data2.getKey().toString()).getKey().equals(data.getKey())) {
+
+                                                                Refrigerator refri = new Refrigerator(data.getKey());
+                                                                User.INSTANCE.addRefrigerator(refri);
+
+                                                                for (int i = 0; i < User.INSTANCE.getRefrigeratorList().size(); i++) {
+                                                                    if (User.INSTANCE.getRefrigeratorList().get(i).getName().equals(data2.getKey())) {
+                                                                        User.INSTANCE.setCurrentRefrigerator(i);
+                                                                        // Log.d("???????????",User.INSTANCE.getRefrigeratorList().get(i).getName());
+                                                                        break;
+                                                                    }
+
+                                                                }
+
+                                                                Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                                                while (iterator.hasNext()) {
+                                                                    DataSnapshot food_data = iterator.next();
+                                                                    Food newFood = food_data.getValue(Food.class);
+
+                                                                    boolean isFood = false;
+                                                                    if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
+                                                                        for (int i = 0; i < User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size(); i++) {
+                                                                            Food exFood = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().get(i);
+
+                                                                            if (newFood.getFoodID() == null && newFood.getFoodName().equals(exFood.getFoodName())) {
+                                                                                if (newFood.getUseByDate() == null) {
+                                                                                    isFood = true;
+                                                                                    break;
+                                                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                                                    isFood = true;
+                                                                                    break;
+                                                                                }
+                                                                            } else if (newFood.getFoodID() != null && newFood.getFoodID().equals(exFood.getFoodID())) {
+                                                                                if (newFood.getUseByDate() == null) {
+                                                                                    isFood = true;
+                                                                                    break;
+                                                                                } else if (exFood.getUseByDate() != null && newFood.getUseByDate().equals(exFood.getUseByDate())) {
+                                                                                    isFood = true;
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        if (!isFood) {
+                                                                            User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                                                        }
+
+                                                                    } else {
+                                                                        User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().add(newFood);
+                                                                    }
+
+                                                                }
+                                                                break;
+
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    break;
+                                }
+
+                            }
+                            break;
                         }
 
                         tabHomeFragment.setFoodList();
+
                         break;
+
                     }
+
                 }
+
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
     }
 
 }
