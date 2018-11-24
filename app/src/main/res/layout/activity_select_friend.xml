@@ -22,11 +22,6 @@
             android:text="그룹생성"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/selectFriendActivity_refrigeratorbutton"
 
-            android:text="그룹냉장고 만들기"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

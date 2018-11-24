@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +32,7 @@ public class SelectFriendActivity extends AppCompatActivity {
     InsertFoodActivity insertFoodActivity= new InsertFoodActivity();
     ChatModel chatModel = new ChatModel();
     private String[] aa;
+    private String refiename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,6 @@ public class SelectFriendActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SelectFriendRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Button button2 = (Button) findViewById(R.id.selectFriendActivity_refrigeratorbutton);
         Button button = (Button) findViewById(R.id.selectFriendActivity_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +55,14 @@ public class SelectFriendActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
                         get(User.INSTANCE.getCurrentRefrigerator()).
                         getName()).setValue(chatModel);
+
+
+                 refiename = User.INSTANCE.getRefrigeratorList().
+                         get(User.INSTANCE.getCurrentRefrigerator()).
+                         getName().toString();
+
                 final int a = chatModel.users.size();
                 aa = chatModel.users.keySet().toArray(new String[a]);
-
-
 
                     FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
                         @Override
@@ -65,25 +70,38 @@ public class SelectFriendActivity extends AppCompatActivity {
 
 
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                Log.d("aaaa", Integer.toString(a));
-                                if(aa!=null) {
-                                    for (int i = 0; i < a; i++) {
+                                Iterator<DataSnapshot> iter = snapshot.child("refriList").getChildren().iterator();
 
+                                while(iter.hasNext())
+                                {
+                                    DataSnapshot data = iter.next();
 
-                                        if (snapshot.getKey().equals(aa[i]) && !snapshot.getKey().equals(myUid)) {
-                                            if (!myUid.equals(aa[i])) {
-                                                FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
-                                                        get(User.INSTANCE.getCurrentRefrigerator()).
-                                                        getName()).child("own").setValue(myUid);
-                                                aa[i] = null;
-                                                break;
+                                    //현재 그룹을 만든 냉장고와 동일한 냉장고 일때
+                                    if(data.getKey().equals(snapshot.child("refriList").child(refiename).getKey()))
+                                    {
+                                        //냉장고 재료들
+                                        Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                        while(iterator.hasNext())
+                                        {
+                                            DataSnapshot food_data = iterator.next();
+                                            Food newFood = food_data.getValue(Food.class);
+                                            if(aa!=null)
+                                            {
+                                                for (int i = 0; i < a; i++) {
+                                                    if(!aa[i].equals(myUid)) {
 
+                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("refriList").child(refiename).child(newFood.getFoodName()).setValue(newFood);
+
+                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
+                                                                get(User.INSTANCE.getCurrentRefrigerator()).
+                                                                getName()).setValue(chatModel);
+
+                                                    }
+                                                }
                                             }
-                                        } else {
-                                            Log.d("usersno", snapshot.child("users").toString());
+
                                         }
                                     }
-
                                 }
                             }
 
@@ -100,16 +118,6 @@ public class SelectFriendActivity extends AppCompatActivity {
 
 
         });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(SelectFriendActivity.this, GroupRefrigeratorActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
 

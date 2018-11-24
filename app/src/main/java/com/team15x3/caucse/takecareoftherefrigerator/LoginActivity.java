@@ -249,35 +249,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
     public void homeActivityIntent()
     {
-        //냉장고리스트 불러오기
-        final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren())
-                {
-                    if(myUid.equals(snapshot.getKey())) {
-                        Iterator<DataSnapshot> iter2 = snapshot.child("refriList").getChildren().iterator();
-
-
-                        while (iter2.hasNext())
-                        {
-                            DataSnapshot data2 = iter2.next();
-                            String a = data2.getKey();
-                            Log.d("wowowowowo", a);
-
-                            Refrigerator refri2 = new Refrigerator(a);
-                            User.INSTANCE.addRefrigerator(refri2);
-                        }}
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         finish();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }

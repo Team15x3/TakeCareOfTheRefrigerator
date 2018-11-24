@@ -1,15 +1,22 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -21,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,7 +43,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.squareup.picasso.Picasso;
@@ -47,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -54,8 +66,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InsertFoodActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemSelectedListener,DatePickerDialog.OnDateSetListener{
-
-
+    DatePickerDialog datePickerDialog;
+DatePicker datePicker;
+/*    DbHelper dbHelper;
+    SQLiteDatabase db;
+    Cursor cursor;
+    ArrayAdapter<String> adapter, adapter2, adapter3;*/
+    private int j=0;
+    DatePicker datePicker2;
     private boolean isBarcodeRecognized = false;
     private final int NO_DATA = 3;
     private static final int MY_PERMISSION_CAMERA = 1111;
@@ -87,7 +105,7 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     TextView tvSellByDate, tvUseByDate;
     ImageView ivFoodImage;
     LinearLayout linShowInformation;
-
+    TimePickerFragment timePickerFragment = new TimePickerFragment();
 
     class APIProcessing extends AsyncTask<String, String, Void> {
         ProgressDialog asyncDialog = new ProgressDialog(InsertFoodActivity.this);
@@ -223,7 +241,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
         dbController = new DBController(this);
         setSpinners(this);
-
         spinSmallest.setOnItemSelectedListener(this);
         spinMedium.setOnItemSelectedListener(this);
         spinBiggest.setOnItemSelectedListener(this);
@@ -236,7 +253,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
 
         checkPermission();
     }
-
 
     @Override
     public void onClick(View view) {
@@ -284,11 +300,64 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             }
 
             //todo:save
-            String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+           final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
             FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
                     get(User.INSTANCE.getCurrentRefrigerator()).
                     getName()).child(InsertFood.getFoodName() + InsertFood.getUseByDate()).setValue(InsertFood);
+
+
+            final String abc = User.INSTANCE.getRefrigeratorList().
+                    get(User.INSTANCE.getCurrentRefrigerator()).
+                    getName();
+            FirebaseDatabase.getInstance().getReference("users").child(myUid).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                        if(snapshot.child("grouprefriList").getKey()!=null) {
+
+                            Iterator<DataSnapshot> iter = snapshot.getChildren().iterator();
+
+                            while (iter.hasNext()) {
+                                DataSnapshot data = iter.next();
+                                //그룹 냉장고
+                                if(data.getKey().equals(abc))
+                                {
+
+
+                                    Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                    while(iterator.hasNext())
+                                    {
+                                        DataSnapshot user_data = iterator.next();
+                                        if(user_data.getKey().equals("users"))
+                                        {
+                                            for(long i=0;i<user_data.getChildrenCount();i++) {
+                                                Iterator<DataSnapshot> useriter = user_data.getChildren().iterator();
+                                                while (useriter.hasNext()) {
+                                                    DataSnapshot user_uid= useriter.next();
+                                                    Log.d("sss111",user_uid.getKey());
+                                                    FirebaseDatabase.getInstance().getReference().child("users").child(user_uid.getKey()).child("refriList").child(abc).child(InsertFood.getFoodName() + InsertFood.getUseByDate()).setValue(InsertFood);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }else
+                        {
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             Toast.makeText(this, "Add food completely", Toast.LENGTH_SHORT).show();
 
@@ -296,7 +365,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             setResult(RESULT_OK,returnIntent);
             finish();
         }
-
         if(view == btnCancel){
             setResult(RESULT_CANCELED);
             finish();
@@ -307,7 +375,6 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, InsertFoodActivity.this, Year, Month, Day);
             datePickerDialog.show();
         }
-
         if(view == ivFoodImage | view == btnFoodImage){
             Log.d("Button Clicked","button clicked!");
             DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
@@ -631,5 +698,18 @@ public class InsertFoodActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void setAlarm(long timeInMillis)
+    {
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MyAlarm.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent,0);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis,AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        Toast.makeText(this, "Alarm is set",Toast.LENGTH_SHORT).show();
     }
 }
