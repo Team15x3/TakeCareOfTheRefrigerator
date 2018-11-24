@@ -3,10 +3,11 @@ package com.team15x3.caucse.takecareoftherefrigerator;
 import java.util.ArrayList;
 
 public class User {
-
     private String mID;
     private String mPassword;
     private ArrayList<Refrigerator> mRefrigeratorList;
+
+    private ArrayList<Allergy> mAllergyList;
 
     public String UserName;
     public String profileImageUrl;
@@ -29,11 +30,15 @@ public class User {
         defaultRefrigerator = 0;
         currentRefrigerator = defaultRefrigerator;
 
+        mAllergyList = new ArrayList<Allergy>();
+
         scrapeList = new ArrayList<Recipe>();
 
         mID = null;
         mPassword = null;
     }
+
+    public ArrayList<Allergy> getAllergyList() { return mAllergyList; }
 
 
     public int getCurrentRefrigerator() {

@@ -78,7 +78,18 @@ public class TabRecipeFragment extends Fragment {
                             String str = messageData.child("IRDNT_NM").getValue().toString();
 
                             ArrayList<String> foodClassifyNameList = new ArrayList<String>();
+
+                            ArrayList<Allergy> allergyList = User.INSTANCE.getAllergyList();
                             foodArrayList = User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList();
+
+                            for (int i = 0; i < foodArrayList.size(); i++) {
+                                ArrayList<Allergy> tempList = foodArrayList.get(i).getAllergyList();
+                                for (int j = 0; j < allergyList.size(); j++) {
+                                    if (tempList.contains(allergyList.get(j))) {
+                                        foodArrayList.remove(i);
+                                    }
+                                }
+                            }
 
                             for (int i = 0; i < foodArrayList.size(); i++) {
                                 if (foodArrayList.get(i).getFoodClassifyName().contains("/")) {
@@ -92,7 +103,6 @@ public class TabRecipeFragment extends Fragment {
                                     foodClassifyNameList.add(foodArrayList.get(i).getFoodClassifyName());
                                 }
                             }
-
 
                             for (int j = 0; j < foodClassifyNameList.size(); j++) {
                                 if (str.equals(foodClassifyNameList.get(j))) {
@@ -204,9 +214,6 @@ public class TabRecipeFragment extends Fragment {
 
                     }
                 });
-
-
-
             }
 
             @Override
@@ -215,7 +222,6 @@ public class TabRecipeFragment extends Fragment {
                 return null;
             }
         }
-
 
         DataToActivity dataToActivity = new DataToActivity();
 
