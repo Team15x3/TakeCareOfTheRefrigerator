@@ -17,7 +17,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -146,7 +149,7 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
                         int num = intent.getIntExtra("list_number",-1);
                         Log.d("index number",num+"");
 
-                        String food_name = foodlist.get(num).getFoodName();
+                        final String food_name = foodlist.get(num).getFoodName();
                         foodlist.remove(num);
                         setResult(LIST_CHANGED,intent);
 
@@ -155,6 +158,59 @@ public class FoodInfoActivity extends AppCompatActivity implements View.OnClickL
                         FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
                                 get(User.INSTANCE.getCurrentRefrigerator()).
                                 getName()).child(food_name).removeValue();
+
+
+                        final String abc = User.INSTANCE.getRefrigeratorList().
+                                get(User.INSTANCE.getCurrentRefrigerator()).
+                                getName();
+
+                        FirebaseDatabase.getInstance().getReference("users").child(myUid).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                                    if(snapshot.child("grouprefriList").getKey()!=null) {
+
+                                        Iterator<DataSnapshot> iter = snapshot.getChildren().iterator();
+
+                                        while (iter.hasNext()) {
+                                            DataSnapshot data = iter.next();
+                                            //그룹 냉장고
+                                            if(data.getKey().equals(abc))
+                                            {
+
+
+                                                Iterator<DataSnapshot> iterator = data.getChildren().iterator();
+                                                while(iterator.hasNext())
+                                                {
+                                                    DataSnapshot user_data = iterator.next();
+                                                    if(user_data.getKey().equals("users"))
+                                                    {
+                                                        for(long i=0;i<user_data.getChildrenCount();i++) {
+                                                            Iterator<DataSnapshot> useriter = user_data.getChildren().iterator();
+                                                            while (useriter.hasNext()) {
+                                                                DataSnapshot user_uid= useriter.next();
+                                                                Log.d("sss111",user_uid.getKey());
+                                                                FirebaseDatabase.getInstance().getReference().child("users").child(user_uid.getKey()).child("refriList").child(abc).child(food_name).removeValue();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }else
+                                    {
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                                 //.child(InsertFood.getFoodName())
 
                         finish();
