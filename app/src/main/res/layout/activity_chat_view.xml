@@ -9,6 +9,6 @@
         android:id="@+id/frag01"
         android:name="com.team15x3.caucse.takecareoftherefrigerator.ChatFragment"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

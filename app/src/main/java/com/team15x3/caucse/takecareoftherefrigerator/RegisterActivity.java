@@ -121,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             }else {
                                     Toast.makeText(getApplicationContext(),"Failed Sign up",Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
                                 }
 
                             }
