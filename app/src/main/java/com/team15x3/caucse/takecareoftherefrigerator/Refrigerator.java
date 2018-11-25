@@ -28,6 +28,8 @@ public class Refrigerator {
         mRecipeProcess = new RecipeProcessing(mFoodList, mFoodProcess);
     }
 
+
+
     public String getName() {
         return mName;
     }
