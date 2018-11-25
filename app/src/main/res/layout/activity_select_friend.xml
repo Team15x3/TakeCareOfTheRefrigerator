@@ -28,7 +28,7 @@
             android:id="@+id/selectFriendActivity_button_chat"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="175dp"
+            android:layout_marginLeft="145dp"
             android:background="@drawable/ic_chat"
             android:textSize="20dp" />
 

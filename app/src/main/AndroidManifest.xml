@@ -64,7 +64,7 @@
 
         <receiver android:name=".NotificationReceiver" />
 
-        <activity android:name=".Alarm" />
+
         <activity android:name=".ChatView"></activity>
     </application>
 
