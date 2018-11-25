@@ -131,7 +131,7 @@ public class MessageActivity extends AppCompatActivity {
 
         Request request = new Request.Builder()
                 .header("Content-Type", "application/json")
-                .addHeader("Authorization", "key=AIzaSyDNFs9vhpZQzQ3VeMXojsAJIId2Z7aj_Xk")
+                .addHeader("Authorization", "key=AIzaSyBf6U9ReVKORub2YtKIFQm-G65RdCV64Go")
                 .url("https://gcm-http.googleapis.com/gcm/send")
                 .post(requestBody)
                 .build();
