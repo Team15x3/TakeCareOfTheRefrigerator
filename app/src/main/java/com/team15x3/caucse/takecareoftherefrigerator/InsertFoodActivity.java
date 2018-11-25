@@ -1,19 +1,13 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -302,7 +296,6 @@ DatePicker datePicker;
             //todo:save
            final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-
             FirebaseDatabase.getInstance().getReference().child("users").child(myUid).child("refriList").child(User.INSTANCE.getRefrigeratorList().
                     get(User.INSTANCE.getCurrentRefrigerator()).
                     getName()).child(InsertFood.getFoodName() + InsertFood.getUseByDate()).setValue(InsertFood);
@@ -583,9 +576,9 @@ DatePicker datePicker;
             if((ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))||
                     (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA))){
                 new AlertDialog.Builder(this)
-                        .setTitle("알림")
-                        .setMessage("저장소 권한이 거부되었습니다. 사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다. ")
-                        .setNeutralButton("설정", new DialogInterface.OnClickListener() {
+                        .setTitle("notice")
+                        .setMessage("Depot permission denied. If you want to use it, you need to allow the permission directly in the settings. ")
+                        .setNeutralButton("setting", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -593,7 +586,7 @@ DatePicker datePicker;
                                 startActivity(intent);
                             }
                         })
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 finish();
@@ -614,7 +607,7 @@ DatePicker datePicker;
             case MY_PERMISSION_CAMERA:
                 for(int i = 0; i<grantResults.length; i++){
                     if(grantResults[i] <0){
-                        Toast.makeText(this, "해당권한을 활성화 해야합니다.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "You need to enable that permission.",Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -700,16 +693,4 @@ DatePicker datePicker;
 
     }
 
-    private void setAlarm(long timeInMillis)
-    {
-
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, MyAlarm.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent,0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis,AlarmManager.INTERVAL_DAY, pendingIntent);
-
-        Toast.makeText(this, "Alarm is set",Toast.LENGTH_SHORT).show();
-    }
 }

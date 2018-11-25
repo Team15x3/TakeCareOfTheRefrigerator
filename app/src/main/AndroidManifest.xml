@@ -55,17 +55,15 @@
         <activity android:name=".AccountFragment" />
         <activity android:name=".SettingFrigerActivity" />
         <activity android:name=".GroupMessageActivity" />
+        <activity android:name=".Alarm" />
 
-
-        GroupRefrigeratorActivity
         <service
             android:name=".NotificationService"
             android:enabled="true" />
 
         <receiver android:name=".NotificationReceiver" />
 
-
-        <activity android:name=".ChatView"></activity>
+        <activity android:name=".ChatView" />
     </application>
 
 </manifest>
