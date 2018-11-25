@@ -51,12 +51,12 @@ public class AccountFragment extends AppCompatActivity {
                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 stringObjectMap.put("comment",editText.getText().toString());
                 FirebaseDatabase.getInstance().getReference().child("users").child(uid).updateChildren(stringObjectMap);
-
+                finish();
             }
         }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                finish();
             }
         });
 

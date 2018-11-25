@@ -80,11 +80,11 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(email.getText().toString()==null || name.getText().toString()==null || password.getText().toString()==null||imageUri ==null)
                 {
-                    Toast.makeText(RegisterActivity.this,"사진을 넣어주세요",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this," Please put a picture",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //todo : insert progress bar
-                progressDialog.setMessage("회원가입중입니다. 잠시 기다려 주세요...");
+                progressDialog.setMessage("sign up is in progress. Please wait a moment.");
                 progressDialog.show();
 
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString(),password.getText().toString())
@@ -120,14 +120,17 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                             }else {
-                                    Toast.makeText(getApplicationContext(),"회원가입실패",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(),"Failed Sign up",Toast.LENGTH_SHORT).show();
                                 }
-                                progressDialog.dismiss();
+
                             }
 
                         });
+
+
             }
         });
+        progressDialog.dismiss();
     }
 
     @Override
