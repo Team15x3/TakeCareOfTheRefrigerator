@@ -49,7 +49,7 @@ public class FindActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view == buttonFind){
-            progressDialog.setMessage("처리중입니다. 잠시 기다려 주세요...");
+            progressDialog.setMessage("Processing. Please wait a moment.");
             progressDialog.show();
             String emailAddress = editTextUserEmail.getText().toString().trim();
             firebaseAuth.sendPasswordResetEmail(emailAddress)
@@ -57,11 +57,11 @@ public class FindActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(FindActivity.this, "이메일을 보냈습니다.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(FindActivity.this, "sent you an email.", Toast.LENGTH_LONG).show();
                                 finish();
                                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                             } else {
-                                Toast.makeText(FindActivity.this, "메일 보내기 실패!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(FindActivity.this, "Fail to send mail!", Toast.LENGTH_LONG).show();
                             }
                             progressDialog.dismiss();
                         }
