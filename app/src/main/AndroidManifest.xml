@@ -52,7 +52,7 @@
         <activity android:name=".ManageFrigerActivity" />
         <activity android:name=".FindActivity" />
         <activity android:name=".SelectFriendActivity" />
-        <activity android:name=".Account_Activity" />
+        <activity android:name=".AccountFragment" />
         <activity android:name=".SettingFrigerActivity" />
 
         <service

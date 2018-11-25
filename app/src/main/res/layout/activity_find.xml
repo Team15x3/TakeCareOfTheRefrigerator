@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
+    android:animateLayoutChanges="true"
+    android:background="@color/wine"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -16,35 +17,15 @@
 
 
     <LinearLayout
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:gravity="left"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-
-
-            <TextView
-                android:gravity="center_horizontal"
-                android:layout_margin="1dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:backgroundTint="@color/colorText"
-                android:singleLine="true"
-                android:textColor="@color/colorText"
-                android:textColorHint="@color/colorText"
-                android:text="Emai을 입력하세요"
-                     />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,7 +43,7 @@
                 android:layout_weight="5"
                 android:singleLine="true"
                 android:backgroundTint="@color/colorText"
-                android:hint="Password"
+                android:hint="Enter Email"
                 android:inputType="textPassword"
                 android:textColorHint="@color/colorText"
                 android:textColor="@color/colorText"
@@ -83,7 +64,7 @@
                 android:background="@drawable/round_button"
                 android:textSize="20dp"
                 android:textColor="@color/colorText"
-                android:text="Email 전송"/>
+                android:text="Email transmission"/>
 
         </FrameLayout>
 

@@ -25,13 +25,16 @@ public class AccountFragment extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_);
-        Button button = (Button) findViewById(R.id.accountFragment_button_comment);
+
+        View view = (View)findViewById(R.id.view);
+        showDialog(view.getContext());
+/*        Button button = (Button) findViewById(R.id.accountFragment_button_comment);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDialog(view.getContext());
             }
-        });
+        });*/
     }
     void showDialog(Context context){
 
@@ -40,7 +43,7 @@ public class AccountFragment extends AppCompatActivity {
         LayoutInflater layoutInflater = getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_comment,null);
         final EditText editText = (EditText) view.findViewById(R.id.commentDialog_edittext);
-        builder.setView(view).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+        builder.setView(view).setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -50,7 +53,7 @@ public class AccountFragment extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference().child("users").child(uid).updateChildren(stringObjectMap);
 
             }
-        }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 

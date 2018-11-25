@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Set;
 
 public class SelectFriendActivity extends AppCompatActivity {
-    InsertFoodActivity insertFoodActivity= new InsertFoodActivity();
     ChatModel chatModel = new ChatModel();
     private String[] aa;
     private String refiename;

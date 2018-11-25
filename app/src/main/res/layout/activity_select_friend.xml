@@ -7,21 +7,39 @@
     android:orientation="vertical"
     tools:context=".SelectFriendActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="30dp"
+        >
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Group"
+            android:textSize="30dp"
+            />
+
+        <Button
+
+            android:id="@+id/selectFriendActivity_button"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="220dp"
+            android:background="@drawable/group"
+
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/selectFriendActivity_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="500dp"></android.support.v7.widget.RecyclerView>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/selectFriendActivity_button"
-            android:text="그룹생성"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-    </LinearLayout>
+
 </LinearLayout>

@@ -6,12 +6,12 @@
 
     <ImageView
         android:src="@drawable/logo"
-        android:background="#FFFFBB33"
+        android:background="@color/wine"
         android:layout_width="match_parent"
         android:layout_height="64dp" />
     <EditText
         android:id="@+id/commentDialog_edittext"
-        android:hint="상태 메세지를 입력하세요"
+        android:hint="Please enter a status message"
         android:layout_margin="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
