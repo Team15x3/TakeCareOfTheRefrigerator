@@ -101,16 +101,19 @@ public class SelectFriendActivity extends AppCompatActivity {
                                         {
                                             DataSnapshot food_data = iterator.next();
                                             Food newFood = food_data.getValue(Food.class);
+                                            Log.d("food_data",data.getKey());
+                                            Log.d("food_data",data.getValue().toString());
+                                            Log.d("food_data",food_data.getKey());
+                                            Log.d("food_data",food_data.getValue().toString());
+                                           // Food InsertFood = food_data.getValue()
                                             if(aa!=null)
                                             {
                                                 for (int i = 0; i < a; i++) {
                                                     if(!aa[i].equals(myUid)) {
 
-                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("refriList").child(refiename).child(newFood.getFoodName()).setValue(newFood);
+                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("refriList").child(refiename).child(food_data.getKey()).setValue(newFood);
 
-                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("grouprefriList").child(User.INSTANCE.getRefrigeratorList().
-                                                                get(User.INSTANCE.getCurrentRefrigerator()).
-                                                                getName()).setValue(chatModel);
+                                                        FirebaseDatabase.getInstance().getReference().child("users").child(aa[i]).child("grouprefriList").child(refiename).setValue(chatModel);
 
                                                     }
                                                 }
