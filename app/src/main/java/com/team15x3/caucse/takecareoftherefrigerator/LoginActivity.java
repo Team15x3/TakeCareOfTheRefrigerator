@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REGISTER_REQUEST && resultCode == RESULT_OK) {
-            Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), " log-in succeed", Toast.LENGTH_SHORT).show();
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
@@ -126,11 +126,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String password = edtPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "email을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter email.", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "password를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter your password.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -141,14 +141,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.setMessage("로그인중입니다. 잠시 기다려 주세요...");
+                            progressDialog.setMessage("Signing in. Please wait a moment.");
                             progressDialog.show();
                             progressDialog.dismiss();
 
                             homeActivityIntent();
                         } else {
-                            Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_LONG).show();
-                            /*textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");*/
+                            Toast.makeText(getApplicationContext(), "password is incorrect", Toast.LENGTH_LONG).show();
+                           // textviewMessage.setText("로그인 실패 유형\n - password가 맞지 않습니다.\n -서버에러");
                         }
                     }
                 });

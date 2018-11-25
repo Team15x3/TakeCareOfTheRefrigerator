@@ -78,8 +78,8 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ChatModel chatModel = new ChatModel();
-/*                chatModel.users.put(uid, true);
-                chatModel.users.put(destinatonUid, true);*/
+               chatModel.users.put(uid, true);
+                chatModel.users.put(destinatonUid, true);
 
 
                 if (chatRoomUid == null) {
