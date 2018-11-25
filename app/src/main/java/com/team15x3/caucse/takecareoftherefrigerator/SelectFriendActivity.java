@@ -1,6 +1,11 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +38,7 @@ public class SelectFriendActivity extends AppCompatActivity {
     ChatModel chatModel = new ChatModel();
     private String[] aa;
     private String refiename;
+    FrameLayout frameLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,15 @@ public class SelectFriendActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.selectFriendActivity_recyclerview);
         recyclerView.setAdapter(new SelectFriendRecyclerViewAdapter());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        Button button1 = (Button)findViewById(R.id.selectFriendActivity_button_chat);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChatView.class);
+                startActivity(intent);
+            }
+        });
 
         Button button = (Button) findViewById(R.id.selectFriendActivity_button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +75,7 @@ public class SelectFriendActivity extends AppCompatActivity {
                  refiename = User.INSTANCE.getRefrigeratorList().
                          get(User.INSTANCE.getCurrentRefrigerator()).
                          getName().toString();
+
 
                 final int a = chatModel.users.size();
                 aa = chatModel.users.keySet().toArray(new String[a]);
@@ -180,7 +197,6 @@ public class SelectFriendActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), MessageActivity.class);
                     intent.putExtra("destinationUid",userModels.get(position).uid);
-
                     startActivity(intent);
 
 
@@ -201,6 +217,7 @@ public class SelectFriendActivity extends AppCompatActivity {
                     }else{
                         chatModel.users.remove(userModels.get(position));
                     }
+
                 }
             });
 
@@ -225,5 +242,12 @@ public class SelectFriendActivity extends AppCompatActivity {
                 checkBox = (CheckBox)view.findViewById(R.id.friendItem_checkbox);
             }
         }
+
+       /* public void replaceFragment(Fragment fragment){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }*/
     }
 }

@@ -186,7 +186,7 @@ public class GroupMessageActivity extends AppCompatActivity {
                         readUsersMap.put(key, comment_motify);
                         comments.add(comment_origin);
                     }
-
+                    if(comments.size()>0){
                     if (!comments.get(comments.size() - 1).readUsers.containsKey(uid)) {
 
 
@@ -205,7 +205,7 @@ public class GroupMessageActivity extends AppCompatActivity {
                     //메세지가 갱신
 
 
-                }
+                }}
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {

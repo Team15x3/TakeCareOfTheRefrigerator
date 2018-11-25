@@ -1,10 +1,11 @@
 package com.team15x3.caucse.takecareoftherefrigerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ChatModel {
-    public Map<String,Boolean> users = new HashMap<>(); //채팅방의 유저들
+    public HashMap<String,Boolean> users = new HashMap<>(); //채팅방의 유저들
     public Map<String,Comment> comments = new HashMap<>();//채팅방의 대화내용
 
 

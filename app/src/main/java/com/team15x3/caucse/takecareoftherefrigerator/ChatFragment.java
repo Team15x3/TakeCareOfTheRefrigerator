@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class ChatFragment extends Fragment {
         private List<String> keys = new ArrayList<>();
         private String uid;
         private ArrayList<String> destinationUsers = new ArrayList<>();
+        private SelectFriendActivity selectFriendActivity;
 
         public ChatRecyclerViewAdapter() {
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -104,15 +106,13 @@ public class ChatFragment extends Fragment {
             FirebaseDatabase.getInstance().getReference().child("users").child(destinationUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
                     User userModel =  dataSnapshot.getValue(User.class);
                     Glide.with(customViewHolder.itemView.getContext())
                             .load(userModel.profileImageUrl)
                             .apply(new RequestOptions().circleCrop())
                             .into(customViewHolder.imageView);
-
-
-                    customViewHolder.textView_title.setText(userModel.UserName);
-
+                   customViewHolder.textView_title.setText(userModel.UserName);
                 }
 
                 @Override
@@ -145,7 +145,7 @@ public class ChatFragment extends Fragment {
                 public void onClick(View view) {
                     Intent intent = null;
                     if(chatModels.get(position).users.size() > 2){
-                        intent = new Intent(view.getContext(), GroupRefrigeratorActivity.class);
+                        intent = new Intent(view.getContext(), GroupMessageActivity.class);
                         intent.putExtra("destinationRoom",keys.get(position));
                     }else{
                         intent = new Intent(view.getContext(), MessageActivity.class);

@@ -47,7 +47,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MessageActivity extends AppCompatActivity {
-
     private String destinatonUid;
     private Button button;
     private EditText editText;
