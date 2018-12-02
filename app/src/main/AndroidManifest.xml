@@ -32,6 +32,8 @@
         <activity android:name=".FoodInfoActivity" />
         <activity android:name=".MainActivity" />
 
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.team15x3.caucse.takecareoftherefrigerator"
@@ -55,7 +57,6 @@
         <activity android:name=".AccountFragment" />
         <activity android:name=".SettingFrigerActivity" />
         <activity android:name=".GroupMessageActivity" />
-        <activity android:name=".Alarm" />
 
         <service
             android:name=".NotificationService"

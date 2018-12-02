@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 public class SelectFriendActivity extends AppCompatActivity {
+    Food food = new Food();
     ChatModel chatModel = new ChatModel();
     private String[] aa;
     private String refiename;
@@ -43,6 +44,7 @@ public class SelectFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_friend);
+
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.selectFriendActivity_recyclerview);
         recyclerView.setAdapter(new SelectFriendRecyclerViewAdapter());

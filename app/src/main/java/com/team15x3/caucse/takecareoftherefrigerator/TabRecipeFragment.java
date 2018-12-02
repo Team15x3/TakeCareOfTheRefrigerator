@@ -225,7 +225,10 @@ public class TabRecipeFragment extends Fragment {
 
         DataToActivity dataToActivity = new DataToActivity();
 
-        if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
+        if (User.INSTANCE.getRefrigeratorList().size() == 0) {
+            Toast.makeText(this.getContext(), "empty",Toast.LENGTH_SHORT).show();
+        }
+        else if (User.INSTANCE.getRefrigeratorList().get(User.INSTANCE.getCurrentRefrigerator()).getFoodList().size() != 0) {
             dataToActivity.execute();
         }else{
             Toast.makeText(this.getContext(), "empty",Toast.LENGTH_SHORT).show();

@@ -138,7 +138,18 @@ DatePicker datePicker;
                         if (foodArrayList.size() != 0) {
                             InsertFood = foodArrayList.get(0);
                             edtName.setText(InsertFood.getFoodName());
-                            parseJsonFromFoodID(InsertFood.getFoodID());
+                            //parseJsonFromFoodID(InsertFood.getFoodID());
+
+                            //setting information on the activity
+                            InsertFood.setIsFromGallery(false);
+                            Picasso.with(getApplicationContext())
+                                    .load(InsertFood.getThumbnailUrl())
+                                    .into(ivFoodImage);
+                            btnFoodImage.setVisibility(View.INVISIBLE);
+                            linShowInformation.setVisibility(View.VISIBLE);
+
+                            FoodInfoActivity.SetInformationOfFood(InsertFood, tvIngredients, tvAllergyIngredient, tvNutrientServing, table, getApplicationContext());
+
                         } else {
                             Toast.makeText(getApplicationContext(),"we don't have information",Toast.LENGTH_SHORT).show();
                         }
